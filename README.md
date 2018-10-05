@@ -12,8 +12,6 @@ This repository was established for tracking changes and managing my workflow..
 
 Lincensed under the MIT license.
 
-[kalazi.com](http://kalazi.com)
-
 # Requirements - can change any time
  - **Linux (or Windows - not tested)**
  - **Python** version 3.X with:
