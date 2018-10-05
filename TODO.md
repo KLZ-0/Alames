@@ -25,3 +25,22 @@
 
 **TODOs**:
  - Cleanup the mess I made a year ago ;)
+
+**TEMP SECTION**:
+ - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
+ - select measurement [keyboard shortcut] > {to be added}
+ - load the interface depending on user's choice
+ - three modes:
+    - show
+    - modify/recalc
+    - measure
+ - two modes:
+    - show current chart by default and update with changes + modify will be the properties tab -- it must load the series to be modified
+    - measure
+
+Basic modifications:
+ - Trim series by x range
+ - Translate series by function etc.
+ - **save the modified file**
+
+**Why don't modify the series on the go??? -- what if too large file?**
