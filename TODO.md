@@ -5,7 +5,6 @@
  - Add selecting more seconds + calcRms from them
  - Modify menubar to something like in Pymage
 
-
 **TODOs**:
  - Add select timeRange from timeLineChart
  - Add sequential reading IDEA: Add live reading
@@ -17,5 +16,15 @@
 
 #NEW
 
+**Finishing touch**:
+ - add installation guide
+ - add requirements.txt
+
+ **IDEAs**:
+  - customise input byte order/setting when measuring - make compatible with some commercial analysers
+
 **TODOs**:
  - Cleanup the mess I made a year ago ;)
+ - rename the project > Alames
+ - publish to GitHub
+ - add license
