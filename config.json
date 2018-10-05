@@ -1,0 +1,10 @@
+{
+    "calibration": 3.62,
+    "color": {
+        "current": "#ff0000",
+        "voltage": "#0000ff"
+    },
+    "dynamic-axis-scaling": false,
+    "language": "English",
+    "show-current-circle": true
+}
