@@ -9,8 +9,6 @@ import soul
 import actions
 import sinlib
 
-# TODO: Optimize actions library >> multiple imports
-
 def setupAll(self, app):
     self.setGeometry(app.desktop().availableGeometry())
     self.move(0, 0)
@@ -20,7 +18,6 @@ def setupAll(self, app):
 
     loadSettings(self)
     self.previousCalibration = self.settings["calibration"]
-    # TODO: Adjust color to more charts
     try:
         self.colors = {"voltage" : self.settings["color"]["voltage"], "current" : self.settings["color"]["current"]} # chart colors
     except KeyError:

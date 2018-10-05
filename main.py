@@ -1,19 +1,3 @@
-# IDEA: Add select time with rubberband and calcRms only from it
-# IDEA: Add selecting more seconds + calcRms from them
-# TODO: Add select timeRange from timeLineChart
-
-# IDEA: Modify menubar to something like in Pymage
-
-# TODO: Add sequential reading IDEA: Add live reading
-
-# TODO: Add settings reloading
-# TODO: update setings/repaint chart maybe
-
-# TODO: HW: Construct DIN voltage Transformer, calibrate    NOTE: Partially done
-# TODO: Add scaling of phasor arrows
-
-# TODO: Create scale and valueLabels in phasorWidget
-
 import os, sys
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
@@ -36,7 +20,6 @@ class Window(QMainWindow):
     def displaynew(self, text):
         if self.chart.series():
             actions.rmser(self, 1)
-        # TODO: Translate to Slovak
         if text != "Select one":
             self.rmsValueLabel.show()
             self.rmsLabel.show()

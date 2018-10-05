@@ -19,7 +19,6 @@ def tooltip(self, position):
             focus_point_point.append(self.chart.mapToPosition(QtCore.QPointF(round(values.x()), yval[i]), self.curves[i]))
 
         self.pos_labels.setPos(position.x()+10, position.y()+10)
-        # TODO: Adjust colors in settings + colors of curves
         text = ""
         for curve in self.checkedCurveBoxes:
             text += "<font color=\"" + self.colors[curve] + "\">" + str(round(yval[self.translateCurve[curve]], 4)) + "</font><br>"
