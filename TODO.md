@@ -25,6 +25,7 @@
 
 **TODOs**:
  - Cleanup the mess I made a year ago ;)
+ - Resolution change **not supported!** >> *the widgets only get resized at creation*
 
 **TEMP SECTION**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render

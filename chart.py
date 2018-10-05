@@ -8,6 +8,7 @@ import math
 
 import chart_view
 import properties
+import bottom_widget
 
 class Chart:
     def __init__(self):
@@ -28,6 +29,7 @@ class Chart:
         self.fillChart()
         self.createAxes()
         self.createPropertyWidget()
+        self.createBottomWidget()
 
     def loadCSV(self, lFileName):
         self.ydata = []
@@ -86,6 +88,13 @@ class Chart:
         self.propertyWidget = properties.PropertyWidget(self)
         self.propertyWidget.setGeometry(self.width()/6*5, self.propertiesBorder, self.width()/6-self.propertiesBorder, self.height()-2*self.propertiesBorder)
 
+    def createBottomWidget(self):
+        self.bottomWidget = bottom_widget.BottomWidget(self)
+        self.bottomWidget.setGeometry(  self.propertiesBorder,
+                                        self.height() - self.propertiesBorder*2 - self.bottomWidget.slider.height() - self.bottomWidget.scrollBar.height(),
+                                        self.width() - 2*self.propertiesBorder,
+                                        self.bottomWidget.slider.height() + self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
+
     def toggleSerieVisiblity(self, key):
         if int(key) > len(self.series): return
         if self.chart.series()[int(key) - 1].isVisible():
@@ -107,7 +116,15 @@ class Chart:
     def toggleProperties(self):
         if self.propertyWidget.isVisible():
             self.propertyWidget.hide()
-            self.chart_view.setGeometry(0, 0, self.width(), self.height())
+            self.chart_view.setGeometry(0, 0, self.width(), self.chart_view.height())
         else:
             self.propertyWidget.show()
-            self.chart_view.setGeometry(0, 0, self.width()/6*5, self.height())
+            self.chart_view.setGeometry(0, 0, self.width()/6*5, self.chart_view.height())
+
+    def toggleBottomWidget(self):
+        if self.bottomWidget.isVisible():
+            self.bottomWidget.hide()
+            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.height())
+        else:
+            self.bottomWidget.show()
+            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.height() - self.bottomWidget.height())

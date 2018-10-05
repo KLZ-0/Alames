@@ -68,6 +68,8 @@ class View(QChartView):
             self.parent().toggleAnimatable(key)
         if "p" in key:
             self.parent().toggleProperties()
+        if "t" in key:
+            self.parent().toggleBottomWidget()
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
