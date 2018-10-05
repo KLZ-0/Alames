@@ -1,4 +1,4 @@
-#OLD
+# OLD
 
 **IDEAs**:
  - Add select time with rubberband and calcRms only from it
@@ -14,7 +14,7 @@
  - Add scaling of phasor arrows
  - Create scale and valueLabels in phasorWidget
 
-#NEW
+# NEW
 
 **Finishing touch**:
  - add installation guide
@@ -25,6 +25,3 @@
 
 **TODOs**:
  - Cleanup the mess I made a year ago ;)
- - rename the project > Alames
- - publish to GitHub
- - add license
