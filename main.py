@@ -7,12 +7,13 @@ from pathlib import Path
 import chart
 import chart_view
 
-class Window(QMainWindow, chart.Chart):
+class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)
-        self.propertiesBorder = 8
+
+        self.chart = chart.Chart(self)
 
         # self.initLabel = QLabel("Drag & Drop a CSV file, or press:\n\nO - to open and load data\n\nS - to draw the file contents into a chart\n\nQ - to quit", self)
         self.initLabel = QLabel("Drag & Drop a CSV file or press O to open one", self)
@@ -36,9 +37,7 @@ class Window(QMainWindow, chart.Chart):
             self.createChart(f)
 
     def createChart(self, csvFile):
-        self.constructChart(csvFile, app)
-        self.chart_view.show()
-        self.chart_view.setGeometry(self.contentsRect())
+        self.chart.constructChart(csvFile, app)
         self.initLabel.hide()
 
     def fileSelect(self):

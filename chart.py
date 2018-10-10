@@ -10,17 +10,20 @@ import chart_view
 import properties
 import bottom_widget
 
-class Chart:
-    def __init__(self):
-        pass
+class Chart(QChart):
+    def __init__(self, parent):
+        super(Chart, self).__init__()
+        self.parent = parent
+        self.propertiesBorder = 8
+
+######## Chart construction
 
     def constructChart(self, fileName, app):
-        self.chart = QChart()
-        self.chart.setAcceptHoverEvents(True)
+        self.setAcceptHoverEvents(True)
         # IDEA: Set as settings animatable
         # self.chart.setAnimationOptions(QChart.SeriesAnimations)
 
-        self.chart_view = chart_view.View(self.chart, self, app)
+        self.chart_view = chart_view.View(self, self.parent, app)
         self.chart_view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.chart_view.setRubberBand(self.chart_view.HorizontalRubberBand)
 
@@ -30,6 +33,9 @@ class Chart:
         self.createAxes()
         self.createPropertyWidget()
         self.createBottomWidget()
+
+        self.chart_view.show()
+        self.chart_view.setGeometry(self.parent.contentsRect())
 
     def loadCSV(self, lFileName):
         self.ydata = []
@@ -46,20 +52,20 @@ class Chart:
                 self.ydata[i].append(row[i+1])
 
     def fillSeries(self):
-        self.series = []
+        self.qseries = []
         for i in range(len(self.ydata)):
-            self.series.append(QLineSeries())
-            # self.series[-1].setUseOpenGL(True)
+            self.qseries.append(QLineSeries())
+            # self.qseries[-1].setUseOpenGL(True)
 
             for u in range(len(self.xdata)):
-                self.series[i].append(u, self.ydata[i][u])
+                self.qseries[i].append(u, self.ydata[i][u])
             # IDEA: make a setting to turn off automatic header detection
-            self.series[i].setName(str(i+1) + " - " + self.columnNames[i+1])
-            # self.series[i].setName(str(i+1))
+            self.qseries[i].setName(str(i+1) + " - " + self.columnNames[i+1])
+            # self.qseries[i].setName(str(i+1))
 
     def fillChart(self):
-        for serie in self.series:
-            self.chart.addSeries(serie)
+        for serie in self.qseries:
+            self.addSeries(serie)
 
     def createAxes(self):
         # NOTE: not adaptive > each curve has the same axis with the max value from the entire file
@@ -82,25 +88,27 @@ class Chart:
             axisY.setMax(0)
 
         for i in range(len(self.ydata)):
-            self.chart.setAxisY(axisY, self.series[i])
+            self.setAxisY(axisY, self.qseries[i])
 
     def createPropertyWidget(self):
-        self.propertyWidget = properties.PropertyWidget(self)
-        self.propertyWidget.setGeometry(self.width()/6*5, self.propertiesBorder, self.width()/6-self.propertiesBorder, self.height()-2*self.propertiesBorder)
+        self.propertyWidget = properties.PropertyWidget(self.parent)
+        self.propertyWidget.setGeometry(self.parent.width()/6*5, self.propertiesBorder, self.parent.width()/6-self.propertiesBorder, self.parent.height()-2*self.propertiesBorder)
 
     def createBottomWidget(self):
-        self.bottomWidget = bottom_widget.BottomWidget(self)
+        self.bottomWidget = bottom_widget.BottomWidget(self.parent)
         self.bottomWidget.setGeometry(  self.propertiesBorder,
-                                        self.height() - self.propertiesBorder*2 - self.bottomWidget.slider.height() - self.bottomWidget.scrollBar.height(),
-                                        self.width() - 2*self.propertiesBorder,
+                                        self.parent.height() - self.propertiesBorder*2 - self.bottomWidget.slider.height() - self.bottomWidget.scrollBar.height(),
+                                        self.parent.width() - 2*self.propertiesBorder,
                                         self.bottomWidget.slider.height() + self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
 
+######## Toggle actions
+
     def toggleSerieVisiblity(self, key):
-        if int(key) > len(self.series): return
-        if self.chart.series()[int(key) - 1].isVisible():
-            self.chart.series()[int(key) - 1].hide()
+        if int(key) > len(self.qseries): return
+        if self.series()[int(key) - 1].isVisible():
+            self.series()[int(key) - 1].hide()
         else:
-            self.chart.series()[int(key) - 1].show()
+            self.series()[int(key) - 1].show()
 
         # Trigger move event after toggle to ensure current text of focusValueTextItem will change
         c = self.cursor()
@@ -108,23 +116,23 @@ class Chart:
         c.setPos(c.pos().x()-1, c.pos().y())
 
     def toggleAnimatable(self, key):
-        if self.chart.animationOptions() == QChart.NoAnimation:
-            self.chart.setAnimationOptions(QChart.SeriesAnimations)
+        if self.animationOptions() == QChart.NoAnimation:
+            self.setAnimationOptions(QChart.SeriesAnimations)
         else:
-            self.chart.setAnimationOptions(QChart.NoAnimation)
+            self.setAnimationOptions(QChart.NoAnimation)
 
     def toggleProperties(self):
         if self.propertyWidget.isVisible():
             self.propertyWidget.hide()
-            self.chart_view.setGeometry(0, 0, self.width(), self.chart_view.height())
+            self.chart_view.setGeometry(0, 0, self.parent.width(), self.chart_view.height())
         else:
             self.propertyWidget.show()
-            self.chart_view.setGeometry(0, 0, self.width()/6*5, self.chart_view.height())
+            self.chart_view.setGeometry(0, 0, self.parent.width()/6*5, self.chart_view.height())
 
     def toggleBottomWidget(self):
         if self.bottomWidget.isVisible():
             self.bottomWidget.hide()
-            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.height())
+            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.parent.height())
         else:
             self.bottomWidget.show()
-            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.height() - self.bottomWidget.height())
+            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.parent.height() - self.bottomWidget.height())

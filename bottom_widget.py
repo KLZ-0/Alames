@@ -19,6 +19,8 @@ class BottomWidget(QWidget):
     def applySettings(self):
         pass
 
+######## Event handlers
+
     def resizeEvent(self, event):
         super(BottomWidget, self).resizeEvent(event)
         self.scrollBar.setGeometry(0, 0, self.width(), self.scrollBar.height())

@@ -12,9 +12,11 @@ class PropertyWidget(QWidget):
     def __init__(self, parent):
         super(PropertyWidget, self).__init__(parent)
 
-        self.setupLabels()
+        self.setupCurveSettings()
 
-    def setupLabels(self):
+######## Widget construction at init
+
+    def setupCurveSettings(self):
 
         self.nOfLinesPerSerie = 3
         self.seriesNameLabels = []
@@ -38,6 +40,8 @@ class PropertyWidget(QWidget):
             self.serieColorPickButtons[-1].pressed.connect(self.pickSerieColor)
             self.hrLines.append(QLabel("<hr>", self))
 
+######## Actions
+
     def pickSerieColor(self):
         for i in range(len(self.serieColorPickButtons)):
             if self.serieColorPickButtons[i].isDown():
@@ -56,6 +60,8 @@ class PropertyWidget(QWidget):
                 self.serieColorPickButtons[i].setIcon(QtGui.QIcon(pixRect))
             except ValueError:
                 pass
+
+######## Event handlers
 
     def resizeEvent(self, event):
         super(PropertyWidget, self).resizeEvent(event)

@@ -13,6 +13,8 @@ class View(QChartView):
         self.setInteractive(True)
         self.createTrackingTools()
 
+######## Tracking tools - setup
+
     def createTrackingTools(self):
         self.focusLine = QGraphicsLineItem(0, 0, 0, 10, self.chart())
         focusPen = QtGui.QPen()
@@ -26,6 +28,8 @@ class View(QChartView):
         self.focusValueTextItem.setZValue(10)
         self.focusValueTextItem.setDefaultTextColor(QtGui.QColor("#333333"))
 
+######## Event handlers
+
     def mouseMoveEvent(self, event):
         super(View, self).mouseMoveEvent(event)
         if not self.focusLine.isVisible(): self.focusLine.show()
@@ -35,10 +39,10 @@ class View(QChartView):
             self.focusValueTextItem.setPos(event.x(), event.y())
 
             xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
-            html = str(self.parent().xdata[round(xVal)]) + "<br>"
+            html = str(self.parent().chart.xdata[round(xVal)]) + "<br>"
             for i in range(len(self.chart().series())):
                 if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + str(self.parent().ydata[i][round(xVal)]) + "<br>"
+                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + str(self.parent().chart.ydata[i][round(xVal)]) + "<br>"
             self.focusValueTextItem.setHtml(html)
 
             focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()
@@ -63,13 +67,13 @@ class View(QChartView):
         super(View, self).keyPressEvent(event)
         key = event.text()
         if key in ["1","2","3","4","5","6","7","8","9"]:
-            self.parent().toggleSerieVisiblity(key)
+            self.parent().chart.toggleSerieVisiblity(key)
         if "a" in key:
-            self.parent().toggleAnimatable(key)
+            self.parent().chart.toggleAnimatable(key)
         if "p" in key:
-            self.parent().toggleProperties()
+            self.parent().chart.toggleProperties()
         if "t" in key:
-            self.parent().toggleBottomWidget()
+            self.parent().chart.toggleBottomWidget()
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
