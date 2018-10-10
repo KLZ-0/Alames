@@ -9,8 +9,14 @@ import math
 import chart_view
 import properties
 import bottom_widget
+import chart_modifier
 
-class Chart(QChart):
+class Chart(QChart, chart_modifier.Modifier):
+    """
+    Purpose: setup and modify the QChart
+    Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
+    Initializes the required objects as its own properties
+    """
     def __init__(self, parent):
         super(Chart, self).__init__()
         self.parent = parent

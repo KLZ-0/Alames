@@ -8,6 +8,11 @@ import chart
 import chart_view
 
 class Window(QMainWindow):
+    """
+    Purpose: setup and modify the QMainWindow
+    Manages the whole window except for the charting subsystem which is managed by Chart.
+    Initializes Chart as its own property
+    """
     def __init__(self):
         super(Window, self).__init__()
         self.setWindowTitle("Alames")

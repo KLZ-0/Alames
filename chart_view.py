@@ -6,6 +6,11 @@ import pandas
 import numpy as np
 
 class View(QChartView):
+    """
+    Purpose: displaying and interacting with the rendered QChart
+    Creates a widget inside MainWindow which is shared for max 3 widgets
+    An object from this class is created in Chart
+    """
     def __init__(self, chart, parent, app):
         super(View, self).__init__(chart, parent)
         self.app = app

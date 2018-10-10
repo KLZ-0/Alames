@@ -5,10 +5,12 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
-# Created for relative positioning of internal labels
-# same lvl as chartview
-
 class PropertyWidget(QWidget):
+    """
+    Purpose: relative positioning of internal labels
+    Creates a widget inside MainWindow which is shared for max 3 widgets
+    Same lvl as chartview > an object from this class is created in Chart
+    """
     def __init__(self, parent):
         super(PropertyWidget, self).__init__(parent)
 

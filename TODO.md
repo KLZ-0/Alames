@@ -27,6 +27,7 @@
  - Cleanup the mess I made a year ago ;)
  - Resolution change **not supported!** >> *the widgets only get resized at creation*
  - Re-add functionality
+ - Place the charting subsystem in its **own widget** for versatility
 
 **TEMP SECTION**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
