@@ -36,7 +36,7 @@ class Chart(QChart, chart_modifier.Modifier):
         self.loadCSV(fileName)
         self.fillSeries()
         self.fillChart()
-        self.createAxes()
+        self.updateAxes()
         self.createPropertyWidget()
         self.createBottomWidget()
 
@@ -73,29 +73,6 @@ class Chart(QChart, chart_modifier.Modifier):
         for serie in self.qseries:
             self.addSeries(serie)
 
-    def createAxes(self):
-        # NOTE: not adaptive > each curve has the same axis with the max value from the entire file
-        minValue = min(min(x) for x in self.ydata)
-        maxValue = max(max(x) for x in self.ydata)
-
-        # IDEA: make a setting to turn on/edit 10% Y reserve
-        yMinReserve = minValue/10
-        yMaxReserve = maxValue/10
-        base = 10 # round to this number
-
-        axisY = QValueAxis()
-        if minValue <= 0:
-            axisY.setMin(int(base * math.floor(float(minValue + yMinReserve)/base)))
-        else:
-            axisY.setMin(0)
-        if maxValue >= 0:
-            axisY.setMax(int(base * math.ceil(float(maxValue + yMaxReserve)/base)))
-        else:
-            axisY.setMax(0)
-
-        for i in range(len(self.ydata)):
-            self.setAxisY(axisY, self.qseries[i])
-
     def createPropertyWidget(self):
         self.propertyWidget = properties.PropertyWidget(self.parent)
         self.propertyWidget.setGeometry(self.parent.width()/6*5, self.propertiesBorder, self.parent.width()/6-self.propertiesBorder, self.parent.height()-2*self.propertiesBorder)
@@ -106,6 +83,36 @@ class Chart(QChart, chart_modifier.Modifier):
                                         self.parent.height() - self.propertiesBorder*2 - self.bottomWidget.slider.height() - self.bottomWidget.scrollBar.height(),
                                         self.parent.width() - 2*self.propertiesBorder,
                                         self.bottomWidget.slider.height() + self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
+
+######## Update actions
+
+    def updateAxisExtremes(self):
+        # NOTE: not adaptive > each curve has the same axis with the max value from the entire file
+        self.minY = min(min(x) for x in self.ydata)
+        self.maxY = max(max(x) for x in self.ydata)
+
+    def updateAxes(self):
+        self.updateAxisExtremes()
+        # IDEA: make a setting to turn on/edit 10% Y reserve
+        yMinReserve = self.minY/10
+        yMaxReserve = self.maxY/10
+        base = 10 # round to this number
+
+        axisY = QValueAxis()
+        if self.series()[0].attachedAxes():
+            axisY =  self.series()[0].attachedAxes()[0]
+        if self.minY <= 0:
+            axisY.setMin(int(base * math.floor(float(self.minY + yMinReserve)/base)))
+        else:
+            axisY.setMin(0)
+        if self.maxY >= 0:
+            axisY.setMax(int(base * math.ceil(float(self.maxY + yMaxReserve)/base)))
+        else:
+            axisY.setMax(0)
+
+        for serie in self.series():
+            if len(serie.attachedAxes()) == 0:
+                self.setAxisY(axisY, serie)
 
 ######## Toggle actions
 

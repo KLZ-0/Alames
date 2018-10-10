@@ -37,7 +37,7 @@
     - show
     - modify/recalc
     - measure
- - two modes:
+ - two modes: -- current version
     - show current chart by default and update with changes + modify will be the properties tab -- it must load the series to be modified
     - measure
 

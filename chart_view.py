@@ -79,6 +79,8 @@ class View(QChartView):
             self.parent().chart.toggleProperties()
         if "t" in key:
             self.parent().chart.toggleBottomWidget()
+        if "m" in key:
+            self.parent().chart.multiplyAll(2)
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
