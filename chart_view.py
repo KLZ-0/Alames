@@ -45,7 +45,7 @@ class View(QChartView):
 
             xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
             html = str(self.parent().chart.xdata[round(xVal)]) + "<br>"
-            for i in range(len(self.chart().series())):
+            for i in range(len(self.chart().ydata)):
                 if self.chart().series()[i].isVisible():
                     html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + str(self.parent().chart.ydata[i][round(xVal)]) + "<br>"
             self.focusValueTextItem.setHtml(html)
@@ -81,6 +81,8 @@ class View(QChartView):
             self.parent().chart.toggleBottomWidget()
         if "m" in key:
             self.parent().chart.multiplyAll(2)
+        if "d" in key:
+            self.parent().chart.filterAlamesOne()
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
