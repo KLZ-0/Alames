@@ -65,6 +65,15 @@ class PropertyWidget(QWidget):
 
 ######## Event handlers
 
+    def showEvent(self, event):
+        super(PropertyWidget, self).showEvent(event)
+        for i in range(len(self.parent().chart.series())):
+            self.seriesNameLineEdits[i].setText(self.parent().chart.series()[i].name())
+            self.seriesColorValueLabels[i].setText(self.parent().chart.series()[i].color().name())
+            pixRect = QtGui.QPixmap(64,64)
+            pixRect.fill(self.parent().chart.series()[i].color())
+            self.serieColorPickButtons[i].setIcon(QtGui.QIcon(pixRect))
+
     def resizeEvent(self, event):
         super(PropertyWidget, self).resizeEvent(event)
         for i in range(len(self.seriesNameLabels)):

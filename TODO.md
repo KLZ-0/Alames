@@ -28,8 +28,9 @@
  - Resolution change **not supported!** >> *the widgets only get resized at creation*
  - Re-add functionality
  - Place the charting subsystem in its **own widget** for versatility
+ - Properties - add hidden checkbox as curve poperty
 
-**TEMP SECTION**:
+**NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
  - select measurement [keyboard shortcut] > {to be added}
  - load the interface depending on user's choice
