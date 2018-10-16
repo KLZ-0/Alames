@@ -84,9 +84,9 @@ class Chart(QChart, chart_modifier.Modifier):
     def createBottomWidget(self):
         self.bottomWidget = bottom_widget.BottomWidget(self.parent)
         self.bottomWidget.setGeometry(  self.propertiesBorder,
-                                        self.parent.height() - self.propertiesBorder*2 - self.bottomWidget.slider.height() - self.bottomWidget.scrollBar.height(),
+                                        self.parent.height() - self.propertiesBorder*2 - self.bottomWidget.scrollBar.height(),
                                         self.parent.width() - 2*self.propertiesBorder,
-                                        self.bottomWidget.slider.height() + self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
+                                        self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
 
 ######## Update actions
 

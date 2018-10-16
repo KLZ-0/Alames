@@ -12,18 +12,17 @@ class BottomWidget(QWidget):
     def __init__(self, parent):
         super(BottomWidget, self).__init__(parent)
 
-        self.scrollBar = QSlider(QtCore.Qt.Horizontal, self)
-        self.scrollBar.setGeometry(0, 0, self.width(), self.scrollBar.height())
-        self.slider = QScrollBar(QtCore.Qt.Horizontal, self)
-        self.slider.setGeometry(0, self.scrollBar.height(), self.width(), self.slider.height())
+        self.scrollBar = QScrollBar(QtCore.Qt.Horizontal, self)
+        self.scrollBar.setRange(100, 300)
+        self.scrollBar.valueChanged.connect(self.applySettings)
 
 
     def applySettings(self):
-        pass
+        # print(self.scrollBar.value())
+        self.parent().chart.scroll(self.scrollBar.value()/100, 0)
 
 ######## Event handlers
 
     def resizeEvent(self, event):
         super(BottomWidget, self).resizeEvent(event)
         self.scrollBar.setGeometry(0, 0, self.width(), self.scrollBar.height())
-        self.slider.setGeometry(0, self.scrollBar.height(), self.width(), self.slider.height())

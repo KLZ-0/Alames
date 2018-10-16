@@ -83,6 +83,10 @@ class View(QChartView):
             self.parent().chart.multiplyAll(2)
         if "d" in key:
             self.parent().chart.filterAlamesOne()
+        if event.key() == QtCore.Qt.Key_Right:
+            self.chart().scroll(10, 0)
+        if event.key() == QtCore.Qt.Key_Left:
+            self.chart().scroll(-10, 0)
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
