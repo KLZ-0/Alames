@@ -5,6 +5,7 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 import math
+import lzma
 
 import chart_view
 import properties
@@ -46,6 +47,9 @@ class Chart(QChart, chart_modifier.Modifier):
     def loadCSV(self, lFileName):
         self.ydata = []
         self.xdata = []
+
+        if lFileName.endswith(".csv.xz"):
+            lFileName = lzma.open(lFileName) # file name or object
 
         f = pandas.read_csv(lFileName)
         csv = f.values

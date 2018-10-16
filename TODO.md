@@ -20,7 +20,7 @@
  - add installation guide
  - add requirements.txt
 
- **IDEAs**:
+**IDEAs**:
   - customise input byte order/setting when measuring - make compatible with some commercial analysers
 
 **TODOs**:
@@ -29,6 +29,8 @@
  - Re-add functionality
  - Place the charting subsystem in its **own widget** for versatility
  - Properties - add hidden checkbox as curve poperty
+ - Add left widget for maybe filters?
+ - Use compression for output files
 
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render

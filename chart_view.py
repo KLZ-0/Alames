@@ -47,7 +47,7 @@ class View(QChartView):
             html = str(self.parent().chart.xdata[round(xVal)]) + "<br>"
             for i in range(len(self.chart().ydata)):
                 if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + str(self.parent().chart.ydata[i][round(xVal)]) + "<br>"
+                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.parent().chart.ydata[i][round(xVal)])
             self.focusValueTextItem.setHtml(html)
 
             focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()

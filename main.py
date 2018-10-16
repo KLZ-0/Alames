@@ -38,7 +38,7 @@ class Window(QMainWindow):
 
     def openFile(self):
         f = self.fileSelect()
-        if Path(f).is_file() and f[-4:].lower() == ".csv":
+        if Path(f).is_file() and (f.endswith(".csv") or f.endswith(".csv.xz")):
             self.createChart(f)
 
     def createChart(self, csvFile):
@@ -47,8 +47,8 @@ class Window(QMainWindow):
 
     def fileSelect(self):
         if platform.uname().system == "Linux":
-            return QFileDialog.getOpenFileName(self, 'Select CSV file', '/', "CSV files (*.csv)")[0]
-        return QFileDialog.getOpenFileName(self, 'Select CSV file', 'C:', "CSV files (*.csv)")[0].encode('utf-8').decode('utf-8', 'replace')
+            return QFileDialog.getOpenFileName(self, 'Select CSV file', '/', "CSV files (*.csv *.csv.xz)")[0]
+        return QFileDialog.getOpenFileName(self, 'Select CSV file', 'C:', "CSV files (*.csv *.csv.xz)")[0].encode('utf-8').decode('utf-8', 'replace')
 
 ######## Event handlers
 
