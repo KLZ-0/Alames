@@ -28,14 +28,11 @@
  - Resolution change **not supported!** >> *the widgets only get resized at creation*
  - Re-add functionality
  - Place the charting subsystem in its **own widget** for versatility
- - Properties - add hidden checkbox as curve poperty
  - Add left widget for maybe filters?
- - Use compression for output files
- - Place properties for each curve into separate widgets
 
 **BUGS**:
  - "Empty filename passed to function" - happena when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}
-
+ - smetimes this Qt error happens unpredictably, but it does not cause any disturbance and the user is not affected - "qt.qpa.xcb: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1665, resource id: 37781937, major code: 40 (TranslateCoords), minor code: 0"
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
  - select measurement [keyboard shortcut] > {to be added}

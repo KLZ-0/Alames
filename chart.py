@@ -38,8 +38,8 @@ class Chart(QChart, chart_modifier.Modifier):
         self.fillSeries()
         self.fillChart()
         self.updateAxes()
-        self.createPropertyWidget()
         self.createBottomWidget()
+        self.createPropertyWidget()
 
         self.chart_view.show()
         self.chart_view.setGeometry(self.parent.contentsRect())
@@ -82,7 +82,10 @@ class Chart(QChart, chart_modifier.Modifier):
 
     def createPropertyWidget(self):
         self.propertyWidget = properties.PropertyWidget(self.parent)
-        self.propertyWidget.setGeometry(self.parent.width()/6*5, self.propertiesBorder, self.parent.width()/6-self.propertiesBorder, self.parent.height()-2*self.propertiesBorder)
+        self.propertyWidget.setGeometry(self.parent.width()/6*5,
+                                        self.propertiesBorder,
+                                        self.parent.width()/6-self.propertiesBorder,
+                                        self.parent.height()-2*self.propertiesBorder - self.bottomWidget.height())
 
     def createBottomWidget(self):
         self.bottomWidget = bottom_widget.BottomWidget(self.parent)

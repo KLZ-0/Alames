@@ -59,7 +59,7 @@ class Modifier:
 
             self.series()[0].setColor(QtGui.QColor("#0000ff"))
             self.series()[1].setColor(QtGui.QColor("#ff0000"))
-
+            self.propertyWidget.updateSections()
 
             self.filterAlamesOneApplied = True
         except:
