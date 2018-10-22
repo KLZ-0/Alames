@@ -134,6 +134,7 @@ class Chart(QChart, chart_modifier.Modifier):
         c = self.cursor()
         c.setPos(c.pos().x()+1, c.pos().y())
         c.setPos(c.pos().x()-1, c.pos().y())
+        self.propertyWidget.updateVisibleBoxes()
 
     def toggleAnimatable(self, key):
         if self.animationOptions() == QChart.NoAnimation:

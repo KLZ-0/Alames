@@ -20,12 +20,13 @@ class PropertyWidget(QWidget):
 
     def setupCurveSettings(self):
 
-        self.nOfLinesPerSerie = 3
+        self.nOfLinesPerSerie = 4
         self.seriesNameLabels = []
         self.seriesNameLineEdits = []
         self.seriesColorLabels = []
         self.seriesColorValueLabels = []
         self.serieColorPickButtons = []
+        self.visibleToggleButtons = []
         self.hrLines = []
 
         for serie in self.parent().chart.series():
@@ -40,9 +41,25 @@ class PropertyWidget(QWidget):
             self.serieColorPickButtons[-1].setIcon(QtGui.QIcon(pixRect))
             # self.serieColorPickButtons[-1].setIcon(QtGui.QIcon("icons/adjust.png"))
             self.serieColorPickButtons[-1].pressed.connect(self.pickSerieColor)
+            self.visibleToggleButtons.append(QCheckBox("Visible", self))
+            self.visibleToggleButtons[-1].setChecked(serie.isVisible())
+            self.visibleToggleButtons[-1].toggled.connect(self.setSerieVisiblity)
             self.hrLines.append(QLabel("<hr>", self))
 
+######## Update Actions
+
+    def updateVisibleBoxes(self):
+        for i in range(len(self.parent().chart.series())):
+            self.visibleToggleButtons[i].setChecked(self.parent().chart.series()[i].isVisible())
+
 ######## Actions
+
+    def setSerieVisiblity(self):
+        for i in range(len(self.visibleToggleButtons)):
+            if self.visibleToggleButtons[i].isChecked():
+                self.parent().chart.series()[i].show()
+            else:
+                self.parent().chart.series()[i].hide()
 
     def pickSerieColor(self):
         for i in range(len(self.serieColorPickButtons)):
@@ -67,6 +84,7 @@ class PropertyWidget(QWidget):
 
     def showEvent(self, event):
         super(PropertyWidget, self).showEvent(event)
+        self.updateVisibleBoxes()
         for i in range(len(self.parent().chart.series())):
             self.seriesNameLineEdits[i].setText(self.parent().chart.series()[i].name())
             self.seriesColorValueLabels[i].setText(self.parent().chart.series()[i].color().name())
@@ -86,6 +104,9 @@ class PropertyWidget(QWidget):
             self.seriesColorLabels[i].setGeometry(0, (offset+currentLine)*self.seriesNameLineEdits[i].height(), self.width()/3, self.seriesNameLineEdits[i].height())
             self.seriesColorValueLabels[i].setGeometry(self.width()/3, (offset+currentLine)*self.seriesNameLineEdits[i].height(), self.width()/1.5, self.seriesNameLineEdits[i].height())
             self.serieColorPickButtons[i].setGeometry(self.width()-self.seriesColorValueLabels[i].height(), (offset+currentLine)*self.seriesNameLineEdits[i].height(), self.seriesColorValueLabels[i].height(), self.seriesColorValueLabels[i].height())
+
+            currentLine += 1
+            self.visibleToggleButtons[i].setGeometry(0, (offset+currentLine)*self.seriesNameLineEdits[i].height(), self.width(), self.seriesNameLineEdits[i].height())
 
             currentLine += 1
             self.hrLines[i].setGeometry(0, (offset+currentLine)*self.seriesNameLineEdits[i].height(), self.width(), self.seriesNameLineEdits[i].height())
