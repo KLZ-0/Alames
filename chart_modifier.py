@@ -1,5 +1,6 @@
 import traceback
 from PyQt5.QtWidgets import *
+from PyQt5 import QtGui
 
 class Modifier:
     """
@@ -25,7 +26,7 @@ class Modifier:
     def filterAlamesOne(self):
         try:
             if self.filterAlamesOneApplied:
-                QErrorMessage(self.parent).showMessage("Filter already applied!")
+                self.parent.errorPopup("Filter already applied!")
                 return
             self.series()[0].setName("Voltage")
             self.series()[1].setName("Current")
@@ -56,9 +57,13 @@ class Modifier:
             self.series()[2].hide()
             self.updateAxes()
 
+            self.series()[0].setColor(QtGui.QColor("#0000ff"))
+            self.series()[1].setColor(QtGui.QColor("#ff0000"))
+
+
             self.filterAlamesOneApplied = True
         except:
-            QErrorMessage(self.parent).showMessage(traceback.format_exc())
+            self.parent.errorPopup(traceback.format_exc())
 
     def invertPointY(self, point):
         point.setY(-point.y())

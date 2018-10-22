@@ -50,6 +50,9 @@ class Window(QMainWindow):
             return QFileDialog.getOpenFileName(self, 'Select CSV file', '/', "CSV files (*.csv *.csv.xz)")[0]
         return QFileDialog.getOpenFileName(self, 'Select CSV file', 'C:', "CSV files (*.csv *.csv.xz)")[0].encode('utf-8').decode('utf-8', 'replace')
 
+    def errorPopup(self, text):
+        QErrorMessage(self).showMessage(text)
+
 ######## Event handlers
 
     def keyPressEvent(self, event):

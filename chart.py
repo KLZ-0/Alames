@@ -49,7 +49,10 @@ class Chart(QChart, chart_modifier.Modifier):
         self.xdata = []
 
         if lFileName.endswith(".csv.xz"):
-            lFileName = lzma.open(lFileName) # file name or object
+            try:
+                lFileName = lzma.open(lFileName) # file name or object
+            except lzma.LZMAError:
+                self.parent.errorPopup("LZMA decompression failed - damaged xz file")
 
         f = pandas.read_csv(lFileName)
         csv = f.values

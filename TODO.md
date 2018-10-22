@@ -32,6 +32,9 @@
  - Add left widget for maybe filters?
  - Use compression for output files
 
+**BUGS**:
+ - "Empty filename passed to function" - happena when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}
+
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
  - select measurement [keyboard shortcut] > {to be added}
