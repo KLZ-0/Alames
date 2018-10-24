@@ -29,6 +29,8 @@
  - Re-add functionality
  - Place the charting subsystem in its **own widget** for versatility
  - Add left widget for maybe filters?
+ - add exporter
+ - fix slider
 
 **BUGS**:
  - "Empty filename passed to function" - happena when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}

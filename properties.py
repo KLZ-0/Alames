@@ -29,7 +29,7 @@ class PropertyWidget(QWidget):
 
     def updateVisibleBoxes(self):
         for section in self.sections:
-            self.section.updateVisibleBox()
+            section.updateVisibleBox()
 
     def updateSections(self):
         for section in self.sections:

@@ -13,7 +13,7 @@ class BottomWidget(QWidget):
         super(BottomWidget, self).__init__(parent)
 
         self.scrollBar = QScrollBar(QtCore.Qt.Horizontal, self)
-        self.scrollBar.setRange(100, 300)
+        self.scrollBar.setRange(1, 1000)
         self.scrollBar.valueChanged.connect(self.applySettings)
 
 
