@@ -26,3 +26,6 @@ class BottomWidget(QWidget):
     def resizeEvent(self, event):
         super(BottomWidget, self).resizeEvent(event)
         self.scrollBar.setGeometry(0, 0, self.width()-self.width()/6, self.scrollBar.height())
+
+    def keyPressEvent(self, event):
+        self.parent().chart.chart_view.keyPressEvent(event)

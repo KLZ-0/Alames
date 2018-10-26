@@ -49,3 +49,6 @@ class PropertyWidget(QWidget):
             section.setGeometry(0, currentOffset, self.width(), heightOffset)
             currentOffset += heightOffset
                 # section
+
+    def keyPressEvent(self, event):
+        self.parent().chart.chart_view.keyPressEvent(event)

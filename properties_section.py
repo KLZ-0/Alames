@@ -73,6 +73,6 @@ class Section(QWidget):
         self.colorLabel.setGeometry(0, itemHeight, self.width()/3, itemHeight)
         self.colorValueLabel.setGeometry(self.width()/3, itemHeight, self.width()/1.5, itemHeight)
         self.colorPickButton.setGeometry(self.width()-itemHeight, itemHeight, itemHeight, itemHeight)
+        self.visibleToggleButton.setGeometry(0, itemHeight*2, self.width(), itemHeight)
 
-        self.visibleToggleButton.setGeometry(0, self.height()-itemHeight*1.5, self.width(), itemHeight)
         self.hrLine.setGeometry(0, self.height()-itemHeight/2, self.width(), itemHeight)
