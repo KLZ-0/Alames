@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os, sys, platform
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
