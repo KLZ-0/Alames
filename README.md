@@ -13,11 +13,11 @@ This repository was established for tracking changes and managing my workflow..
 Lincensed under the MIT license.
 
 # Installation
-## Linux
+### Linux
 
-*to be added*
+Varies by distribution.. you should install the dependencies using your package manager or if you want you can use pip: `pip install -r ./requirements.txt` or `pip install --user -r ./requirements.txt`
 
-## Windows
+### Windows
 **Install dependencies:**
 
 Run (double click on) `install-dependencies.bat`
