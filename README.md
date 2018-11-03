@@ -22,9 +22,7 @@ Varies by distribution.. you should install the dependencies using your package 
 
 Run (double click on) `install-dependencies.bat`
 
-Set .pyw file type association for Pythonw (needed for launcher):
-
-Run as administrator (right click and select "run as administrator") `install-launcher.bat`
+If an editor would open instead of the app - set .pyw file type association for Pythonw manually or run as administrator `install-launcher.bat`
 
 **Launch application:**
 

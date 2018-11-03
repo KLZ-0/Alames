@@ -51,8 +51,8 @@ class Window(QMainWindow):
 
     def fileSelect(self):
         if platform.uname().system == "Linux":
-            return QFileDialog.getOpenFileName(self, 'Select CSV file', '/', "CSV files (*.csv *.csv.xz)")[0]
-        return QFileDialog.getOpenFileName(self, 'Select CSV file', 'C:', "CSV files (*.csv *.csv.xz)")[0].encode('utf-8').decode('utf-8', 'replace')
+            return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0]
+        return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0].encode("utf-8").decode("utf-8", "replace")
 
     def errorPopup(self, text):
         QErrorMessage(self).showMessage(text)
