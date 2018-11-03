@@ -12,14 +12,24 @@ This repository was established for tracking changes and managing my workflow..
 
 Lincensed under the MIT license.
 
-# Requirements - can change any time
- - **Linux (or Windows - not tested)**
- - **Python** version 3.X with:
-   - **[PyQt5](https://pypi.python.org/pypi/PyQt5)**
-   - **[PyQtChart](https://pypi.python.org/pypi/PyQtChart/5.7)**
-   - **[pyserial](https://pypi.python.org/pypi/pyserial)**
-   - **[pandas](https://pypi.python.org/pypi/pandas/0.22.0)**
-   - **[numpy](https://pypi.python.org/pypi/numpy)**
+# Installation
+## Linux
 
+*to be added*
 
-   install dependencies: `pip install -r requirements.txt`
+## Windows
+**Install dependencies:**
+
+Run (double click on) `install-dependencies.bat`
+
+Set .pyw file type association for Pythonw (needed for launcher):
+
+Run as administrator (right click and select "run as administrator") `install-dependencies.bat`
+
+**Launch application:**
+
+Run (double click on) `Alames.pyw`
+
+# Requirements
+ - **Linux or Windows**
+ - **Python 3 and pip** installed and added to PATH

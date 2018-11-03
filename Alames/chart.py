@@ -7,10 +7,10 @@ import numpy as np
 import math
 import lzma
 
-import chart_view
-import properties
-import bottom_widget
-import chart_modifier
+from Alames import chart_view
+from Alames import properties
+from Alames import bottom_widget
+from Alames import chart_modifier
 
 class Chart(QChart, chart_modifier.Modifier):
     """

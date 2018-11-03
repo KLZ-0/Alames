@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 import pandas
 import numpy as np
-import properties_section
+
+from Alames import properties_section
 
 class PropertyWidget(QWidget):
     """

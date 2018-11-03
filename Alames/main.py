@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis
 from pathlib import Path
 
-import chart
-import chart_view
+from Alames import chart
+from Alames import chart_view
 
 class Window(QMainWindow):
     """
@@ -15,8 +15,10 @@ class Window(QMainWindow):
     Manages the whole window except for the charting subsystem which is managed by Chart.
     Initializes Chart as its own property
     """
-    def __init__(self):
+    def __init__(self, app):
         super(Window, self).__init__()
+        self.app = app
+
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)
 
@@ -29,11 +31,11 @@ class Window(QMainWindow):
         f.setPointSize(24)
         self.initLabel.setFont(f)
 
-        # self.constructChart(op_dir, app)
+        # self.constructChart(op_dir, self.app)
 
         self.show()
-        self.windowHandle().setScreen(app.screens()[-1])
-        self.setGeometry(app.screens()[-1].availableGeometry())
+        self.windowHandle().setScreen(self.app.screens()[-1])
+        self.setGeometry(self.app.screens()[-1].availableGeometry())
         self.setWindowState(QtCore.Qt.WindowMaximized)
 
 ######## Open file methods
@@ -44,7 +46,7 @@ class Window(QMainWindow):
             self.createChart(f)
 
     def createChart(self, csvFile):
-        self.chart.constructChart(csvFile, app)
+        self.chart.constructChart(csvFile, self.app)
         self.initLabel.hide()
 
     def fileSelect(self):
@@ -63,9 +65,9 @@ class Window(QMainWindow):
         if "o" in key:
             self.openFile()
         if "q" in key or event.key() == QtCore.Qt.Key_Escape:
-            app.exit()
+            self.app.exit()
         if event.key() == QtCore.Qt.Key_F12:
-            app.aboutQt()
+            self.app.aboutQt()
 
     def dragEnterEvent(self, event):
         super(Window, self).dragEnterEvent(event)
@@ -78,14 +80,3 @@ class Window(QMainWindow):
 
     def resizeEvent(self, event):
         self.initLabel.setGeometry(self.contentsRect())
-
-######## Actual start
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setApplicationDisplayName("Alames")
-    # app.setWindowIcon(QtGui.QIcon("icons/main.png"))
-    QtGui.QFontDatabase.addApplicationFont("fonts/Gidole-Regular.ttf")
-    app.setFont(QtGui.QFont("Gidole"))
-    ex = Window()
-    sys.exit(app.exec_())
