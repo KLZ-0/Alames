@@ -1,3 +1,5 @@
+Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016-September/038129.html
+
 # OLD
 
 **IDEAs**:
@@ -19,21 +21,22 @@
 **Finishing touch**:
  - add installation guide
  - add requirements.txt
+ - add licensing header to every file
 
 **IDEAs**:
   - customise input byte order/setting when measuring - make compatible with some commercial analysers
 
 **TODOs**:
- - Cleanup the mess I made a year ago ;)
  - Resolution change **not supported!** >> *the widgets only get resized at creation*
- - Re-add functionality
+ - Re-add functionality from reference/
  - Place the charting subsystem in its **own widget** for versatility
  - Add left widget for maybe filters?
  - add exporter
- - fix slider
+ - **fix slider**
+ - ciastkove ulohy do zoznamu
 
 **BUGS**:
- - "Empty filename passed to function" - happena when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}
+ - "Empty filename passed to function" - happens when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}
  - smetimes this Qt error happens unpredictably, but it does not cause any disturbance and the user is not affected - "qt.qpa.xcb: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1665, resource id: 37781937, major code: 40 (TranslateCoords), minor code: 0"
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
