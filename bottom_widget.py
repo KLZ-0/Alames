@@ -14,10 +14,10 @@ class BottomWidget(QWidget):
 
         self.scrollBar = QScrollBar(QtCore.Qt.Horizontal, self)
         self.scrollBar.setRange(1, 1000)
-        self.scrollBar.valueChanged.connect(self.applySettings)
+        self.scrollBar.valueChanged.connect(self.scroll)
 
 
-    def applySettings(self):
+    def scroll(self):
         # print(self.scrollBar.value())
         self.parent().chart.scroll(self.scrollBar.value()/100, 0)
 

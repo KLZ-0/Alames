@@ -20,11 +20,11 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 
 **Finishing touch**:
  - add installation guide
- - add requirements.txt
  - add licensing header to every file
 
 **IDEAs**:
   - customise input byte order/setting when measuring - make compatible with some commercial analysers
+  - make the serial communication part in C/C++? > if not then add pyserial to requirements.txt
 
 **TODOs**:
  - Resolution change **not supported!** >> *the widgets only get resized at creation*

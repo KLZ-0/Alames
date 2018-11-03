@@ -22,4 +22,4 @@ Lincensed under the MIT license.
    - **[numpy](https://pypi.python.org/pypi/numpy)**
 
 
-   *requirements.txt will be added soon*
+   install dependencies: `pip install -r requirements.txt`
