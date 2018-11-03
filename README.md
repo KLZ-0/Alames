@@ -24,7 +24,7 @@ Run (double click on) `install-dependencies.bat`
 
 Set .pyw file type association for Pythonw (needed for launcher):
 
-Run as administrator (right click and select "run as administrator") `install-dependencies.bat`
+Run as administrator (right click and select "run as administrator") `install-launcher.bat`
 
 **Launch application:**
 
