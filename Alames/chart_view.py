@@ -81,8 +81,11 @@ class View(QChartView):
             self.parent().chart.toggleBottomWidget()
         if "m" in key:
             self.parent().chart.multiplyAll(2)
-        if "d" in key:
+        if "d" in key: # DEBUG
             self.parent().chart.filterAlamesOne()
+        if "c" in key: # DEBUG 
+            self.parent().chart.setRange(0, 150)
+
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
         if event.key() == QtCore.Qt.Key_Left:

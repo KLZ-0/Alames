@@ -1,6 +1,6 @@
 import traceback
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 
 class Modifier:
     """
@@ -70,3 +70,12 @@ class Modifier:
 
     def multiplyPoint(self, point, ratio):
         point.setY(point.y()*ratio)
+
+    def setRange(self, start, end):
+        for serie in self.series():
+            serie.setRange(start, end)
+        self.updateAxes()
+        firstX = self.mapToPosition(self.series()[0].firstPoint(), self.series()[0]).x()
+        lastX = self.mapToPosition(self.series()[0].lastPoint(), self.series()[0]).x()
+
+        self.zoomIn(QtCore.QRectF(firstX, self.plotArea().y(), lastX-firstX, self.plotArea().height()))

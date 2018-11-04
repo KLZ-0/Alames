@@ -11,6 +11,7 @@ from Alames import chart_view
 from Alames import properties
 from Alames import bottom_widget
 from Alames import chart_modifier
+from Alames import chart_lineseries
 
 class Chart(QChart, chart_modifier.Modifier):
     """
@@ -67,11 +68,9 @@ class Chart(QChart, chart_modifier.Modifier):
     def fillSeries(self):
         self.qseries = []
         for i in range(len(self.ydata)):
-            self.qseries.append(QLineSeries())
+            self.qseries.append(chart_lineseries.LineSeries(self.ydata[i]))
             # self.qseries[-1].setUseOpenGL(True)
 
-            for u in range(len(self.xdata)):
-                self.qseries[i].append(u, self.ydata[i][u])
             # IDEA: make a setting to turn off automatic header detection
             self.qseries[i].setName(str(i+1) + " - " + self.columnNames[i+1])
             # self.qseries[i].setName(str(i+1))
@@ -98,8 +97,8 @@ class Chart(QChart, chart_modifier.Modifier):
 
     def updateAxisExtremes(self):
         # NOTE: not adaptive > each curve has the same axis with the max value from the entire file
-        self.minY = min(min(x) for x in self.ydata)
-        self.maxY = max(max(x) for x in self.ydata)
+        self.minY = min(serie.min() for serie in self.series())
+        self.maxY = max(serie.max() for serie in self.series())
 
     def updateAxes(self):
         self.updateAxisExtremes()
