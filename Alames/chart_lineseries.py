@@ -38,7 +38,14 @@ class LineSeries(QLineSeries):
         self.end = self.baseRangeXData[-1]
         self.update()
 
+    def setBaseData(self, baseData):
+        self.baseVect = baseData
+        self.update()
+
 ######## Getters
+
+    def baseData(self):
+        return self.baseVect
 
     def getStart(self):
         return self.start

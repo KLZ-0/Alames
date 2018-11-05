@@ -1,7 +1,7 @@
 import os, sys
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
+from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis
 import pandas
 import numpy as np
 import math
@@ -96,7 +96,8 @@ class Chart(QChart, chart_modifier.Modifier):
 ######## Update actions
 
     def updateAxisExtremes(self):
-        # NOTE: not adaptive > each curve has the same axis with the max value from the entire file
+        # self.minY = min(min(x) for x in self.ydata)
+        # self.maxY = max(max(x) for x in self.ydata)
         self.minY = min(serie.min() for serie in self.series())
         self.maxY = max(serie.max() for serie in self.series())
 
@@ -107,9 +108,12 @@ class Chart(QChart, chart_modifier.Modifier):
         yMaxReserve = self.maxY/10
         base = 10 # round to this number
 
+        axisX = QValueAxis()
         axisY = QValueAxis()
         if self.series()[0].attachedAxes():
-            axisY =  self.series()[0].attachedAxes()[0]
+            axisX = self.series()[0].attachedAxes()[0]
+            axisY = self.series()[0].attachedAxes()[1]
+
         if self.minY <= 0:
             axisY.setMin(int(base * math.floor(float(self.minY + yMinReserve)/base)))
         else:
@@ -119,8 +123,12 @@ class Chart(QChart, chart_modifier.Modifier):
         else:
             axisY.setMax(0)
 
+        axisX.setRange(self.series()[0].getStart(), self.series()[0].getEnd())
+        axisX.hide()
+
         for serie in self.series():
             if len(serie.attachedAxes()) == 0:
+                self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
 
 ######## Toggle actions
