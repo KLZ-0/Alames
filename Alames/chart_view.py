@@ -83,8 +83,10 @@ class View(QChartView):
             self.parent().chart.multiplyAll(2)
         if "d" in key: # DEBUG
             self.parent().chart.filterAlamesOne()
-        if "c" in key: # DEBUG 
+        if "c" in key: # DEBUG
             self.parent().chart.setRange(0, 150)
+        if "r" in key: # DEBUG
+            self.parent().chart.zoomReset()
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
