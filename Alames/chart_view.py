@@ -87,6 +87,8 @@ class View(QChartView):
             self.parent().chart.filterAlamesOne()
         if "r" in key: # DEBUG
             self.parent().chart.zoomReset()
+        if "u" in key: # DEBUG
+            self.parent().chart.leftWidget.updateAll()
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)

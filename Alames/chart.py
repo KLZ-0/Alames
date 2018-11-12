@@ -138,6 +138,17 @@ class Chart(QChart, chart_modifier.Modifier):
                 self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
 
+######## Getters
+
+    def getRange(self):
+        return self.series()[0].getStart(), self.series[0].getEnd()
+
+    def getStart(self):
+        return self.series()[0].getStart()
+
+    def getEnd(self):
+        return self.series()[0].getEnd()
+
 ######## Toggle actions
 
     def toggleSerieVisiblity(self, key):
