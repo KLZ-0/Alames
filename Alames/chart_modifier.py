@@ -75,3 +75,4 @@ class Modifier:
         for serie in self.series():
             serie.setRange(start, end)
         self.updateAxes()
+        self.bottomWidget.updateRange()

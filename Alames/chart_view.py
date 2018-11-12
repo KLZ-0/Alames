@@ -77,14 +77,14 @@ class View(QChartView):
             self.parent().chart.toggleAnimatable(key)
         if "p" in key:
             self.parent().chart.toggleProperties()
+        if "f" in key:
+            self.parent().chart.toggleLeftWidget()
         if "t" in key:
             self.parent().chart.toggleBottomWidget()
         if "m" in key:
             self.parent().chart.multiplyAll(2)
         if "d" in key: # DEBUG
             self.parent().chart.filterAlamesOne()
-        if "c" in key: # DEBUG
-            self.parent().chart.setRange(0, 150)
         if "r" in key: # DEBUG
             self.parent().chart.zoomReset()
 

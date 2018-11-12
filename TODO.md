@@ -15,6 +15,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - HW: Construct DIN voltage Transformer, calibrate    NOTE: Partially done
  - Add scaling of phasor arrows
  - Create scale and valueLabels in phasorWidget
+ - Add zoom widget to the left side
 
 # NEW
 

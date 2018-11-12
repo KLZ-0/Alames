@@ -9,6 +9,7 @@ import lzma
 
 from Alames import chart_view
 from Alames import properties
+from Alames import left_widget
 from Alames import bottom_widget
 from Alames import chart_modifier
 from Alames import chart_lineseries
@@ -40,7 +41,7 @@ class Chart(QChart, chart_modifier.Modifier):
         self.fillChart()
         self.updateAxes()
         self.createBottomWidget()
-        self.createPropertyWidget()
+        self.createSideWidgets()
 
         self.chart_view.show()
         self.chart_view.setGeometry(self.parent.contentsRect())
@@ -79,19 +80,25 @@ class Chart(QChart, chart_modifier.Modifier):
         for serie in self.qseries:
             self.addSeries(serie)
 
-    def createPropertyWidget(self):
+    def createSideWidgets(self):
         self.propertyWidget = properties.PropertyWidget(self.parent)
         self.propertyWidget.setGeometry(self.parent.width()/6*5,
+                                        self.propertiesBorder,
+                                        self.parent.width()/6-self.propertiesBorder,
+                                        self.parent.height()-2*self.propertiesBorder - self.bottomWidget.height())
+        self.leftWidget = left_widget.LeftWidget(self.parent)
+        self.leftWidget.setGeometry(    self.propertiesBorder,
                                         self.propertiesBorder,
                                         self.parent.width()/6-self.propertiesBorder,
                                         self.parent.height()-2*self.propertiesBorder - self.bottomWidget.height())
 
     def createBottomWidget(self):
         self.bottomWidget = bottom_widget.BottomWidget(self.parent)
+        childrenHeight = sum([child.height() for child in self.bottomWidget.children()])
         self.bottomWidget.setGeometry(  self.propertiesBorder,
-                                        self.parent.height() - self.propertiesBorder*2 - self.bottomWidget.scrollBar.height(),
+                                        self.parent.height() - self.propertiesBorder*2 - childrenHeight,
                                         self.parent.width() - 2*self.propertiesBorder,
-                                        self.bottomWidget.scrollBar.height()+2*self.propertiesBorder)
+                                        childrenHeight+2*self.propertiesBorder)
 
 ######## Update actions
 
@@ -153,17 +160,31 @@ class Chart(QChart, chart_modifier.Modifier):
             self.setAnimationOptions(QChart.NoAnimation)
 
     def toggleProperties(self):
+        br = self.chart_view.geometry()
+        widgetWidth = self.parent.width()/6
         if self.propertyWidget.isVisible():
             self.propertyWidget.hide()
-            self.chart_view.setGeometry(0, 0, self.parent.width(), self.chart_view.height())
+            self.chart_view.setGeometry(br.x(), br.y(), br.width()+widgetWidth, br.height())
         else:
             self.propertyWidget.show()
-            self.chart_view.setGeometry(0, 0, self.parent.width()/6*5, self.chart_view.height())
+            self.chart_view.setGeometry(br.x(), br.y(), br.width()-widgetWidth, br.height())
+
+    def toggleLeftWidget(self):
+        br = self.chart_view.geometry()
+        widgetWidth = self.parent.width()/6
+        if self.leftWidget.isVisible():
+            self.leftWidget.hide()
+            self.chart_view.setGeometry(br.x()-widgetWidth, br.y(), br.width()+widgetWidth, br.height())
+        else:
+            self.leftWidget.show()
+            self.chart_view.setGeometry(br.x()+widgetWidth, br.y(), br.width()-widgetWidth, br.height())
 
     def toggleBottomWidget(self):
+        br = self.chart_view.geometry()
+        widgetHeight = self.bottomWidget.height()
         if self.bottomWidget.isVisible():
             self.bottomWidget.hide()
-            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.parent.height())
+            self.chart_view.setGeometry(br.x(), br.y(), br.width(), br.height()+widgetHeight)
         else:
             self.bottomWidget.show()
-            self.chart_view.setGeometry(0, 0, self.chart_view.width(), self.parent.height() - self.bottomWidget.height())
+            self.chart_view.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
