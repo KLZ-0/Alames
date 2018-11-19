@@ -21,12 +21,20 @@ class LeftWidget(QWidget):
         self.endBox = QSpinBox(self)
         self.startBox.setMinimum(self.parent().chart.getStart())
         self.startBox.setMaximum(self.parent().chart.getEnd()-1)
+        self.startBox.valueChanged.connect(self.updateRange)
         self.endBox.setMinimum(self.parent().chart.getStart()+1)
         self.endBox.setMaximum(self.parent().chart.getEnd())
+        self.endBox.valueChanged.connect(self.updateRange)
+
+        self.resetButton = QPushButton("Reset", self)
+        self.resetButton.clicked.connect(self.resetRange)
 
         self.updateAll()
 
 ######## Update Actions
+
+    def updateRange(self):
+        self.parent().chart.setZoom(self.startBox.value(), self.endBox.value())
 
     def recalculatePadding(self):
         padding = self.padding
@@ -37,6 +45,10 @@ class LeftWidget(QWidget):
         self.infoLabel.setText("Range:")
         self.startBox.setValue(self.parent().chart.getStart())
         self.endBox.setValue(self.parent().chart.getEnd())
+
+    def resetRange(self):
+        self.startBox.setValue(self.parent().chart.series()[0].getStart())
+        self.endBox.setValue(self.parent().chart.series()[0].getEnd())
 
 ######## Event handlers
 
@@ -49,6 +61,7 @@ class LeftWidget(QWidget):
         self.infoLabel.setGeometry(0, 0, self.width(), self.infoLabel.height()*2)
         self.startBox.setGeometry(0, self.infoLabel.height(), self.width()/2, self.startBox.height()+2*self.padding)
         self.endBox.setGeometry(self.width()/2, self.infoLabel.height(), self.width()/2, self.endBox.height()+2*self.padding)
+        self.resetButton.setGeometry(0, self.endBox.y() + self.endBox.height(), self.width(), self.resetButton.height())
         self.recalculatePadding()
 
     def keyPressEvent(self, event):

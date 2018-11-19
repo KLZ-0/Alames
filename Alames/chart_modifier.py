@@ -76,3 +76,9 @@ class Modifier:
             serie.setRange(start, end)
         self.updateAxes()
         self.bottomWidget.updateRange()
+
+    def setZoom(self, start, end):
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
+        area = self.plotArea()
+        self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))

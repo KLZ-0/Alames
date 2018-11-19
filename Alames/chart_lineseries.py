@@ -70,3 +70,6 @@ class LineSeries(QLineSeries):
 
     def lastPoint(self):
         return self.currentVect[-1]
+
+    def getPoint(self, pos):
+        return self.currentVect[pos]
