@@ -105,11 +105,7 @@ class View(QChartView):
         ######## set range values to left widget
         super(View, self).mouseReleaseEvent(event)
         if event.button() == QtCore.Qt.LeftButton:
-            plotArea = self.chart().plotArea()
-            startX = self.chart().mapToValue(QtCore.QPointF(plotArea.x(), plotArea.y()), self.chart().series()[0]).x()
-            endX = self.chart().mapToValue(QtCore.QPointF(plotArea.x() + plotArea.width(), plotArea.y()), self.chart().series()[0]).x()
-            self.chart().leftWidget.startBox.setValue(round(startX))
-            self.chart().leftWidget.endBox.setValue(round(endX))
+            self.chart().leftWidget.updateValuesFromChart()
 
 
     def resizeEvent(self, event):

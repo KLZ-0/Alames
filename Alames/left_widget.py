@@ -50,6 +50,13 @@ class LeftWidget(QWidget):
         self.startBox.setValue(self.parent().chart.series()[0].getStart())
         self.endBox.setValue(self.parent().chart.series()[0].getEnd())
 
+    def updateValuesFromChart(self):
+        plotArea = self.parent().chart.plotArea()
+        startX = self.parent().chart.mapToValue(QtCore.QPointF(plotArea.x(), plotArea.y()), self.parent().chart.series()[0]).x()
+        endX = self.parent().chart.mapToValue(QtCore.QPointF(plotArea.x() + plotArea.width(), plotArea.y()), self.parent().chart.series()[0]).x()
+        self.startBox.setValue(round(startX))
+        self.endBox.setValue(round(endX))
+
 ######## Event handlers
 
     def showEvent(self, event):

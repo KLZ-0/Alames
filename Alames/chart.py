@@ -138,6 +138,11 @@ class Chart(QChart, chart_modifier.Modifier):
                 self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
 
+        try:
+            self.leftWidget.updateValuesFromChart() # FIXME: Temporary workaround and even then it does not work..
+        except AttributeError as e:
+            print(e)
+
 ######## Getters
 
     def getRange(self):
@@ -199,3 +204,17 @@ class Chart(QChart, chart_modifier.Modifier):
         else:
             self.bottomWidget.show()
             self.chart_view.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
+
+######## UNSORTED
+
+    def setRange(self, start, end):
+        for serie in self.series():
+            serie.setRange(start, end)
+        self.updateAxes()
+        self.bottomWidget.updateRange()
+
+    def setZoom(self, start, end):
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
+        area = self.plotArea()
+        self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
