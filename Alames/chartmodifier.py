@@ -2,7 +2,7 @@ import traceback
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui, QtCore
 
-class Modifier:
+class ChartModifier:
     """
     Purpose: modifying chart series
     Chart overrides this class

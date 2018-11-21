@@ -7,14 +7,12 @@ import numpy as np
 import math
 import lzma
 
-from Alames import chart_view
-from Alames import properties
-from Alames import left_widget
-from Alames import bottom_widget
-from Alames import chart_modifier
-from Alames import chart_lineseries
+from Alames import chartview
+from Alames import leftwidget
+from Alames import chartmodifier
+from Alames import chartsetup
 
-class Chart(QChart, chart_modifier.Modifier):
+class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
     """
     Purpose: setup and modify the QChart
     Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
@@ -25,80 +23,81 @@ class Chart(QChart, chart_modifier.Modifier):
         self.parent = parent
         self.propertiesBorder = 8
 
-######## Chart construction
+######## Getters
 
-    def constructChart(self, fileName, app):
-        self.setAcceptHoverEvents(True)
-        # IDEA: Set as settings animatable
-        # self.chart.setAnimationOptions(QChart.SeriesAnimations)
+    def getRange(self):
+        return self.series()[0].getStart(), self.series[0].getEnd()
 
-        self.chart_view = chart_view.View(self, self.parent, app)
-        self.chart_view.setRenderHint(QtGui.QPainter.Antialiasing)
-        self.chart_view.setRubberBand(self.chart_view.HorizontalRubberBand)
+    def getStart(self):
+        return self.series()[0].getStart()
 
-        self.loadCSV(fileName)
-        self.fillSeries()
-        self.fillChart()
+    def getEnd(self):
+        return self.series()[0].getEnd()
+
+######## View modifiers
+
+    def setRange(self, start, end):
+        for serie in self.series():
+            serie.setRange(start, end)
         self.updateAxes()
-        self.createBottomWidget()
-        self.createSideWidgets()
+        self.bottomWidget.updateRange()
 
-        self.chart_view.show()
-        self.chart_view.setGeometry(self.parent.contentsRect())
+    def setZoom(self, start, end):
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
+        area = self.plotArea()
+        self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
 
-    def loadCSV(self, lFileName):
-        self.ydata = []
-        self.xdata = []
+######## Toggle actions
 
-        if lFileName.endswith(".csv.xz"):
-            try:
-                lFileName = lzma.open(lFileName) # file name or object
-            except lzma.LZMAError:
-                self.parent.errorPopup("LZMA decompression failed - damaged xz file")
+    def toggleSerieVisiblity(self, key):
+        if int(key) > len(self.qseries): return
+        if self.series()[int(key) - 1].isVisible():
+            self.series()[int(key) - 1].hide()
+        else:
+            self.series()[int(key) - 1].show()
 
-        f = pandas.read_csv(lFileName)
-        csv = f.values
-        self.columnNames = f.columns
-        for i in range(len(csv[0])-1):
-            self.ydata.append([])
-        for row in csv:
-            self.xdata.append(row[0])
-            for i in range(len(row)-1):
-                self.ydata[i].append(row[i+1])
+        # Trigger move event after toggle to ensure current text of focusValueTextItem will change
+        c = self.cursor()
+        c.setPos(c.pos().x()+1, c.pos().y())
+        c.setPos(c.pos().x()-1, c.pos().y())
+        self.propertyWidget.updateVisibleBoxes()
 
-    def fillSeries(self):
-        self.qseries = []
-        for i in range(len(self.ydata)):
-            self.qseries.append(chart_lineseries.LineSeries(self.ydata[i]))
-            # self.qseries[-1].setUseOpenGL(True)
+    def toggleAnimatable(self, key):
+        if self.animationOptions() == QChart.NoAnimation:
+            self.setAnimationOptions(QChart.SeriesAnimations)
+        else:
+            self.setAnimationOptions(QChart.NoAnimation)
 
-            # IDEA: make a setting to turn off automatic header detection
-            self.qseries[i].setName(str(i+1) + " - " + self.columnNames[i+1])
-            # self.qseries[i].setName(str(i+1))
+    def toggleProperties(self):
+        br = self.chartView.geometry()
+        widgetWidth = self.parent.width()/6
+        if self.propertyWidget.isVisible():
+            self.propertyWidget.hide()
+            self.chartView.setGeometry(br.x(), br.y(), br.width()+widgetWidth, br.height())
+        else:
+            self.propertyWidget.show()
+            self.chartView.setGeometry(br.x(), br.y(), br.width()-widgetWidth, br.height())
 
-    def fillChart(self):
-        for serie in self.qseries:
-            self.addSeries(serie)
+    def toggleLeftWidget(self):
+        br = self.chartView.geometry()
+        widgetWidth = self.parent.width()/6
+        if self.leftWidget.isVisible():
+            self.leftWidget.hide()
+            self.chartView.setGeometry(br.x()-widgetWidth, br.y(), br.width()+widgetWidth, br.height())
+        else:
+            self.leftWidget.show()
+            self.chartView.setGeometry(br.x()+widgetWidth, br.y(), br.width()-widgetWidth, br.height())
 
-    def createSideWidgets(self):
-        self.propertyWidget = properties.PropertyWidget(self.parent)
-        self.propertyWidget.setGeometry(self.parent.width()/6*5,
-                                        self.propertiesBorder,
-                                        self.parent.width()/6-self.propertiesBorder,
-                                        self.parent.height()-2*self.propertiesBorder - self.bottomWidget.height())
-        self.leftWidget = left_widget.LeftWidget(self.parent)
-        self.leftWidget.setGeometry(    self.propertiesBorder,
-                                        self.propertiesBorder,
-                                        self.parent.width()/6-self.propertiesBorder,
-                                        self.parent.height()-2*self.propertiesBorder - self.bottomWidget.height())
-
-    def createBottomWidget(self):
-        self.bottomWidget = bottom_widget.BottomWidget(self.parent)
-        childrenHeight = sum([child.height() for child in self.bottomWidget.children()])
-        self.bottomWidget.setGeometry(  self.propertiesBorder,
-                                        self.parent.height() - self.propertiesBorder*2 - childrenHeight,
-                                        self.parent.width() - 2*self.propertiesBorder,
-                                        childrenHeight+2*self.propertiesBorder)
+    def toggleBottomWidget(self):
+        br = self.chartView.geometry()
+        widgetHeight = self.bottomWidget.height()
+        if self.bottomWidget.isVisible():
+            self.bottomWidget.hide()
+            self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()+widgetHeight)
+        else:
+            self.bottomWidget.show()
+            self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
 
 ######## Update actions
 
@@ -138,83 +137,7 @@ class Chart(QChart, chart_modifier.Modifier):
                 self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
 
-        try:
-            self.leftWidget.updateValuesFromChart() # FIXME: Temporary workaround and even then it does not work..
-        except AttributeError as e:
-            print(e)
-
-######## Getters
-
-    def getRange(self):
-        return self.series()[0].getStart(), self.series[0].getEnd()
-
-    def getStart(self):
-        return self.series()[0].getStart()
-
-    def getEnd(self):
-        return self.series()[0].getEnd()
-
-######## Toggle actions
-
-    def toggleSerieVisiblity(self, key):
-        if int(key) > len(self.qseries): return
-        if self.series()[int(key) - 1].isVisible():
-            self.series()[int(key) - 1].hide()
-        else:
-            self.series()[int(key) - 1].show()
-
-        # Trigger move event after toggle to ensure current text of focusValueTextItem will change
-        c = self.cursor()
-        c.setPos(c.pos().x()+1, c.pos().y())
-        c.setPos(c.pos().x()-1, c.pos().y())
-        self.propertyWidget.updateVisibleBoxes()
-
-    def toggleAnimatable(self, key):
-        if self.animationOptions() == QChart.NoAnimation:
-            self.setAnimationOptions(QChart.SeriesAnimations)
-        else:
-            self.setAnimationOptions(QChart.NoAnimation)
-
-    def toggleProperties(self):
-        br = self.chart_view.geometry()
-        widgetWidth = self.parent.width()/6
-        if self.propertyWidget.isVisible():
-            self.propertyWidget.hide()
-            self.chart_view.setGeometry(br.x(), br.y(), br.width()+widgetWidth, br.height())
-        else:
-            self.propertyWidget.show()
-            self.chart_view.setGeometry(br.x(), br.y(), br.width()-widgetWidth, br.height())
-
-    def toggleLeftWidget(self):
-        br = self.chart_view.geometry()
-        widgetWidth = self.parent.width()/6
-        if self.leftWidget.isVisible():
-            self.leftWidget.hide()
-            self.chart_view.setGeometry(br.x()-widgetWidth, br.y(), br.width()+widgetWidth, br.height())
-        else:
-            self.leftWidget.show()
-            self.chart_view.setGeometry(br.x()+widgetWidth, br.y(), br.width()-widgetWidth, br.height())
-
-    def toggleBottomWidget(self):
-        br = self.chart_view.geometry()
-        widgetHeight = self.bottomWidget.height()
-        if self.bottomWidget.isVisible():
-            self.bottomWidget.hide()
-            self.chart_view.setGeometry(br.x(), br.y(), br.width(), br.height()+widgetHeight)
-        else:
-            self.bottomWidget.show()
-            self.chart_view.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
-
-######## UNSORTED
-
-    def setRange(self, start, end):
-        for serie in self.series():
-            serie.setRange(start, end)
-        self.updateAxes()
-        self.bottomWidget.updateRange()
-
-    def setZoom(self, start, end):
-        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
-        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
-        area = self.plotArea()
-        self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
+        # try:
+        #     self.leftWidget.updateValuesFromChart() # FIXME: Temporary workaround and even then it does not work..
+        # except AttributeError as e:
+        #     print(e)

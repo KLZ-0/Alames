@@ -3,9 +3,9 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 
-class LineSeries(QLineSeries):
+class ChartLineSeries(QLineSeries):
     def __init__(self, ydata=[]):
-        super(LineSeries, self).__init__()
+        super(ChartLineSeries, self).__init__()
 
         self.baseRangeXData = range(len(ydata))
 

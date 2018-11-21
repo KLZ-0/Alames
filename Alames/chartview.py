@@ -18,7 +18,7 @@ class View(QChartView):
         self.setInteractive(True)
         self.createTrackingTools()
 
-######## Tracking tools - setup
+######## Init - tracking tools setup
 
     def createTrackingTools(self):
         self.focusLine = QGraphicsLineItem(0, 0, 0, 10, self.chart())

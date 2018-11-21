@@ -7,7 +7,6 @@ from PyQt5.QtChart import QLineSeries, QValueAxis
 from pathlib import Path
 
 from Alames import chart
-from Alames import chart_view
 
 class Window(QMainWindow):
     """
