@@ -1,12 +1,12 @@
 import traceback
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 
-class Modifier:
+class ChartModifier:
     """
     Purpose: modifying chart series
     Chart overrides this class
-    # NOTE: Use chart.series()[i].replace()
+    # NOTE: Use chart.series()[i].replace() >> NEW: use chart.series()[i].setBaseData() to edit the whole series data
     # NOTE: ydata is not the same len as chart.series.. some series could be intentionally hidden and not present in ydata, therefore they are not displayed in the tracking tools
     """
     def __init__(self):
@@ -16,11 +16,11 @@ class Modifier:
         self.ydata = []
         for serie in self.series():
             self.ydata.append([])
-            vect = serie.pointsVector()
+            vect = serie.baseData()
             for point in vect:
                 point.setY(point.y()*ratio)
                 self.ydata[-1].append(point.y())
-            serie.replace(vect)
+            serie.setBaseData(vect)
         self.updateAxes()
 
     def filterAlamesOne(self):
@@ -32,9 +32,9 @@ class Modifier:
             self.series()[1].setName("Current")
             self.series()[2].setName("State")
 
-            voltageVect = self.series()[0].pointsVector()
-            currentVect = self.series()[1].pointsVector()
-            stateVect = self.series()[2].pointsVector()
+            voltageVect = self.series()[0].baseData()
+            currentVect = self.series()[1].baseData()
+            stateVect = self.series()[2].baseData()
             self.ydata = [[], []]
             for i in range(len(stateVect)):
                 state = stateVect[i].y()
@@ -52,14 +52,14 @@ class Modifier:
                 self.ydata[0].append(voltageVect[i].y())
                 self.ydata[1].append(currentVect[i].y())
 
-            self.series()[0].replace(voltageVect)
-            self.series()[1].replace(currentVect)
+            self.series()[0].setBaseData(voltageVect)
+            self.series()[1].setBaseData(currentVect)
             self.series()[2].hide()
-            self.updateAxes()
 
             self.series()[0].setColor(QtGui.QColor("#0000ff"))
             self.series()[1].setColor(QtGui.QColor("#ff0000"))
             self.propertyWidget.updateSections()
+            self.updateAxes()
 
             self.filterAlamesOneApplied = True
         except:

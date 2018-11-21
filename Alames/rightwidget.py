@@ -5,16 +5,16 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
-from Alames import properties_section
+from Alames import rightwidgetsection
 
-class PropertyWidget(QWidget):
+class RightWidget(QWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
     def __init__(self, parent):
-        super(PropertyWidget, self).__init__(parent)
+        super(RightWidget, self).__init__(parent)
 
         self.setupCurveSettings()
 
@@ -24,7 +24,7 @@ class PropertyWidget(QWidget):
         self.sections = []
 
         for serie in self.parent().chart.series():
-            self.sections.append(properties_section.Section(self, serie))
+            self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
 
 ######## Update Actions
 
@@ -39,11 +39,11 @@ class PropertyWidget(QWidget):
 ######## Event handlers
 
     def showEvent(self, event):
-        super(PropertyWidget, self).showEvent(event)
+        super(RightWidget, self).showEvent(event)
         self.updateSections()
 
     def resizeEvent(self, event):
-        super(PropertyWidget, self).resizeEvent(event)
+        super(RightWidget, self).resizeEvent(event)
         currentOffset = 0
         heightOffset = self.height()/len(self.sections)
         for section in self.sections:

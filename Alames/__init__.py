@@ -2,7 +2,9 @@ import sys, os
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase, QFont
 
-from Alames import main
+from Alames.window import Window
+
+VERSION = "1.0-r1"
 
 def launch():
     app = QApplication(sys.argv)
@@ -10,5 +12,8 @@ def launch():
     # app.setWindowIcon(QtGui.QIcon("icons/main.png"))
     QFontDatabase.addApplicationFont(os.path.join(os.path.join(os.path.dirname(__file__), "fonts"), "Gidole-Regular.ttf"))
     app.setFont(QFont("Gidole"))
-    ex = main.Window(app)
+    Window(app)
     sys.exit(app.exec_())
+
+def version():
+    return VERSION

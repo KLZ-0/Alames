@@ -18,7 +18,7 @@ class View(QChartView):
         self.setInteractive(True)
         self.createTrackingTools()
 
-######## Tracking tools - setup
+######## Init - tracking tools setup
 
     def createTrackingTools(self):
         self.focusLine = QGraphicsLineItem(0, 0, 0, 10, self.chart())
@@ -77,12 +77,19 @@ class View(QChartView):
             self.parent().chart.toggleAnimatable(key)
         if "p" in key:
             self.parent().chart.toggleProperties()
+        if "f" in key:
+            self.parent().chart.toggleLeftWidget()
         if "t" in key:
             self.parent().chart.toggleBottomWidget()
         if "m" in key:
             self.parent().chart.multiplyAll(2)
-        if "d" in key:
+        if "d" in key: # DEBUG
             self.parent().chart.filterAlamesOne()
+        if "r" in key: # DEBUG
+            self.parent().chart.zoomReset()
+        if "u" in key: # DEBUG
+            self.parent().chart.leftWidget.updateAll()
+
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
         if event.key() == QtCore.Qt.Key_Left:
@@ -92,6 +99,14 @@ class View(QChartView):
         super(View, self).mousePressEvent(event)
         if event.button() == QtCore.Qt.MiddleButton:
             self.chart().zoomReset()
+
+
+    def mouseReleaseEvent(self, event):
+        ######## set range values to left widget
+        super(View, self).mouseReleaseEvent(event)
+        if event.button() == QtCore.Qt.LeftButton:
+            self.chart().leftWidget.updateValuesFromChart()
+
 
     def resizeEvent(self, event):
         super(View, self).resizeEvent(event)

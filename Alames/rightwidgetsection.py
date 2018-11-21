@@ -3,9 +3,9 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 
-class Section(QWidget):
+class RightWidgetSection(QWidget):
     def __init__(self, parent, serie):
-        super(Section, self).__init__(parent)
+        super(RightWidgetSection, self).__init__(parent)
         self.serie = serie
 
         self.nOfLines = 4
@@ -64,7 +64,7 @@ class Section(QWidget):
 ######## Event handlers
 
     def resizeEvent(self, event):
-        super(Section, self).resizeEvent(event)
+        super(RightWidgetSection, self).resizeEvent(event)
         itemHeight = self.nameLineEdit.height()
 
         self.nameLabel.setGeometry(0, 0, self.width()/3, itemHeight)

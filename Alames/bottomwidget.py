@@ -12,20 +12,23 @@ class BottomWidget(QWidget):
     def __init__(self, parent):
         super(BottomWidget, self).__init__(parent)
 
-        self.scrollBar = QScrollBar(QtCore.Qt.Horizontal, self)
-        self.scrollBar.setRange(1, 1000)
-        self.scrollBar.valueChanged.connect(self.scroll)
+        # self.scrollBar = QScrollBar(QtCore.Qt.Horizontal, self)
+        # self.scrollBar.setRange(1, 1000)
+        # self.scrollBar.valueChanged.connect(self.scroll)
 
 
     def scroll(self):
         # print(self.scrollBar.value())
-        self.parent().chart.scroll(self.scrollBar.value()/100, 0)
+        # self.parent().chart.scroll(self.scrollBar.value()/100, 0)
+        pass
+
+    
 
 ######## Event handlers
 
     def resizeEvent(self, event):
         super(BottomWidget, self).resizeEvent(event)
-        self.scrollBar.setGeometry(0, 0, self.width()-self.width()/6, self.scrollBar.height())
+        # self.scrollBar.setGeometry(0, 0, self.width()-self.width()/6, self.scrollBar.height())
 
     def keyPressEvent(self, event):
         self.parent().chart.chart_view.keyPressEvent(event)
