@@ -4,6 +4,8 @@ from PyQt5.QtGui import QFontDatabase, QFont
 
 from Alames.window import Window
 
+VERSION = "1.0-r1"
+
 def launch():
     app = QApplication(sys.argv)
     app.setApplicationDisplayName("Alames")
@@ -12,3 +14,6 @@ def launch():
     app.setFont(QFont("Gidole"))
     Window(app)
     sys.exit(app.exec_())
+
+def version():
+    return VERSION
