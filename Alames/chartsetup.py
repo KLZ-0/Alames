@@ -22,6 +22,8 @@ class ChartSetup:
         # self.chart.setAnimationOptions(QChart.SeriesAnimations)
 
         self.chartView = chartview.View(self, self.parent, app)
+        # self.chartView = self.parent.chartView
+        # self.chartView.setChart(self.parent.chart)
         self.chartView.setRenderHint(QtGui.QPainter.Antialiasing)
         self.chartView.setRubberBand(self.chartView.HorizontalRubberBand)
 

@@ -6,9 +6,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis
 from pathlib import Path
 
+from Alames.generated.ui_mainwindow import Ui_MainWindow
+
 from Alames import chart
 
-class Window(QMainWindow):
+class Window(QMainWindow): # TODO: Check PySide2
     """
     Purpose: setup and modify the QMainWindow
     Manages the whole window except for the charting subsystem which is managed by Chart.
@@ -17,6 +19,8 @@ class Window(QMainWindow):
     def __init__(self, app):
         super(Window, self).__init__()
         self.app = app
+
+        # self.setupUi(self)
 
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)

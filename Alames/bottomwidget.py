@@ -16,13 +16,10 @@ class BottomWidget(QWidget):
         # self.scrollBar.setRange(1, 1000)
         # self.scrollBar.valueChanged.connect(self.scroll)
 
-
     def scroll(self):
         # print(self.scrollBar.value())
         # self.parent().chart.scroll(self.scrollBar.value()/100, 0)
         pass
-
-    
 
 ######## Event handlers
 

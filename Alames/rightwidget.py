@@ -7,7 +7,7 @@ import numpy as np
 
 from Alames import rightwidgetsection
 
-class RightWidget(QWidget):
+class RightWidget(QWidget): # TODO: Reformat to QDockWidget
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
@@ -15,7 +15,7 @@ class RightWidget(QWidget):
     """
     def __init__(self, parent):
         super(RightWidget, self).__init__(parent)
-
+        self.setLayout(QFormLayout(self))
         self.setupCurveSettings()
 
 ######## Widget construction at init
@@ -25,6 +25,7 @@ class RightWidget(QWidget):
 
         for serie in self.parent().chart.series():
             self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
+            self.layout().addWidget(self.sections[-1])
 
 ######## Update Actions
 
@@ -44,12 +45,6 @@ class RightWidget(QWidget):
 
     def resizeEvent(self, event):
         super(RightWidget, self).resizeEvent(event)
-        currentOffset = 0
-        heightOffset = self.height()/len(self.sections)
-        for section in self.sections:
-            section.setGeometry(0, currentOffset, self.width(), heightOffset)
-            currentOffset += heightOffset
-                # section
 
     def keyPressEvent(self, event):
         self.parent().chart.chart_view.keyPressEvent(event)
