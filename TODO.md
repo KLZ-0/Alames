@@ -37,7 +37,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - Place the charting subsystem in its **own widget** for versatility
  - Add left widget for maybe filters?
  - add exporter
- - **fix slider**
+ - scroll - https://www.advsofteng.com/doc/cdcppdoc/realtimezoomscrollqt.htm
 
 **BUGS**:
  - "Empty filename passed to function" - happens when clicking on an item in openFileDialog {effect of an update on my system, may or may not work on other systems - also I had to install python-pyqtchart from the AUR}

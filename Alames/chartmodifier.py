@@ -2,6 +2,8 @@ import traceback
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui, QtCore
 
+from Alames import scope
+
 class ChartModifier:
     """
     Purpose: modifying chart series
@@ -26,7 +28,7 @@ class ChartModifier:
     def filterAlamesOne(self):
         try:
             if self.filterAlamesOneApplied:
-                self.parent.errorPopup("Filter already applied!")
+                scope.errorPopup("Filter already applied!")
                 return
             self.series()[0].setName("Voltage")
             self.series()[1].setName("Current")
@@ -58,12 +60,12 @@ class ChartModifier:
 
             self.series()[0].setColor(QtGui.QColor("#0000ff"))
             self.series()[1].setColor(QtGui.QColor("#ff0000"))
-            self.propertyWidget.updateSections()
+            scope.rightWidget.updateSections()
             self.updateAxes()
 
             self.filterAlamesOneApplied = True
         except:
-            self.parent.errorPopup(traceback.format_exc())
+            scope.errorPopup(traceback.format_exc())
 
     def invertPointY(self, point):
         point.setY(-point.y())

@@ -1,4 +1,5 @@
 import sys, os, glob
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase, QFont
 from PyQt5 import uic
@@ -24,7 +25,11 @@ def launch():
     # app.setWindowIcon(QtGui.QIcon("icons/main.png"))
     QFontDatabase.addApplicationFont(os.path.join(os.path.join(os.path.dirname(__file__), "fonts"), "Gidole-Regular.ttf"))
     app.setFont(QFont("Gidole"))
-    Window(app)
+    w = Window()
+    w.show()
+    w.windowHandle().setScreen(app.screens()[-1])
+    w.setGeometry(app.screens()[-1].availableGeometry())
+    w.setWindowState(QtCore.Qt.WindowMaximized)
     sys.exit(app.exec_())
 
 def version():

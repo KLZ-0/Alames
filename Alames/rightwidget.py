@@ -5,9 +5,10 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames import scope
 from Alames import rightwidgetsection
 
-class RightWidget(QWidget): # TODO: Reformat to QDockWidget
+class RightWidget(QDockWidget): # TODO: Reformat to QDockWidget
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
@@ -15,19 +16,30 @@ class RightWidget(QWidget): # TODO: Reformat to QDockWidget
     """
     def __init__(self, parent):
         super(RightWidget, self).__init__(parent)
-        self.setLayout(QFormLayout(self))
-        self.setupCurveSettings()
+        self.chart = None
+        self.sections = []
+        # self.setup()
 
 ######## Widget construction at init
 
-    def setupCurveSettings(self):
-        self.sections = []
+    def setChart(self, chart):
+        """
+        Args: (Chart chart)
+        chart - chart to get data from
+        """
+        self.chart = chart
+        self.setup()
 
-        for serie in self.parent().chart.series():
+    def setup(self):
+        for serie in self.chart.series():
             self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
-            self.layout().addWidget(self.sections[-1])
+            self.widget().layout().addWidget(self.sections[-1]) # FIXME: Add to layout
+            # print(self.parent().rightWidget.objectName(), self.widget())
 
 ######## Update Actions
+
+    def update(self):
+        self.updateSections()
 
     def updateVisibleBoxes(self):
         for section in self.sections:
@@ -41,10 +53,7 @@ class RightWidget(QWidget): # TODO: Reformat to QDockWidget
 
     def showEvent(self, event):
         super(RightWidget, self).showEvent(event)
-        self.updateSections()
+        # self.updateSections() # FIXME: try: except:
 
-    def resizeEvent(self, event):
-        super(RightWidget, self).resizeEvent(event)
-
-    def keyPressEvent(self, event):
-        self.parent().chart.chart_view.keyPressEvent(event)
+    # def keyPressEvent(self, event):
+        # scope.chart_view.keyPressEvent(event) # FIXME: Set MainWindow grab key events

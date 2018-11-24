@@ -58,8 +58,3 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
             self.colorPickButton.setIcon(QtGui.QIcon(pixRect))
         except ValueError:
             pass
-
-######## Event handlers
-
-    def resizeEvent(self, event):
-        super(RightWidgetSection, self).resizeEvent(event)
