@@ -115,7 +115,7 @@ class View(QChartView):
     def wheelEvent(self, event):
         super(View, self).wheelEvent(event)
         self.chart().scroll(event.angleDelta().y()/8, 0)
-        scope.rightWidget.update()
+        scope.rightDock.widget().update()
 
 
     def resizeEvent(self, event):

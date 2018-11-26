@@ -60,7 +60,7 @@ class ChartModifier:
 
             self.series()[0].setColor(QtGui.QColor("#0000ff"))
             self.series()[1].setColor(QtGui.QColor("#ff0000"))
-            scope.rightWidget.updateSections()
+            scope.rightDock.widget().updateSections()
             self.updateAxes()
 
             self.filterAlamesOneApplied = True

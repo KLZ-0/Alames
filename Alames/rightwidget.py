@@ -7,7 +7,6 @@ import numpy as np
 
 from Alames.generated import ui_rightwidget
 
-from Alames import scope
 from Alames import rightwidgetsection
 
 class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to QDockWidget
@@ -56,6 +55,3 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to Q
     def showEvent(self, event):
         super(RightWidget, self).showEvent(event)
         # self.updateSections() # FIXME: try: except:
-
-    # def keyPressEvent(self, event):
-        # scope.chart_view.keyPressEvent(event) # FIXME: Set MainWindow grab key events

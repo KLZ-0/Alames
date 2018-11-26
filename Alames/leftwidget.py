@@ -91,6 +91,3 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
     def showEvent(self, event):
         super(LeftWidget, self).showEvent(event)
         # self.updateSections()
-
-    # def keyPressEvent(self, event): # FIXME: Set MainWindow grab key events
-    #     self.parent().chart.chart_view.keyPressEvent(event)
