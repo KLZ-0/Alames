@@ -50,7 +50,6 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         for serie in self.series():
             serie.setRange(start, end)
         self.updateAxes()
-        self.bottomWidget.updateRange()
 
     def setZoom(self, start, end):
         firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
@@ -80,16 +79,16 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             self.setAnimationOptions(QChart.NoAnimation)
 
     def toggleProperties(self):
-        if scope.rightWidget.isVisible():
-            scope.rightWidget.hide()
+        if scope.rightDock.isVisible():
+            scope.rightDock.hide()
         else:
-            scope.rightWidget.show()
+            scope.rightDock.show()
 
     def toggleLeftWidget(self):
-        if scope.leftWidget.isVisible():
-            scope.leftWidget.hide()
+        if scope.leftDock.isVisible():
+            scope.leftDock.hide()
         else:
-            scope.leftWidget.show()
+            scope.leftDock.show()
 
     def toggleBottomWidget(self):
         br = self.chartView.geometry()
@@ -102,6 +101,10 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
 
 ######## Update actions
+
+    def scaleChanged(self):
+        super(Chart, self).scaleChanged()
+        scope.leftDock.widget().update()
 
     def updateAxisExtremes(self):
         # self.minY = min(min(x) for x in self.ydata)

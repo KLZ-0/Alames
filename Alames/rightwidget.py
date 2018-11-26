@@ -5,16 +5,18 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.generated import ui_rightwidget
+
 from Alames import scope
 from Alames import rightwidgetsection
 
-class RightWidget(QDockWidget): # TODO: Reformat to QDockWidget
+class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to QDockWidget
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(RightWidget, self).__init__(parent)
         self.chart = None
         self.sections = []
@@ -33,7 +35,7 @@ class RightWidget(QDockWidget): # TODO: Reformat to QDockWidget
     def setup(self):
         for serie in self.chart.series():
             self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
-            self.widget().layout().addWidget(self.sections[-1]) # FIXME: Add to layout
+            self.layout().addWidget(self.sections[-1]) # FIXME: Add to layout
             # print(self.parent().rightWidget.objectName(), self.widget())
 
 ######## Update Actions

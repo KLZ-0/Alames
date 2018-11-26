@@ -1,9 +1,9 @@
 """Definition of variables accessible trought the scope"""
 
 #### Widgets
-global rightWidget
+global rightDock
 global centralWidget
-global leftWidget
+global leftDock
 
 #### Meta-Objects
 global chartView

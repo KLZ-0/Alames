@@ -21,15 +21,15 @@ class Window(QMainWindow, Ui_MainWindow):
         super(Window, self).__init__()
         self.setupUi(self)
         self.centralWidget.hide()
-        self.rightWidget.hide()
-        self.leftWidget.hide()
+        self.rightDock.hide()
+        self.leftDock.hide()
 
         #### Assign scope
         scope.errorPopup = self.errorPopup
         scope.chartView = self.chartView
-        scope.rightWidget = self.rightWidget
+        scope.rightDock = self.rightDock
         scope.centralWidget = self.centralWidget
-        scope.leftWidget = self.leftWidget
+        scope.leftDock = self.leftDock
 
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)
@@ -54,8 +54,8 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.chartView.setChart(scope.chart)
         self.initLabel.hide()
         scope.centralWidget.show()
-        scope.rightWidget.show()
-        scope.leftWidget.show()
+        scope.rightDock.show()
+        scope.leftDock.show()
 
         # scope.chart.chartView = scope.chartView
 

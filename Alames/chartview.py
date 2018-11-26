@@ -23,8 +23,8 @@ class View(QChartView):
 
     def setChart(self, chart):
         super(View, self).setChart(chart)
-        scope.rightWidget.setChart(chart)
-        scope.leftWidget.setChart(chart)
+        scope.rightDock.widget().setChart(chart)
+        scope.leftDock.widget().setChart(chart)
         self.createTrackingTools()
 
 ######## Init - tracking tools setup
@@ -95,8 +95,6 @@ class View(QChartView):
             self.chart().filterAlamesOne()
         if "r" in key: # DEBUG
             self.chart().zoomReset()
-        if "u" in key: # DEBUG
-            scope.leftWidget.updateAll(self.chart())
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
@@ -112,7 +110,7 @@ class View(QChartView):
         ######## set range values to left widget
         super(View, self).mouseReleaseEvent(event)
         if event.button() == QtCore.Qt.LeftButton:
-            scope.leftWidget.updateValuesFromChart()
+            scope.leftDock.widget().updateValuesFromChart()
 
     def wheelEvent(self, event):
         super(View, self).wheelEvent(event)

@@ -5,23 +5,22 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
-class LeftWidget(QDockWidget):
+from Alames.generated import ui_leftwidget
+
+class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(LeftWidget, self).__init__(parent)
         self.chart = None
 
-        self.infoLabel = QLabel("Text", self)
+        self.setupUi(self)
 
-        self.startBox = QSpinBox(self)
-        self.endBox = QSpinBox(self)
         self.startBox.valueChanged.connect(self.updateRange)
         self.endBox.valueChanged.connect(self.updateRange)
-        self.resetButton = QPushButton("Reset", self)
         self.resetButton.clicked.connect(self.resetRange)
 
         # self.setupBoxes()
@@ -36,6 +35,8 @@ class LeftWidget(QDockWidget):
         """
         self.chart = chart
         self.setupRanges()
+        self.updateAll()
+
 
     def setupRanges(self): # FIXME: Call to parent
         """
@@ -46,6 +47,9 @@ class LeftWidget(QDockWidget):
         self.endBox.setMaximum(self.chart.getEnd())
         self.startBox.setMinimum(self.chart.getStart())
         self.startBox.setMaximum(self.chart.getEnd()-1)
+
+    def update(self):
+        self.updateAll()
 
     def updateRange(self):
         """
