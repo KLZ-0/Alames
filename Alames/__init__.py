@@ -17,7 +17,7 @@ genUi()
 
 from Alames.window import Window
 
-VERSION = "1.0-r1"
+VERSION = "1.1"
 
 def launch():
     app = QApplication(sys.argv)
