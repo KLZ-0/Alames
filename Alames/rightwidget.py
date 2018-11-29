@@ -5,28 +5,42 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.generated import ui_rightwidget
+
 from Alames import rightwidgetsection
 
-class RightWidget(QWidget):
+class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to QDockWidget
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(RightWidget, self).__init__(parent)
-
-        self.setupCurveSettings()
+        self.chart = None
+        self.sections = []
+        # self.setup()
 
 ######## Widget construction at init
 
-    def setupCurveSettings(self):
-        self.sections = []
+    def setChart(self, chart):
+        """
+        Args: (Chart chart)
+        chart - chart to get data from
+        """
+        self.chart = chart
+        self.setup()
 
-        for serie in self.parent().chart.series():
+    def setup(self):
+        for serie in self.chart.series():
             self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
+            self.layout().addWidget(self.sections[-1]) # FIXME: Add to layout
+            # print(self.parent().rightWidget.objectName(), self.widget())
 
 ######## Update Actions
+
+    def update(self):
+        self.updateSections()
 
     def updateVisibleBoxes(self):
         for section in self.sections:
@@ -40,16 +54,4 @@ class RightWidget(QWidget):
 
     def showEvent(self, event):
         super(RightWidget, self).showEvent(event)
-        self.updateSections()
-
-    def resizeEvent(self, event):
-        super(RightWidget, self).resizeEvent(event)
-        currentOffset = 0
-        heightOffset = self.height()/len(self.sections)
-        for section in self.sections:
-            section.setGeometry(0, currentOffset, self.width(), heightOffset)
-            currentOffset += heightOffset
-                # section
-
-    def keyPressEvent(self, event):
-        self.parent().chart.chart_view.keyPressEvent(event)
+        # self.updateSections() # FIXME: try: except:

@@ -7,6 +7,8 @@ import numpy as np
 import math
 import lzma
 
+from Alames import scope
+
 from Alames import chartview
 from Alames import leftwidget
 from Alames import chartmodifier
@@ -18,21 +20,28 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
     Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
     Initializes the required objects as its own properties
     """
-    def __init__(self, parent):
+    def __init__(self):
         super(Chart, self).__init__()
-        self.parent = parent
-        self.propertiesBorder = 8
 
 ######## Getters
 
     def getRange(self):
-        return self.series()[0].getStart(), self.series[0].getEnd()
+        try:
+            return self.series()[0].getStart(), self.series[0].getEnd()
+        except IndexError:
+            return 0
 
     def getStart(self):
-        return self.series()[0].getStart()
+        try:
+            return self.series()[0].getStart()
+        except IndexError:
+            return 0
 
     def getEnd(self):
-        return self.series()[0].getEnd()
+        try:
+            return self.series()[0].getEnd()
+        except IndexError:
+            return 0
 
 ######## View modifiers
 
@@ -40,7 +49,6 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         for serie in self.series():
             serie.setRange(start, end)
         self.updateAxes()
-        self.bottomWidget.updateRange()
 
     def setZoom(self, start, end):
         firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
@@ -61,7 +69,7 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         c = self.cursor()
         c.setPos(c.pos().x()+1, c.pos().y())
         c.setPos(c.pos().x()-1, c.pos().y())
-        self.propertyWidget.updateVisibleBoxes()
+        scope.rightDock.widget().updateVisibleBoxes()
 
     def toggleAnimatable(self, key):
         if self.animationOptions() == QChart.NoAnimation:
@@ -70,24 +78,16 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             self.setAnimationOptions(QChart.NoAnimation)
 
     def toggleProperties(self):
-        br = self.chartView.geometry()
-        widgetWidth = self.parent.width()/6
-        if self.propertyWidget.isVisible():
-            self.propertyWidget.hide()
-            self.chartView.setGeometry(br.x(), br.y(), br.width()+widgetWidth, br.height())
+        if scope.rightDock.isVisible():
+            scope.rightDock.hide()
         else:
-            self.propertyWidget.show()
-            self.chartView.setGeometry(br.x(), br.y(), br.width()-widgetWidth, br.height())
+            scope.rightDock.show()
 
     def toggleLeftWidget(self):
-        br = self.chartView.geometry()
-        widgetWidth = self.parent.width()/6
-        if self.leftWidget.isVisible():
-            self.leftWidget.hide()
-            self.chartView.setGeometry(br.x()-widgetWidth, br.y(), br.width()+widgetWidth, br.height())
+        if scope.leftDock.isVisible():
+            scope.leftDock.hide()
         else:
-            self.leftWidget.show()
-            self.chartView.setGeometry(br.x()+widgetWidth, br.y(), br.width()-widgetWidth, br.height())
+            scope.leftDock.show()
 
     def toggleBottomWidget(self):
         br = self.chartView.geometry()
@@ -100,6 +100,12 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
 
 ######## Update actions
+
+    def scaleChangedFun(self):
+        print("scaleChanged")
+
+    def geometryChangedFun(self):
+        print("geometryChanged")
 
     def updateAxisExtremes(self):
         # self.minY = min(min(x) for x in self.ydata)
@@ -136,8 +142,3 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             if len(serie.attachedAxes()) == 0:
                 self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
-
-        # try:
-        #     self.leftWidget.updateValuesFromChart() # FIXME: Temporary workaround and even then it does not work..
-        # except AttributeError as e:
-        #     print(e)

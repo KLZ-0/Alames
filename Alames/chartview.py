@@ -5,17 +5,26 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames import scope
+
 class View(QChartView):
     """
     Purpose: displaying and interacting with the rendered QChart
     Creates a widget inside MainWindow which is shared for max 3 widgets
     An object from this class is created in Chart
     """
-    def __init__(self, chart, parent, app):
-        super(View, self).__init__(chart, parent)
-        self.app = app
+    def __init__(self, parent):
+        super(View, self).__init__(parent)
         self.setMouseTracking(True)
         self.setInteractive(True)
+        self.setRubberBand(self.HorizontalRubberBand)
+
+######## overrides
+
+    def setChart(self, chart):
+        super(View, self).setChart(chart)
+        scope.rightDock.widget().setChart(chart)
+        scope.leftDock.widget().setChart(chart)
         self.createTrackingTools()
 
 ######## Init - tracking tools setup
@@ -44,10 +53,10 @@ class View(QChartView):
             self.focusValueTextItem.setPos(event.x(), event.y())
 
             xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
-            html = str(self.parent().chart.xdata[round(xVal)]) + "<br>"
+            html = str(self.chart().xdata[round(xVal)]) + "<br>"
             for i in range(len(self.chart().ydata)):
                 if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.parent().chart.ydata[i][round(xVal)])
+                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.chart().ydata[i][round(xVal)])
             self.focusValueTextItem.setHtml(html)
 
             focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()
@@ -58,37 +67,34 @@ class View(QChartView):
 
     def leaveEvent(self, event):
         super(View, self).leaveEvent(event)
-        # self.app.changeOverrideCursor(QtCore.Qt.ArrowCursor)
-        self.app.restoreOverrideCursor()
+        # QApplication.restoreOverrideCursor()
         if self.chart().series():
             self.focusLine.hide()
             self.focusValueTextItem.hide()
 
     def enterEvent(self, event):
         super(View, self).enterEvent(event)
-        self.app.setOverrideCursor(QtCore.Qt.CrossCursor)
+        # QApplication.setOverrideCursor(QtCore.Qt.CrossCursor)
 
     def keyPressEvent(self, event):
         super(View, self).keyPressEvent(event)
         key = event.text()
         if key in ["1","2","3","4","5","6","7","8","9"]:
-            self.parent().chart.toggleSerieVisiblity(key)
+            self.chart().toggleSerieVisiblity(key)
         if "a" in key:
-            self.parent().chart.toggleAnimatable(key)
+            self.chart().toggleAnimatable(key)
         if "p" in key:
-            self.parent().chart.toggleProperties()
+            self.chart().toggleProperties()
         if "f" in key:
-            self.parent().chart.toggleLeftWidget()
+            self.chart().toggleLeftWidget()
         if "t" in key:
-            self.parent().chart.toggleBottomWidget()
+            self.chart().toggleBottomWidget()
         if "m" in key:
-            self.parent().chart.multiplyAll(2)
+            self.chart().multiplyAll(2)
         if "d" in key: # DEBUG
-            self.parent().chart.filterAlamesOne()
+            self.chart().filterAlamesOne()
         if "r" in key: # DEBUG
-            self.parent().chart.zoomReset()
-        if "u" in key: # DEBUG
-            self.parent().chart.leftWidget.updateAll()
+            self.chart().zoomReset()
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
@@ -100,12 +106,16 @@ class View(QChartView):
         if event.button() == QtCore.Qt.MiddleButton:
             self.chart().zoomReset()
 
-
     def mouseReleaseEvent(self, event):
         ######## set range values to left widget
         super(View, self).mouseReleaseEvent(event)
-        if event.button() == QtCore.Qt.LeftButton:
-            self.chart().leftWidget.updateValuesFromChart()
+        if event.button() == QtCore.Qt.LeftButton or event.button() == QtCore.Qt.RightButton:
+            scope.leftDock.widget().updateValuesFromChart()
+
+    def wheelEvent(self, event):
+        super(View, self).wheelEvent(event)
+        self.chart().scroll(event.angleDelta().y()/8, 0)
+        scope.rightDock.widget().update()
 
 
     def resizeEvent(self, event):
