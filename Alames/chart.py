@@ -22,7 +22,6 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
     """
     def __init__(self):
         super(Chart, self).__init__()
-        self.propertiesBorder = 8
 
 ######## Getters
 
@@ -70,7 +69,7 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         c = self.cursor()
         c.setPos(c.pos().x()+1, c.pos().y())
         c.setPos(c.pos().x()-1, c.pos().y())
-        self.rightWidget.updateVisibleBoxes()
+        scope.rightDock.widget().updateVisibleBoxes()
 
     def toggleAnimatable(self, key):
         if self.animationOptions() == QChart.NoAnimation:
@@ -102,9 +101,11 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
 
 ######## Update actions
 
-    def scaleChanged(self):
-        super(Chart, self).scaleChanged()
-        scope.leftDock.widget().update()
+    def scaleChangedFun(self):
+        print("scaleChanged")
+
+    def geometryChangedFun(self):
+        print("geometryChanged")
 
     def updateAxisExtremes(self):
         # self.minY = min(min(x) for x in self.ydata)
@@ -141,8 +142,3 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
             if len(serie.attachedAxes()) == 0:
                 self.setAxisX(axisX, serie)
                 self.setAxisY(axisY, serie)
-
-        # try:
-        #     self.leftWidget.updateValuesFromChart() # FIXME: Temporary workaround and even then it does not work..
-        # except AttributeError as e:
-        #     print(e)

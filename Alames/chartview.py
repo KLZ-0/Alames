@@ -109,7 +109,7 @@ class View(QChartView):
     def mouseReleaseEvent(self, event):
         ######## set range values to left widget
         super(View, self).mouseReleaseEvent(event)
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton or event.button() == QtCore.Qt.RightButton:
             scope.leftDock.widget().updateValuesFromChart()
 
     def wheelEvent(self, event):

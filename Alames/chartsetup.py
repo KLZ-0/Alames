@@ -9,27 +9,17 @@ import lzma
 
 from Alames import scope
 
-from Alames import chartview
-from Alames import rightwidget
-from Alames import leftwidget
-from Alames import chartmodifier
 from Alames import chartlineseries
 
 class ChartSetup:
     """Convenience class inherited by Chart for managing initial setup of the chart"""
     def constructChart(self, fileName):
         self.setAcceptHoverEvents(True)
-        # IDEA: Set as settings animatable
-        # self.chart.setAnimationOptions(QChart.SeriesAnimations)
-
-        # self.chartView = chartview.View(self, self.parent, app)
 
         self.loadCSV(fileName)
         self.fillSeries()
         self.fillChart()
         self.updateAxes()
-        self.createBottomWidget()
-        self.createSideWidgets()
 
     def loadCSV(self, lFileName):
         self.ydata = []
@@ -64,13 +54,3 @@ class ChartSetup:
     def fillChart(self):
         for serie in self.qseries:
             self.addSeries(serie)
-
-    def createSideWidgets(self):
-        # self.rightWidget = rightwidget.RightWidget(self.parent)
-        # self.leftWidget = leftwidget.LeftWidget(self.parent)
-        pass
-
-    def createBottomWidget(self):
-        # self.bottomWidget = bottomwidget.BottomWidget(self.parent)
-        # childrenHeight = sum([child.height() for child in self.bottomWidget.children()])
-        pass
