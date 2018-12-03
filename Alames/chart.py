@@ -69,7 +69,7 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         c = self.cursor()
         c.setPos(c.pos().x()+1, c.pos().y())
         c.setPos(c.pos().x()-1, c.pos().y())
-        scope.rightDock.widget().updateVisibleBoxes()
+        scope.rightDock.widget().update()
 
     def toggleAnimatable(self, key):
         if self.animationOptions() == QChart.NoAnimation:

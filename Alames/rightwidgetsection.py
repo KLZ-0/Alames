@@ -27,7 +27,7 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
     def updateVisibleBox(self):
         self.visibleCheckBox.setChecked(self.serie.isVisible())
 
-    def updateAll(self):
+    def update(self):
         self.updateVisibleBox()
         self.nameLineEdit.setText(self.serie.name())
         self.colorValueLabel.setText(self.serie.color().name())
