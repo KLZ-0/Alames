@@ -22,7 +22,7 @@ class ChartLineSeries(QLineSeries):
 ######## Update Actions
 
     def update(self):
-        self.currentVect = self.baseVect[self.start:self.end]
+        self.currentVect = self.baseVect[self.start:self.end+1]
         self.replace(self.currentVect)
 
 ######## Setters

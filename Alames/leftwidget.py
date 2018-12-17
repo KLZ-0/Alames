@@ -51,7 +51,6 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         Args: ()
         Update all values of Ui elements
         """
-        self.infoLabel.setText("Range:")
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
 
