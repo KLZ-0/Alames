@@ -89,16 +89,6 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         else:
             scope.leftDock.show()
 
-    def toggleBottomWidget(self):
-        br = self.chartView.geometry()
-        widgetHeight = self.bottomWidget.height()
-        if self.bottomWidget.isVisible():
-            self.bottomWidget.hide()
-            self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()+widgetHeight)
-        else:
-            self.bottomWidget.show()
-            self.chartView.setGeometry(br.x(), br.y(), br.width(), br.height()-widgetHeight)
-
 ######## Update actions
 
     def scaleChangedFun(self):
