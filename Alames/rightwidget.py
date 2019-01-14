@@ -21,7 +21,7 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to Q
         self.sections = []
         # self.setup()
 
-######## Widget construction at init
+######## Widget setup
 
     def setChart(self, chart):
         """
@@ -42,13 +42,9 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to Q
     def update(self):
         self.updateSections()
 
-    def updateVisibleBoxes(self):
-        for section in self.sections:
-            section.updateVisibleBox()
-
     def updateSections(self):
         for section in self.sections:
-            section.updateAll()
+            section.update()
 
 ######## Event handlers
 

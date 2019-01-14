@@ -87,8 +87,6 @@ class View(QChartView):
             self.chart().toggleProperties()
         if "f" in key:
             self.chart().toggleLeftWidget()
-        if "t" in key:
-            self.chart().toggleBottomWidget()
         if "m" in key:
             self.chart().multiplyAll(2)
         if "d" in key: # DEBUG

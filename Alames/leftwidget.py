@@ -23,10 +23,7 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         self.endBox.valueChanged.connect(self.updateRange)
         self.resetButton.clicked.connect(self.resetRange)
 
-        # self.setupBoxes()
-        # self.updateAll()
-
-######## Update Actions
+######## Widget setup
 
     def setChart(self, chart):
         """
@@ -34,11 +31,10 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         chart - chart to get data from
         """
         self.chart = chart
-        self.setupRanges()
-        self.updateAll()
+        self.setup()
+        self.update()
 
-
-    def setupRanges(self): # FIXME: Call to parent
+    def setup(self): # FIXME: Call to parent
         """
         Args: ()
         Setup box ranges
@@ -48,8 +44,15 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         self.startBox.setMinimum(self.chart.getStart())
         self.startBox.setMaximum(self.chart.getEnd()-1)
 
+######## Update Actions
+
     def update(self):
-        self.updateAll()
+        """
+        Args: ()
+        Update all values of Ui elements
+        """
+        self.startBox.setValue(self.chart.getStart())
+        self.endBox.setValue(self.chart.getEnd())
 
     def updateRange(self):
         """
@@ -57,15 +60,6 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         Update chart zoom
         """
         self.chart.setZoom(self.startBox.value(), self.endBox.value())
-
-    def updateAll(self):
-        """
-        Args: ()
-        Update all values of Ui elements
-        """
-        self.infoLabel.setText("Range:")
-        self.startBox.setValue(self.chart.getStart())
-        self.endBox.setValue(self.chart.getEnd())
 
     def resetRange(self):
         """

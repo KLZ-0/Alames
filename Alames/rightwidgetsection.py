@@ -21,13 +21,15 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
         self.colorPickButton.pressed.connect(self.pickSerieColor)
         self.visibleCheckBox.setChecked(serie.isVisible())
         self.visibleCheckBox.toggled.connect(self.setSerieVisiblity)
+        self.OpenGLCheckBox.toggled.connect(self.toggleOpenGL)
+        self.OpenGLCheckBox.setChecked(True)
 
 ######## Update Actions
 
     def updateVisibleBox(self):
         self.visibleCheckBox.setChecked(self.serie.isVisible())
 
-    def updateAll(self):
+    def update(self):
         self.updateVisibleBox()
         self.nameLineEdit.setText(self.serie.name())
         self.colorValueLabel.setText(self.serie.color().name())
@@ -42,6 +44,12 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
             self.serie.show()
         else:
             self.serie.hide()
+
+    def toggleOpenGL(self):
+        if self.OpenGLCheckBox.isChecked():
+            self.serie.setUseOpenGL(True)
+        else:
+            self.serie.setUseOpenGL(False)
 
     def pickSerieColor(self):
         if self.colorPickButton.isDown():
