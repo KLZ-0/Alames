@@ -7,7 +7,7 @@ from PyQt5 import uic
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.1-r3"
+    VERSION = "1.1-r4"
 
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
@@ -63,20 +63,3 @@ class Alames(QApplication):
         palette.setColor(QPalette.HighlightedText, QColor(239, 240, 241))
 
         self.setPalette(palette)
-
-    def getFusion(self):
-        palette = self.palette()
-        print(palette.color(QPalette.Window).blue())
-        print(palette.color(QPalette.WindowText).blue())
-        print(palette.color(QPalette.Base).blue())
-        print(palette.color(QPalette.AlternateBase).blue())
-        print(palette.color(QPalette.ToolTipBase).blue())
-        print(palette.color(QPalette.ToolTipText).blue())
-        print(palette.color(QPalette.Text).blue())
-        print(palette.color(QPalette.Button).blue())
-        print(palette.color(QPalette.ButtonText).blue())
-        print(palette.color(QPalette.BrightText).blue())
-        print(palette.color(QPalette.Link).blue())
-
-        print(palette.color(QPalette.Highlight).blue())
-        print(palette.color(QPalette.HighlightedText).blue())
