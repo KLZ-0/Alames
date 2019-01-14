@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 import Alames
 
-Alames.launch()
+ala = Alames.Alames(sys.argv)

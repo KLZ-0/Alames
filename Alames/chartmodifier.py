@@ -58,8 +58,8 @@ class ChartModifier:
             self.series()[1].setBaseData(currentVect)
             self.series()[2].hide()
 
-            self.series()[0].setColor(QtGui.QColor("#0000ff"))
-            self.series()[1].setColor(QtGui.QColor("#ff0000"))
+            self.series()[0].setColor("#0000ff")
+            self.series()[1].setColor("#ff0000")
             scope.rightDock.widget().updateSections()
             self.updateAxes()
 

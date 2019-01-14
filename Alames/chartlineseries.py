@@ -1,4 +1,5 @@
 import os, sys
+from six import string_types
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
@@ -41,6 +42,13 @@ class ChartLineSeries(QLineSeries):
     def setBaseData(self, baseData):
         self.baseVect = baseData
         self.update()
+
+    def setColor(self, color):
+        if isinstance(color, string_types): # if color is a text in hex format
+            self.setColor(QtGui.QColor(color))
+        else:
+            super(ChartLineSeries, self).setColor(color)
+            # TODO: update chart to get rid of openGL frags or update color of the openGL rendered parts
 
 ######## Getters
 
