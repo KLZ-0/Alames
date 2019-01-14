@@ -19,7 +19,6 @@ class ChartLineSeries(QLineSeries):
         self.start = self.baseRangeXData[0]
         self.end = self.baseRangeXData[-1]
 
-
 ######## Update Actions
 
     def update(self):
@@ -48,7 +47,13 @@ class ChartLineSeries(QLineSeries):
             self.setColor(QtGui.QColor(color))
         else:
             super(ChartLineSeries, self).setColor(color)
+            self.update()
             # TODO: update chart to get rid of openGL frags or update color of the openGL rendered parts
+
+    def setUseOpenGL(self, state):
+        self.hide()
+        super(ChartLineSeries, self).setUseOpenGL(state)
+        self.show()
 
 ######## Getters
 
