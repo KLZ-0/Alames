@@ -91,12 +91,14 @@ class Chart(QChart, chartmodifier.ChartModifier):
         except IndexError:
             return 0
 
-######## View modifiers
+######## Setters
 
     def setRange(self, start, end):
         for serie in self.series():
             serie.setRange(start, end)
         self.updateAxes()
+
+######## View modifiers
 
     def setZoom(self, start, end):
         firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
