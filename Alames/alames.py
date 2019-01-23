@@ -1,8 +1,7 @@
-import sys, os, glob
+import sys, os
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
-from PyQt5 import uic
 
 from Alames.window import Window
 
@@ -12,7 +11,6 @@ class Alames(QApplication):
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
 
-        self.genUi()
         self.launch()
 
     def version(self):
@@ -33,15 +31,6 @@ class Alames(QApplication):
         w.setGeometry(self.screens()[-1].availableGeometry())
         w.setWindowState(QtCore.Qt.WindowMaximized)
         sys.exit(self.exec_())
-
-    def genUi(self):
-        for uiFileName in glob.glob(os.path.join(os.path.join(os.path.dirname(__file__), "forms"), "*.ui")):
-            pyFileName = os.path.join(os.path.join(os.path.dirname(__file__), "generated"), "ui_" + os.path.basename(uiFileName).split(".")[0] + ".py")
-            os.makedirs(os.path.dirname(pyFileName), exist_ok=True)
-            if os.path.isfile(pyFileName) == False or os.path.getmtime(uiFileName) > os.path.getmtime(pyFileName):
-                with open(pyFileName, "w") as f:
-                    uic.compileUi(uiFileName, f)
-                    print("compiled " + pyFileName)
 
     def setFusion(self):
         self.setStyle("fusion")
