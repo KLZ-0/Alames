@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, platform
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
@@ -11,7 +11,10 @@ class Alames(QApplication):
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
 
-        self.launch()
+        if platform.uname().system == "Linux":
+            self.launch(False)
+        else:
+            self.launch()
 
     def version(self):
         return self.VERSION
