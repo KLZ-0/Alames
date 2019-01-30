@@ -25,7 +25,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QFormLayout" name="formLayout"/>
  </widget>
  <resources/>
  <connections/>
