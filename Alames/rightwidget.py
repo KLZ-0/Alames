@@ -35,7 +35,7 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget): # TODO: Reformat to Q
         self.setLayout(QFormLayout(self))
         for serie in self.chart.series():
             self.sections.append(rightwidgetsection.RightWidgetSection(self, serie))
-            self.layout().addWidget(self.sections[-1]) # FIXME: Add to layout
+            self.layout().addWidget(self.sections[-1])
             # print(self.parent().rightWidget.objectName(), self.widget())
 
 ######## Update Actions

@@ -22,7 +22,9 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
         self.visibleCheckBox.setChecked(serie.isVisible())
         self.visibleCheckBox.toggled.connect(self.setSerieVisiblity)
         self.OpenGLCheckBox.toggled.connect(self.toggleOpenGL)
-        self.OpenGLCheckBox.setChecked(True)
+
+        # Enable default OpenGL
+        # self.OpenGLCheckBox.setChecked(True)
 
 ######## Update Actions
 
