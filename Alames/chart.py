@@ -12,7 +12,8 @@ from Alames import scope
 from Alames import chartview
 from Alames import leftwidget
 from Alames import chartmodifier
-from Alames import chartlineseries
+from Alames.dataholder import DataHolder
+from Alames.serieshelper import SeriesHelper
 
 class Chart(QChart, chartmodifier.ChartModifier):
     """
@@ -20,11 +21,11 @@ class Chart(QChart, chartmodifier.ChartModifier):
     Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
     Initializes the required objects as its own properties
     """
-    ydata = []
-    xdata = []
+    qseries = []
 
     def __init__(self):
         super(Chart, self).__init__()
+        self.dataHolder = DataHolder()
 
 ######## Setup
 
@@ -32,14 +33,11 @@ class Chart(QChart, chartmodifier.ChartModifier):
         self.setAcceptHoverEvents(True)
 
         self.loadCSV(fileName)
-        self.fillSeries()
-        self.fillChart()
+        SeriesHelper.fillSeries(self.dataHolder.YData(), self.dataHolder.columnNames())
+        SeriesHelper.fillChart()
         self.updateAxes()
 
     def loadCSV(self, lFileName):
-        self.ydata = []
-        self.xdata = []
-
         if lFileName.endswith(".csv.xz"):
             try:
                 lFileName = lzma.open(lFileName) # file name or object
@@ -48,30 +46,17 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
         f = pandas.read_csv(lFileName)
         csv = f.values
-        self.columnNames = f.columns
-
-        for i in range(len(csv[0])-1):
-            self.ydata.append([])
-        for row in csv:
-            self.xdata.append(row[0])
-            for i in range(len(row)-1):
-                self.ydata[i].append(row[i+1])
-
-    def fillSeries(self):
-        self.qseries = []
-        for i in range(len(self.ydata)):
-            self.qseries.append(chartlineseries.ChartLineSeries(self.ydata[i]))
-
-            # self.qseries[-1].setUseOpenGL(True)
-            # IDEA: make a setting to turn off automatic header detection
-            self.qseries[i].setName(str(i+1) + " - " + self.columnNames[i+1])
-            # self.qseries[i].setName(str(i+1))
-
-    def fillChart(self):
-        for serie in self.qseries:
-            self.addSeries(serie)
+        
+        self.dataHolder.setColumnNames(f.columns)
+        self.dataHolder.setDataFromRows(csv)
 
 ######## Getters
+
+    def getXData(self):
+        return self.dataHolder.XData()
+
+    def getYData(self):
+        return self.dataHolder.YData()
 
     def getRange(self):
         try:
@@ -91,12 +76,10 @@ class Chart(QChart, chartmodifier.ChartModifier):
         except IndexError:
             return 0
 
-######## Setters
+######## Series modifier
 
     def setRange(self, start, end):
-        for serie in self.series():
-            serie.setRange(start, end)
-        self.updateAxes()
+        SeriesHelper.setRange(start, end)
 
 ######## View modifiers
 

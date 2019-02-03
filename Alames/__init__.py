@@ -14,8 +14,6 @@ def genUi():
                 f.write(regex.sub(r"./Alames/\1/", buf.read()))
 
                 print("compiled " + pyFileName)
-                
-
 
 genUi()
 

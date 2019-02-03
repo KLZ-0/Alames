@@ -130,6 +130,9 @@
      <height>63</height>
     </size>
    </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
    <property name="windowTitle">
     <string/>
    </property>
@@ -166,6 +169,9 @@
    </property>
    <property name="floating">
     <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
     <string/>
