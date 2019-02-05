@@ -89,7 +89,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QWidget" name="widget_3" native="true"/>
+     <widget class="PhasorWidget" name="phasorWidget" native="true"/>
     </item>
     <item row="1" column="1">
      <widget class="QWidget" name="widget_2" native="true"/>
@@ -112,7 +112,7 @@
      <x>0</x>
      <y>0</y>
      <width>1264</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -205,6 +205,12 @@
    <class>RightWidget</class>
    <extends>QWidget</extends>
    <header>Alames/rightwidget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PhasorWidget</class>
+   <extends>QWidget</extends>
+   <header>Alames/phasorwidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

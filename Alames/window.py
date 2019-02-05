@@ -20,6 +20,8 @@ class Window(QMainWindow, Ui_MainWindow):
     """
     def __init__(self):
         super(Window, self).__init__()
+        scope.window = self
+
         self.setupUi(self)
         self.centralWidget.hide()
         self.rightDock.hide()

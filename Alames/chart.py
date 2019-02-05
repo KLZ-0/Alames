@@ -37,6 +37,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
         SeriesHelper.fillChart()
         self.updateAxes()
 
+        # send signal to window->phasorWidget to update
+        scope.window.phasorWidget.setData(self.dataHolder, {"show-current-circle" : False, "current-color" : "#ff0000", "voltage-color" : "#0000ff"})
+
     def loadCSV(self, lFileName):
         if lFileName.endswith(".csv.xz"):
             try:

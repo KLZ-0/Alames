@@ -51,12 +51,18 @@ class DataHolder:
     def columnNames(self):
         return self._columnNames
 
+    def fi(self):
+        return self._fi
+
     def powerDataSet(self):
         return [self._activeP,
                 self._reactiveP, self._apparentP, self._cosFi]
 
     def RMSValues(self):
         return self._YRMS
+
+    def isLoaded(self):
+        return len(self._YData)
 
 ######## Privates
 
