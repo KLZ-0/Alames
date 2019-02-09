@@ -39,6 +39,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - scroll - https://www.advsofteng.com/doc/cdcppdoc/realtimezoomscrollqt.htm
  - implement RMS calculation
  - add scrollSpeed slider
+ - Save modified ranges in dataholder instead of lineseries - think it over
 
 **BUGS**:
  - sometimes this Qt error happens unpredictably, but it does not cause any disturbance and the user is not affected - "qt.qpa.xcb: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1665, resource id: 37781937, major code: 40 (TranslateCoords), minor code: 0"

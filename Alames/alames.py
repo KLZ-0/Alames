@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.1-r8"
+    VERSION = "1.1-r9"
 
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
@@ -19,10 +19,15 @@ class Alames(QApplication):
     def version(self):
         return self.VERSION
 
-    def launch(self, fusion=True):
+    def launch(self, fusion=True, equalizeBG=False):
         if fusion: # needs to be applied before QApp init
             self.setFusion()
             self.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+        
+        if equalizeBG: # in case it would look ugly..
+            palette = self.palette()
+            palette.setColor(QPalette.Base, palette.color(QPalette.Window))
+            self.setPalette(palette)
 
         self.setApplicationDisplayName("Alames")
         # self.setWindowIcon(QtGui.QIcon("icons/main.png"))

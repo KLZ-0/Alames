@@ -64,6 +64,9 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.rightDock.show()
         scope.leftDock.show()
 
+        # send signal to window->phasorWidget to update
+        self.phasorView.scene().setData(scope.chart.dataHolder, {"show-current-circle": False, "current-color": "#ff0000", "voltage-color": "#0000ff"})
+
         # scope.chart.chartView = scope.chartView
 
     def fileSelect(self):
