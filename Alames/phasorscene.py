@@ -8,6 +8,10 @@ from Alames.dataholder import DataHolder
 class PhasorScene(QGraphicsScene):
     """Phasor diagram Scene"""
 
+    # Phasor Diagram type: 0 - basic (voltage + current), 1 - power triangle (active, reactive and apparent power)
+    # Make setters for it in the future instead of settings - *dont pass settings to every class*
+    _phasorType = 0
+
     dataHolder = DataHolder()
     settings = {"show-current-circle": False,
                 "current-color": "#ff0000", "voltage-color": "#0000ff"}
@@ -44,22 +48,16 @@ class PhasorScene(QGraphicsScene):
         self.settings = settings
         self.reDraw()
 
-    def hideEvent(self, event):
-        super(PhasorScene, self).hideEvent(event)
-        for label in self.labels:
-            label.setPlainText("")
-            label.hide()
-
     def reDraw(self):
         """Redraw (or update) the Diagram, happens after filer has been applied and after zooming"""
 
         if self.dataHolder.isLoaded():
-            self.tipPoints = []
 
-            if self.dataHolder.RMSValues():
-                # self._drawPowerTriangle()
+            if self._phasorType == 0 and self.dataHolder.RMSValues():
                 self._drawBasicPhasor()
-                # self.updateValueLabels(qp)        
+
+            if self._phasorType == 1 and self.dataHolder.powerDataSet():
+                self._drawPowerTriangle()
 
 ######## Drawing methods (base) - draw (display) the items on the scene (high level methods)
 
