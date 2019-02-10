@@ -34,8 +34,8 @@ class PhasorScene(QGraphicsScene):
         for label in self.labels:
             self.addItem(label)
             label.hide()
-            # label.setAlignment(QtCore.Qt.AlignCenter) # FIXME: to be added
-            # label.setStyleSheet("background-color: #eeeeee")  # FIXME: set from palette
+
+######## Update methods
 
     def setData(self, dataholder, settings):
         self.dataholder = dataholder
@@ -67,6 +67,8 @@ class PhasorScene(QGraphicsScene):
                 self._drawHelperCircles()
                 self._drawPowerArrows()
                 # self.updateValueLabels(qp)        
+
+######## Drawing methods - draw (display) the items on the scene (high level methods)
 
     def _drawDiagramBase(self):
         """Draw the main circle + x and y axes"""
@@ -129,6 +131,8 @@ class PhasorScene(QGraphicsScene):
                 self.arrowLineItems[0], self.arrowLineItems[1], "#888888"))
         self._addDashedSupport(self.arrowLineItems[-1])
 
+######## Constuction methods - construct new objects and return them
+
     def _createArrow(self, lenmultiplier, angle=0, color="#333333", additem=True):
         """Create and return an arrow LineItem with arrowhead"""
 
@@ -149,28 +153,11 @@ class PhasorScene(QGraphicsScene):
         if additem: self.addItem(item)
         return item
 
-    def _addHeadToLineItem(self, item, angle):
-        """Add arrowhead to a QGraphicsLineItem's end"""
-
-        parentline = item.line()
-        rhead = QtCore.QLineF(parentline.p2(), parentline.p1())
-        rhead.setAngle(rhead.angle() + angle)
-        rhead.setLength(self._arrowHeadLen)
-        QGraphicsLineItem(rhead, item).setPen(item.pen())
-
-    def _addLabelToLineItem(self, lineItem):
-        basepoint = lineItem.line().p2()
-
-        lineItem.label = QGraphicsTextItem(lineItem)
-        lineItem.label.setDefaultTextColor(lineItem.pen().color())
-        lineItem.label.setPlainText("text")
-        lineItem.label.setPos(basepoint.x()+10, basepoint.y())
-
-
     def _createPytagorasArrow(self, lineItem1, lineItem2, color="#333333", additem=True):
         """Create a line using the pythagoras theorem with dashed supports to make a triangle - example use: apparent power"""
 
-        endpoint = QtCore.QPointF(lineItem1.line().p2().x(), lineItem2.line().p2().y())
+        endpoint = QtCore.QPointF(
+            lineItem1.line().p2().x(), lineItem2.line().p2().y())
 
         pen = QtGui.QPen()
         pen.setWidthF(self._arrowLineThickness)
@@ -188,6 +175,25 @@ class PhasorScene(QGraphicsScene):
             self.addItem(item)
         return item
 
+######## Modifier methods - only modify items (add children to them)
+
+    def _addHeadToLineItem(self, item, angle):
+        """Add arrowhead to a QGraphicsLineItem's end"""
+
+        parentline = item.line()
+        rhead = QtCore.QLineF(parentline.p2(), parentline.p1())
+        rhead.setAngle(rhead.angle() + angle)
+        rhead.setLength(self._arrowHeadLen)
+        QGraphicsLineItem(rhead, item).setPen(item.pen())
+
+    def _addLabelToLineItem(self, lineItem):
+        basepoint = lineItem.line().p2()
+
+        lineItem.label = QGraphicsTextItem(lineItem)
+        lineItem.label.setDefaultTextColor(lineItem.pen().color())
+        lineItem.label.setPlainText("text")
+        lineItem.label.setPos(basepoint.x()+10, basepoint.y())
+
     def _addDashedSupport(self, lineItem):
         """Add a dashed support to a line"""
 
@@ -203,26 +209,3 @@ class PhasorScene(QGraphicsScene):
 
         QGraphicsLineItem(xLine, lineItem).setPen(pen)
         QGraphicsLineItem(yLine, lineItem).setPen(pen)
-        
-
-
-
-    # def updateValueLabels(self, qp):
-    #     qp.setBrush(QtGui.QBrush())
-    #     qp.setPen(QtGui.QColor("#999999"))
-    #     labelWidth = self.width()/6
-    #     labelHeight = self.height()/20
-    #     self.labels[0].setText(str(self.dataholder.RMSValues()[0]))
-    #     self.labels[1].setText(str(self.dataholder.RMSValues()[1]))
-    #     for i in range(len(self.labels)):
-    #         if self.labels[i].isVisible() == False:
-    #             self.labels[i].show()
-    #         font = self.labels[i].font()
-    #         font.setPixelSize(labelHeight*0.9)
-    #         self.labels[i].setFont(font)
-
-    #         x = self.tipPoints[i].x() - labelWidth - 1
-    #         y = self.tipPoints[i].y() - labelHeight*1.5
-    #         # labelRect = QtCore.QRect(x, y, labelWidth, labelHeight)
-    #         # qp.drawRect(labelRect)
-    #         self.labels[i].setPos(x,y)
