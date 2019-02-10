@@ -25,7 +25,8 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
     def __init__(self):
         super(Chart, self).__init__()
-        self.dataHolder = DataHolder()
+        self.selectionDataHolder = DataHolder()
+        self.overallDataHolder = DataHolder()
 
 ######## Setup
 
@@ -33,7 +34,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
         self.setAcceptHoverEvents(True)
 
         self.loadCSV(fileName)
-        SeriesHelper.fillSeries(self.dataHolder.YData(), self.dataHolder.columnNames())
+        SeriesHelper.fillSeries(self.selectionDataHolder.YData(), self.selectionDataHolder.columnNames())
         SeriesHelper.fillChart()
         self.updateAxes()
 
@@ -47,16 +48,25 @@ class Chart(QChart, chartmodifier.ChartModifier):
         f = pandas.read_csv(lFileName)
         csv = f.values
         
-        self.dataHolder.setColumnNames(f.columns)
-        self.dataHolder.setDataFromRows(csv)
+        self.selectionDataHolder.setColumnNames(f.columns)
+        self.selectionDataHolder.setDataFromRows(csv)
+        self.overallDataHolder.setColumnNames(f.columns)
+        self.overallDataHolder.setDataFromRows(csv)
+
+######## Signal handlers
+
+    def onSelectionChange(self, range):
+        # call in ....connect(self.onSelectionChange)
+        # self.selectionDataHolder.update(range)
+        pass
 
 ######## Getters
 
     def getXData(self):
-        return self.dataHolder.XData()
+        return self.selectionDataHolder.XData()
 
     def getYData(self):
-        return self.dataHolder.YData()
+        return self.selectionDataHolder.YData()
 
     def getRange(self):
         try:

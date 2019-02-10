@@ -13,6 +13,7 @@ class PhasorScene(QGraphicsScene):
                 "current-color": "#ff0000", "voltage-color": "#0000ff"}
     _width = _height = 300
     _radius = _width/2
+    _center = QtCore.QPointF(_radius, _radius)
     _arrowLenMax = _radius
     _arrowAngle = 15
     _arrowHeadLen = 15
@@ -131,14 +132,11 @@ class PhasorScene(QGraphicsScene):
     def _createArrow(self, lenmultiplier, angle=0, color="#333333", additem=True):
         """Create and return an arrow LineItem with arrowhead"""
 
-        # reducing reference access time
-        center = self.sceneRect().center()
-
         pen = QtGui.QPen()
         pen.setWidthF(self._arrowLineThickness)
         pen.setColor(QtGui.QColor(color))
-        line = QtCore.QLineF(center, QtCore.QPointF(
-            self._radius + (self._arrowLenMax*lenmultiplier)-pen.widthF()/2, center.y()))
+        line = QtCore.QLineF(self._center, QtCore.QPointF(
+            self._radius + (self._arrowLenMax*lenmultiplier)-pen.widthF()/2, self._center.y()))
         line.setAngle(angle)
 
         item = QGraphicsLineItem(line)
@@ -146,6 +144,7 @@ class PhasorScene(QGraphicsScene):
 
         self._addHeadToLineItem(item, -self._arrowAngle)
         self._addHeadToLineItem(item, self._arrowAngle)
+        self._addLabelToLineItem(item)
 
         if additem: self.addItem(item)
         return item
@@ -159,22 +158,31 @@ class PhasorScene(QGraphicsScene):
         rhead.setLength(self._arrowHeadLen)
         QGraphicsLineItem(rhead, item).setPen(item.pen())
 
+    def _addLabelToLineItem(self, lineItem):
+        basepoint = lineItem.line().p2()
+
+        lineItem.label = QGraphicsTextItem(lineItem)
+        lineItem.label.setDefaultTextColor(lineItem.pen().color())
+        lineItem.label.setPlainText("text")
+        lineItem.label.setPos(basepoint.x()+10, basepoint.y())
+
+
     def _createPytagorasArrow(self, lineItem1, lineItem2, color="#333333", additem=True):
         """Create a line using the pythagoras theorem with dashed supports to make a triangle - example use: apparent power"""
 
-        center = self.sceneRect().center()
         endpoint = QtCore.QPointF(lineItem1.line().p2().x(), lineItem2.line().p2().y())
 
         pen = QtGui.QPen()
         pen.setWidthF(self._arrowLineThickness)
         pen.setColor(QtGui.QColor(color))
-        line = QtCore.QLineF(center, endpoint)
+        line = QtCore.QLineF(self._center, endpoint)
 
         item = QGraphicsLineItem(line)
         item.setPen(pen)
 
         self._addHeadToLineItem(item, -self._arrowAngle)
         self._addHeadToLineItem(item, self._arrowAngle)
+        self._addLabelToLineItem(item)
 
         if additem:
             self.addItem(item)

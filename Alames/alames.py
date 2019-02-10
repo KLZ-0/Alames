@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.1-r9"
+    VERSION = "1.1-r10"
 
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
