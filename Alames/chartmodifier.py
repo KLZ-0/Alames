@@ -26,6 +26,7 @@ class ChartModifier:
         self.updateAxes()
 
     def filterAlamesOne(self):
+        # TODO: Rewrite to make changes in dataHolder instead of lineSeries, the start end end zoom methods in lineseries must remain untouched
         try:
             if self.filterAlamesOneApplied:
                 scope.errorPopup("Filter already applied!")
@@ -60,7 +61,10 @@ class ChartModifier:
 
             self.series()[0].setColor("#0000ff")
             self.series()[1].setColor("#ff0000")
+
+            # TODO: Implement and use the window.update() or chart.update() function instead
             scope.rightDock.widget().updateSections()
+            scope.window.phasorView.reDraw()
             self.updateAxes()
 
             self.filterAlamesOneApplied = True

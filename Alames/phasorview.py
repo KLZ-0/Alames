@@ -11,5 +11,9 @@ class PhasorView(QGraphicsView):
         super(PhasorView, self).__init__(parent)
         self.setScene(PhasorScene())
 
+    def reDraw(self):
+        """Just a wrapper method for the scene reDraw"""
+        self.scene().reDraw()
+
     def resizeEvent(self, event):
         super(PhasorView, self).resizeEvent(event)

@@ -8,7 +8,7 @@ from Alames.dataholder import DataHolder
 class PhasorScene(QGraphicsScene):
     """Phasor diagram Scene"""
 
-    dataholder = DataHolder()
+    dataHolder = DataHolder()
     settings = {"show-current-circle": False,
                 "current-color": "#ff0000", "voltage-color": "#0000ff"}
     _width = _height = 300
@@ -26,24 +26,18 @@ class PhasorScene(QGraphicsScene):
 
     def __init__(self):
         super(PhasorScene, self).__init__()
-        self.currentLabel = QGraphicsTextItem()
-        self.voltageLabel = QGraphicsTextItem()
-        self.currentLabel.setDefaultTextColor(QtGui.QColor(self.settings["current-color"]))
-        self.voltageLabel.setDefaultTextColor(QtGui.QColor(self.settings["voltage-color"]))
-        self.labels = [self.currentLabel, self.voltageLabel]
-        for label in self.labels:
-            self.addItem(label)
-            label.hide()
+        self._drawDiagramBase()
+        self._drawHelperCircles()
 
 ######## Update methods
 
     def setData(self, dataholder, settings):
-        self.dataholder = dataholder
+        self.dataHolder = dataholder
         self.settings = settings
         self.reDraw()
 
     def setDataHolder(self, dataholder):
-        self.dataholder = dataholder
+        self.dataHolder = dataholder
         self.reDraw()
 
     def setSettings(self, settings):
@@ -57,18 +51,17 @@ class PhasorScene(QGraphicsScene):
             label.hide()
 
     def reDraw(self):
-        """Redraw (or update) the Diagram"""
+        """Redraw (or update) the Diagram, happens after filer has been applied and after zooming"""
 
-        if self.dataholder.isLoaded():
+        if self.dataHolder.isLoaded():
             self.tipPoints = []
 
-            if self.dataholder.RMSValues():
-                self._drawDiagramBase()
-                self._drawHelperCircles()
-                self._drawPowerArrows()
+            if self.dataHolder.RMSValues():
+                # self._drawPowerTriangle()
+                self._drawBasicPhasor()
                 # self.updateValueLabels(qp)        
 
-######## Drawing methods - draw (display) the items on the scene (high level methods)
+######## Drawing methods (base) - draw (display) the items on the scene (high level methods)
 
     def _drawDiagramBase(self):
         """Draw the main circle + x and y axes"""
@@ -114,13 +107,14 @@ class PhasorScene(QGraphicsScene):
 
             # TODO: Add axis numbering
 
-    def _drawPowerArrows(self):
-        """Create Power Phasor diagram"""
+######## Drawing methods (modifiable) - only one at a time can be used
+
+    def _drawPowerTriangle(self):
+        """Draw Power Phasor diagram"""
 
         # reducing reference access time
-        dataSet = self.dataholder.powerDataSet()
-        maxLineLen = self.width()/2
-        lenMultiplier = maxLineLen/max(self.dataholder.powerDataSet())
+        dataSet = self.dataHolder.powerDataSet()
+        lenDivider = max(dataSet) # any value from the set / lenDivider = a ratio between 0-1
 
         # TODO: Reimplement this part
         self.arrowLineItems = []
@@ -130,6 +124,25 @@ class PhasorScene(QGraphicsScene):
             self._createPytagorasArrow(
                 self.arrowLineItems[0], self.arrowLineItems[1], "#888888"))
         self._addDashedSupport(self.arrowLineItems[-1])
+
+    def _drawBasicPhasor(self):
+        """Draw a basic phasor diagram with voltage and current"""
+
+        # reducing reference access time
+        rmsvalues = self.dataHolder.RMSValues()
+        angle = self.dataHolder.fi()
+        lenDivider = max(rmsvalues) # any value from the set / lenDivider = a ratio between 0-1
+
+        # NOTE: The rmsvalues array can also be passed alone without dividind, the divider can be calculated
+        self.arrowLineItems = []
+        self.arrowLineItems.append(self._createArrow(
+            rmsvalues[0]/lenDivider, 0, "#0000ff"))  # voltage
+        self.arrowLineItems.append(self._createArrow(
+            rmsvalues[1]/lenDivider, angle, "#ff0000"))  # current
+
+        # TODO: Optimize this, make a new class or something
+        self.arrowLineItems[0].label.setPlainText(str(rmsvalues[0]))
+        self.arrowLineItems[1].label.setPlainText(str(rmsvalues[1]))
 
 ######## Constuction methods - construct new objects and return them
 
