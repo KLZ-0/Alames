@@ -34,6 +34,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
         self.setAcceptHoverEvents(True)
 
         self.loadCSV(fileName)
+        # TODO: Run at event
         SeriesHelper.fillSeries(self.selectionDataHolder.YData(), self.selectionDataHolder.columnNames())
         SeriesHelper.fillChart()
         self.updateAxes()

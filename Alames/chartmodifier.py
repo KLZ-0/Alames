@@ -15,15 +15,20 @@ class ChartModifier:
         self.filterAlamesOneApplied = False
 
     def multiplyAll(self, ratio):
-        self.ydata = []
-        for serie in self.series():
-            self.ydata.append([])
-            vect = serie.baseData()
-            for point in vect:
-                point.setY(point.y()*ratio)
-                self.ydata[-1].append(point.y())
-            serie.setBaseData(vect)
+        baseydata = self.selectionDataHolder.YData()
+
+        newydata = []
+
+        for ydata in baseydata:
+            newydata.append([])
+            for point in ydata:
+                point = point*ratio
+                newydata[-1].append(point)
+
+        self.selectionDataHolder.setYData(newydata)
+
         self.updateAxes()
+        scope.window.phasorView.scene().setDataHolder(self.selectionDataHolder)
 
     def filterAlamesOne(self):
         # TODO: Rewrite to make changes in dataHolder instead of lineSeries, the start end end zoom methods in lineseries must remain untouched

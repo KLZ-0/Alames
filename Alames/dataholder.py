@@ -37,6 +37,21 @@ class DataHolder:
         self._XData = xdata
         self._YData = ydata
 
+        if self._testUI():
+            self._calcAll()
+
+    def setXData(self, xdata):
+        self._XData = xdata
+
+        if self._testUI():
+            self._calcAll()
+
+    def setYData(self, ydata):
+        self._YData = ydata
+
+        if self._testUI():
+            self._calcAll()
+
     def setColumnNames(self, columnnames):
         self._columnNames = columnnames
 

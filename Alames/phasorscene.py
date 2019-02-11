@@ -28,6 +28,8 @@ class PhasorScene(QGraphicsScene):
     _nOfCircles = 4
     _circleOffset = _width/_nOfCircles+1  # Offset between circles
 
+    redrawn = QtCore.pyqtSignal()
+
     def __init__(self):
         super(PhasorScene, self).__init__()
         self._drawDiagramBase()
@@ -51,6 +53,10 @@ class PhasorScene(QGraphicsScene):
     def reDraw(self):
         """Redraw (or update) the Diagram, happens after filer has been applied and after zooming"""
 
+        for item in self.items():
+            if item in self.baseItemSet: continue
+            self.removeItem(item)
+
         if self.dataHolder.isLoaded():
 
             if self._phasorType == 0 and self.dataHolder.RMSValues():
@@ -59,10 +65,13 @@ class PhasorScene(QGraphicsScene):
             if self._phasorType == 1 and self.dataHolder.powerDataSet():
                 self._drawPowerTriangle()
 
+        self.redrawn.emit()
+
 ######## Drawing methods (base) - draw (display) the items on the scene (high level methods)
 
     def _drawDiagramBase(self):
         """Draw the main circle + x and y axes"""
+        self.baseItemSet = []
 
         circleRect = QtCore.QRectF(0, 0, self._width, self._height)
         self.circle = QGraphicsEllipseItem()
@@ -74,6 +83,7 @@ class PhasorScene(QGraphicsScene):
         #     self.palette().color(QtGui.QPalette.Mid)))
         self.circle.setRect(circleRect)
         self.addItem(self.circle)
+        self.baseItemSet.append(self.circle)
 
         self.xLine = QGraphicsLineItem(
             pen.widthF(), self.height()/2-pen.widthF()/2, self.width()-2*pen.widthF(), self.height()/2-pen.widthF()/2)
@@ -85,6 +95,8 @@ class PhasorScene(QGraphicsScene):
         self.yLine.setPen(pen)
         self.xLine.show()
         self.yLine.show()
+        self.baseItemSet.append(self.xLine)
+        self.baseItemSet.append(self.yLine)
 
     def _drawHelperCircles(self):
         """Draw circles for axis numbering"""
@@ -104,6 +116,8 @@ class PhasorScene(QGraphicsScene):
             self.addItem(self.helperCircles[-1])
 
             # TODO: Add axis numbering
+
+        self.baseItemSet += self.helperCircles
 
 ######## Drawing methods (modifiable) - only one at a time can be used
 
