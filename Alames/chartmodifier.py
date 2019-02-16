@@ -15,20 +15,12 @@ class ChartModifier:
         self.filterAlamesOneApplied = False
 
     def multiplyAll(self, ratio):
-        baseydata = self.selectionDataHolder.YData()
 
-        newydata = []
-
-        for ydata in baseydata:
-            newydata.append([])
-            for point in ydata:
-                point = point*ratio
-                newydata[-1].append(point)
-
-        self.selectionDataHolder.setYData(newydata)
+        for i in range(self.selectionDataHolder.getLen()):
+            ydata = self.selectionDataHolder.getYData(i)
+            self.selectionDataHolder.setYData(i, [val*ratio for val in ydata])
 
         self.updateAxes()
-        scope.window.phasorView.scene().setDataHolder(self.selectionDataHolder)
 
     def filterAlamesOne(self):
         # TODO: Rewrite to make changes in dataHolder instead of lineSeries, the start end end zoom methods in lineseries must remain untouched
@@ -40,28 +32,25 @@ class ChartModifier:
             self.series()[1].setName("Current")
             self.series()[2].setName("State")
 
-            voltageVect = self.series()[0].baseData()
-            currentVect = self.series()[1].baseData()
-            stateVect = self.series()[2].baseData()
-            self.ydata = [[], []]
+            voltageVect = self.selectionDataHolder.getYData(0)
+            currentVect = self.selectionDataHolder.getYData(1)
+            stateVect = self.selectionDataHolder.getYData(2)
             for i in range(len(stateVect)):
-                state = stateVect[i].y()
+                state = stateVect[i]
                 if state == 0:
                     pass
                 elif state == 1:
-                    self.invertPointY(voltageVect[i])
+                    voltageVect[i] = -voltageVect[i]
                 elif state == 2:
-                    self.invertPointY(currentVect[i])
+                    currentVect[i] = -currentVect[i]
                 elif state == 3:
-                    self.invertPointY(voltageVect[i])
-                    self.invertPointY(currentVect[i])
-                self.multiplyPoint(voltageVect[i], 3.62) # calibration
-                self.multiplyPoint(currentVect[i], 1/2.54) # current calc
-                self.ydata[0].append(voltageVect[i].y())
-                self.ydata[1].append(currentVect[i].y())
+                    voltageVect[i] = -voltageVect[i]
+                    currentVect[i] = -currentVect[i]
+                voltageVect[i] *= (3.62) # calibration
+                currentVect[i] *= (1/2.54) # current calc
 
-            self.series()[0].setBaseData(voltageVect)
-            self.series()[1].setBaseData(currentVect)
+            self.selectionDataHolder.setYData(0, voltageVect)
+            self.selectionDataHolder.setYData(1, currentVect)
             self.series()[2].hide()
 
             self.series()[0].setColor("#0000ff")
@@ -69,15 +58,8 @@ class ChartModifier:
 
             # TODO: Implement and use the window.update() or chart.update() function instead
             scope.rightDock.widget().updateSections()
-            scope.window.phasorView.reDraw()
             self.updateAxes()
 
             self.filterAlamesOneApplied = True
         except:
             scope.errorPopup(traceback.format_exc())
-
-    def invertPointY(self, point):
-        point.setY(-point.y())
-
-    def multiplyPoint(self, point, ratio):
-        point.setY(point.y()*ratio)

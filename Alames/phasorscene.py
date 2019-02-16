@@ -41,10 +41,12 @@ class PhasorScene(QGraphicsScene):
         self.dataHolder = dataholder
         self.settings = settings
         self.reDraw()
+        self.dataHolder.changed.connect(self.reDraw)
 
     def setDataHolder(self, dataholder):
         self.dataHolder = dataholder
         self.reDraw()
+        self.dataHolder.changed.connect(self.reDraw)
 
     def setSettings(self, settings):
         self.settings = settings

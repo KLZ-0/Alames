@@ -12,8 +12,8 @@ from Alames import scope
 from Alames import chartview
 from Alames import leftwidget
 from Alames import chartmodifier
+from Alames.dataholderbase import DataHolderBase
 from Alames.dataholder import DataHolder
-from Alames.serieshelper import SeriesHelper
 
 class Chart(QChart, chartmodifier.ChartModifier):
     """
@@ -21,12 +21,11 @@ class Chart(QChart, chartmodifier.ChartModifier):
     Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
     Initializes the required objects as its own properties
     """
-    qseries = []
 
     def __init__(self):
         super(Chart, self).__init__()
         self.selectionDataHolder = DataHolder()
-        self.overallDataHolder = DataHolder()
+        self.overallDataHolder = DataHolderBase()
 
 ######## Setup
 
@@ -34,9 +33,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
         self.setAcceptHoverEvents(True)
 
         self.loadCSV(fileName)
-        # TODO: Run at event
-        SeriesHelper.fillSeries(self.selectionDataHolder.YData(), self.selectionDataHolder.columnNames())
-        SeriesHelper.fillChart()
+        for serie in self.selectionDataHolder.getQSeries():
+            self.addSeries(serie)
+
         self.updateAxes()
 
     def loadCSV(self, lFileName):
@@ -90,20 +89,22 @@ class Chart(QChart, chartmodifier.ChartModifier):
 ######## Series modifier
 
     def setRange(self, start, end):
-        SeriesHelper.setRange(start, end)
+        self.selectionDataHolder.setRange(start, end)
+        # TODO: Test this
 
 ######## View modifiers
 
     def setZoom(self, start, end):
-        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
-        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, 0), self.series()[0])
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.series()[0])
         area = self.plotArea()
         self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
 
 ######## Toggle actions
 
     def toggleSerieVisiblity(self, key):
-        if int(key) > len(self.qseries): return
+        if int(key) > self.selectionDataHolder.getLen():
+            return
         if self.series()[int(key) - 1].isVisible():
             self.series()[int(key) - 1].hide()
         else:
