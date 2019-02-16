@@ -8,6 +8,7 @@ from pathlib import Path
 
 from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
+from Alames.generated import ui_aboutwidget
 
 from Alames import chart
 
@@ -19,6 +20,8 @@ class Window(QMainWindow, Ui_MainWindow):
     """
     def __init__(self):
         super(Window, self).__init__()
+        scope.window = self
+
         self.setupUi(self)
         self.centralWidget.hide()
         self.rightDock.hide()
@@ -33,6 +36,10 @@ class Window(QMainWindow, Ui_MainWindow):
 
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)
+
+        self.aboutWidget = QWidget()
+        self.aboutWidget.ui = ui_aboutwidget.Ui_AboutWidget()
+        self.aboutWidget.ui.setupUi(self.aboutWidget)
 
         # self.initLabel = QLabel("Drag & Drop a CSV file, or press:\n\nO - to open and load data\n\nS - to draw the file contents into a chart\n\nQ - to quit", self)
         self.initLabel = QLabel("Drag & Drop a CSV file or press O to open one", self)
@@ -57,6 +64,9 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.rightDock.show()
         scope.leftDock.show()
 
+        # send signal to window->phasorWidget to update
+        self.phasorView.scene().setData(scope.chart.selectionDataHolder, {"show-current-circle": False, "current-color": "#ff0000", "voltage-color": "#0000ff"})
+
         # scope.chart.chartView = scope.chartView
 
     def fileSelect(self):
@@ -74,8 +84,16 @@ class Window(QMainWindow, Ui_MainWindow):
         key = event.text()
         if "o" in key:
             self.openFile()
+
         if "q" in key or event.key() == QtCore.Qt.Key_Escape:
             QApplication.exit()
+
+        if event.key() == QtCore.Qt.Key_F11:
+            self.aboutWidget.move(self.frameGeometry().topLeft(
+            ) + self.frameGeometry().center() - self.aboutWidget.geometry().center())
+            self.aboutWidget.show()
+
+
         if event.key() == QtCore.Qt.Key_F12:
             QApplication.aboutQt()
 

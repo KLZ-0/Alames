@@ -7,82 +7,56 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 class ChartLineSeries(QLineSeries):
     def __init__(self, ydata=[]):
         super(ChartLineSeries, self).__init__()
-
-        self.baseRangeXData = range(len(ydata))
-
-        for i in self.baseRangeXData:
-            self.append(i, ydata[i])
-
-        self.baseVect = self.pointsVector()
-        self.currentVect = self.baseVect
-
-        self.start = self.baseRangeXData[0]
-        self.end = self.baseRangeXData[-1]
-
-######## Update Actions
-
-    def update(self):
-        self.currentVect = self.baseVect[self.start:self.end+1]
-        self.replace(self.currentVect)
+        # TODO: Remove setup from constructor
+        # TODO: Make a setYData method
+        # TODO: Remove range modifying methods > the range will be the whole range of the dataholder (selectionDataHolder)
+        #           Range reset will be available by setting the selectionDataHolder xdata and ydata from overallDataHolder
+        # TODO: Preserve the basic access and modifying methods to keep backwards compatibility
 
 ######## Setters
-
-    def setRange(self, start, end):
-        """Expects a range between 0-max range of the chart"""
-        self.start = start
-        self.end = end
-        self.update()
-
-    def resetRange(self):
-        self.start = self.baseRangeXData[0]
-        self.end = self.baseRangeXData[-1]
-        self.update()
-
-    def setBaseData(self, baseData):
-        self.baseVect = baseData
-        self.update()
 
     def setColor(self, color):
         if isinstance(color, string_types): # if color is a text in hex format
             self.setColor(QtGui.QColor(color))
         else:
             super(ChartLineSeries, self).setColor(color)
-            self.update()
-            # TODO: update chart to get rid of openGL frags or update color of the openGL rendered parts
+            self.hide()
+            self.show()
 
     def setUseOpenGL(self, state):
         self.hide()
         super(ChartLineSeries, self).setUseOpenGL(state)
         self.show()
 
+    def setData(self, ydata):
+        """Replace current data with new data (better alternative to replaceData)"""
+
+        newData = []
+        for i in range(len(ydata)):
+            # Set abstract X data
+            newData.append(QtCore.QPointF(i, ydata[i]))
+
+        self.replace(newData)
+
 ######## Getters
 
-    def baseData(self):
-        return self.baseVect
-
     def getStart(self):
-        return self.start
+        return self.firstPoint().x()
 
     def getEnd(self):
-        return self.end
-
-    def getBaseStart(self):
-        return self.baseRangeXData[0]
-
-    def getBaseEnd(self):
-        return self.baseRangeXData[-1]
+        return self.lastPoint().x()
 
     def max(self):
-        return max(point.y() for point in self.currentVect)
+        return max(point.y() for point in self.pointsVector())
 
     def min(self):
-        return min(point.y() for point in self.currentVect)
+        return min(point.y() for point in self.pointsVector())
 
     def firstPoint(self):
-        return self.currentVect[0]
+        return self.pointsVector()[0]
 
     def lastPoint(self):
-        return self.currentVect[-1]
+        return self.pointsVector()[-1]
 
     def getPoint(self, pos):
-        return self.currentVect[pos]
+        return self.pointsVector()[pos-1]

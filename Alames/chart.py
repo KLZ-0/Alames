@@ -12,18 +12,61 @@ from Alames import scope
 from Alames import chartview
 from Alames import leftwidget
 from Alames import chartmodifier
-from Alames import chartsetup
+from Alames.dataholderbase import DataHolderBase
+from Alames.dataholder import DataHolder
 
-class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
+class Chart(QChart, chartmodifier.ChartModifier):
     """
     Purpose: setup and modify the QChart
     Manages the charting subsystem consisting of the ChartView, Properties and BottomWidget.
     Initializes the required objects as its own properties
     """
+
     def __init__(self):
         super(Chart, self).__init__()
+        self.selectionDataHolder = DataHolder()
+        self.overallDataHolder = DataHolderBase()
+
+######## Setup
+
+    def constructChart(self, fileName):
+        self.setAcceptHoverEvents(True)
+
+        self.loadCSV(fileName)
+        for serie in self.selectionDataHolder.getQSeries():
+            self.addSeries(serie)
+
+        self.updateAxes()
+
+    def loadCSV(self, lFileName):
+        if lFileName.endswith(".csv.xz"):
+            try:
+                lFileName = lzma.open(lFileName) # file name or object
+            except lzma.LZMAError:
+                scope.errorPopup("LZMA decompression failed - damaged xz file")
+
+        f = pandas.read_csv(lFileName)
+        csv = f.values
+        
+        self.selectionDataHolder.setColumnNames(f.columns)
+        self.selectionDataHolder.setDataFromRows(csv)
+        self.overallDataHolder.setColumnNames(f.columns)
+        self.overallDataHolder.setDataFromRows(csv)
+
+######## Signal handlers
+
+    def onSelectionChange(self, range):
+        # call in ....connect(self.onSelectionChange)
+        # self.selectionDataHolder.update(range)
+        pass
 
 ######## Getters
+
+    def getXData(self):
+        return self.selectionDataHolder.XData()
+
+    def getYData(self):
+        return self.selectionDataHolder.YData()
 
     def getRange(self):
         try:
@@ -43,23 +86,25 @@ class Chart(QChart, chartmodifier.ChartModifier, chartsetup.ChartSetup):
         except IndexError:
             return 0
 
-######## View modifiers
+######## Series modifier
 
     def setRange(self, start, end):
-        for serie in self.series():
-            serie.setRange(start, end)
-        self.updateAxes()
+        self.selectionDataHolder.setRange(start, end)
+        # TODO: Test this
+
+######## View modifiers
 
     def setZoom(self, start, end):
-        firstPoint = self.mapToPosition(QtCore.QPoint(start, self.series()[0].getPoint(start).y()), self.series()[0])
-        lastPoint = self.mapToPosition(QtCore.QPoint(end, self.series()[0].getPoint(end).y()), self.series()[0])
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, 0), self.series()[0])
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.series()[0])
         area = self.plotArea()
         self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
 
 ######## Toggle actions
 
     def toggleSerieVisiblity(self, key):
-        if int(key) > len(self.qseries): return
+        if int(key) > self.selectionDataHolder.getLen():
+            return
         if self.series()[int(key) - 1].isVisible():
             self.series()[int(key) - 1].hide()
         else:

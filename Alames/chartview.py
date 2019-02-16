@@ -53,10 +53,10 @@ class View(QChartView):
             self.focusValueTextItem.setPos(event.x(), event.y())
 
             xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
-            html = str(self.chart().xdata[round(xVal)]) + "<br>"
-            for i in range(len(self.chart().ydata)):
+            html = str(self.chart().getXData()[round(xVal)]) + "<br>"
+            for i in range(len(self.chart().getYData())):
                 if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.chart().ydata[i][round(xVal)])
+                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData()[i][round(xVal)])
             self.focusValueTextItem.setHtml(html)
 
             focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()
@@ -81,21 +81,28 @@ class View(QChartView):
         key = event.text()
         if key in ["1","2","3","4","5","6","7","8","9"]:
             self.chart().toggleSerieVisiblity(key)
+
         if "a" in key:
             self.chart().toggleAnimatable(key)
+
         if "p" in key:
             self.chart().toggleProperties()
+
         if "f" in key:
             self.chart().toggleLeftWidget()
+
         if "m" in key:
             self.chart().multiplyAll(2)
+
         if "d" in key: # DEBUG
             self.chart().filterAlamesOne()
+
         if "r" in key: # DEBUG
             self.chart().zoomReset()
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
+            
         if event.key() == QtCore.Qt.Key_Left:
             self.chart().scroll(-10, 0)
 
