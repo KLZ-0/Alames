@@ -19,8 +19,8 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
 
         self.setupUi(self)
 
-        self.startBox.valueChanged.connect(self.updateRange)
-        self.endBox.valueChanged.connect(self.updateRange)
+        self.startBox.valueChanged.connect(self.updateChartRange)
+        self.endBox.valueChanged.connect(self.updateChartRange)
         self.resetButton.clicked.connect(self.resetRange)
 
 ######## Widget setup
@@ -54,7 +54,7 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
 
-    def updateRange(self):
+    def updateChartRange(self):
         """
         Args: ()
         Update chart zoom

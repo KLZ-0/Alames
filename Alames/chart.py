@@ -90,7 +90,8 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
     def setRange(self, start, end):
         self.selectionDataHolder.setRange(start, end)
-        # TODO: Test this
+        self.resetZoom()
+        scope.window.updateChildren()
 
 ######## View modifiers
 
@@ -99,6 +100,13 @@ class Chart(QChart, chartmodifier.ChartModifier):
         lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.series()[0])
         area = self.plotArea()
         self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
+
+    def resetZoom(self):
+        self.setZoom(self.getStart(), self.getEnd())
+
+    def zoomReset(self):
+        """Override the inherited method"""
+        self.resetZoom()
 
 ######## Toggle actions
 
@@ -135,6 +143,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
             scope.leftDock.show()
 
 ######## Update actions
+
+    def updateChildren(self):
+        self.updateAxes()
 
     def scaleChangedFun(self):
         print("scaleChanged")

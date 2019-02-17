@@ -15,6 +15,12 @@ class DataHolder(DataHolderBase):
     def __init__(self, xdata=[], ydata=[]):
         super(DataHolder, self).__init__(xdata, ydata)
 
+######## Updates
+
+    def updateColumnNames(self):
+        for serie in self._qSeries:
+            self._columnNames[serie.property("number")] = serie.name()
+
 ######## YData low level access - used in chartmodifier
 
     def setYData(self, ydatanum, ydata):
@@ -41,6 +47,7 @@ class DataHolder(DataHolderBase):
 
     def setRange(self, start, end):
         """Expects a range between 0-max range of the chart"""
+        # TODO: Fix the max zooming area to be zoomed out
         self._start = start
         self._end = end
         self._updateQSeries()
@@ -62,10 +69,11 @@ class DataHolder(DataHolderBase):
 
     def _makeQSeries(self):
         for i in range(len(self._YData)):
-            # TODO: Implement the constructor and remove most of chartlineseries, preserving some methods
             # TODO: Make use of the property "number"
             self._qSeries.append(ChartLineSeries())
             self._qSeries[-1].setProperty("number", i)
+            self._qSeries[-1].setName(self._columnNames[i])
+            self._qSeries[-1].nameChanged.connect(self.updateColumnNames)
 
     def _updateQSeries(self):
         # if len doesn't match that means a new file could have been opened
@@ -75,5 +83,4 @@ class DataHolder(DataHolderBase):
 
         # Add the ydata to series
         for qserie in self._qSeries:
-            # TODO: Implement this method in chartlineseries
             qserie.setData(self._YData[qserie.property("number")][self._start:self._end+1])

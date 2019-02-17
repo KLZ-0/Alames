@@ -25,7 +25,7 @@ class DataHolderBase(QtCore.QObject):
 ######## Setters
 
     def setColumnNames(self, columnnames):
-        self._columnNames = columnnames
+        self._columnNames = [name for name in columnnames]
 
     def setDataFromRows(self, rows):
         """High level access function"""

@@ -100,6 +100,9 @@ class View(QChartView):
         if "r" in key: # DEBUG
             self.chart().zoomReset()
 
+        if "i" in key:  # DEBUG
+            self.chart().setRange(100, 200)
+
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)
             

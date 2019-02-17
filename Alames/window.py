@@ -10,6 +10,8 @@ from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
 from Alames.generated import ui_aboutwidget
 
+from Alames.config.keymaps import windowkeymap
+
 from Alames import chart
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -18,6 +20,9 @@ class Window(QMainWindow, Ui_MainWindow):
     Manages the whole window except for the charting subsystem which is managed by Chart.
     Initializes Chart as its own property
     """
+
+    _shortcuts = []
+
     def __init__(self):
         super(Window, self).__init__()
         scope.window = self
@@ -48,6 +53,15 @@ class Window(QMainWindow, Ui_MainWindow):
         f.setPointSize(24)
         self.initLabel.setFont(f)
 
+        self.setupShortcuts()
+
+######## Update methods
+
+    def updateChildren(self):
+        self.rightDock.widget().update()
+        self.leftDock.widget().update()
+        self.chartView.chart().updateChildren()
+
 ######## Open file methods
 
     def openFile(self):
@@ -77,25 +91,13 @@ class Window(QMainWindow, Ui_MainWindow):
     def errorPopup(self, text):
         QErrorMessage(self).showMessage(text)
 
+######## Shortcut binding
+
+    def setupShortcuts(self):
+        for key, method in windowkeymap.keydict.items():
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method)))
+
 ######## Event handlers
-
-    def keyPressEvent(self, event):
-        super(Window, self).keyPressEvent(event)
-        key = event.text()
-        if "o" in key:
-            self.openFile()
-
-        if "q" in key or event.key() == QtCore.Qt.Key_Escape:
-            QApplication.exit()
-
-        if event.key() == QtCore.Qt.Key_F11:
-            self.aboutWidget.move(self.frameGeometry().topLeft(
-            ) + self.frameGeometry().center() - self.aboutWidget.geometry().center())
-            self.aboutWidget.show()
-
-
-        if event.key() == QtCore.Qt.Key_F12:
-            QApplication.aboutQt()
 
     def dragEnterEvent(self, event):
         super(Window, self).dragEnterEvent(event)
