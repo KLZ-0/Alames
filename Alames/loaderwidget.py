@@ -55,6 +55,7 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
             self._checkBoxes[i].setChecked(rightWidget.isVisibleSection(i))
             self._checkBoxes[i].setText(rightWidget.getSectionName(i))
 
+            # TODO: Also draw a line before the checkbox
             font = self._checkBoxes[i].font()
             font.setBold(rightWidget.isVisibleSectionSerie(i))
             font.setItalic(rightWidget.isVisibleSectionSerie(i))
