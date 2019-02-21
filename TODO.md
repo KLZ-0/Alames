@@ -25,6 +25,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - simplify imports
  - clean old files
  - exceptions
+ - write a documentation
 
 **IDEAs**:
   - **When large numbers of points are concentrated on a small area, they should be merged to represent RMS values**

@@ -7,6 +7,10 @@ from Alames.chartlineseries import ChartLineSeries
 class DataHolder(DataHolderBase):
     """Data holder/container, inherits DataHolderBase and adds support for QSeries"""
 
+    # NOTE: self.qSeries are not aligned with with self._YData
+    #       Not every YData array contains numbers and thus cannot be added to the chart
+    #       For example YData can contain 7 arrays but self.qSeries only 3
+
     _start = 0
     _end = -1
 
@@ -60,6 +64,10 @@ class DataHolder(DataHolderBase):
 
 ######## Getters
 
+    def columnNamesOfSeries(self):
+        """Column names which could be added to chart (their YData contains only numbers)"""
+        return [serie.name() for serie in self._qSeries]
+
     def getDummyQSerie(self):
         """Return a dummy serie for e.g. mapping.."""
         return self._qSeries[0]
@@ -72,6 +80,13 @@ class DataHolder(DataHolderBase):
 
 ######## Privates
 
+    def _setDataToQSerie(self, YDataNum):
+        """Set the data of a QSerie """
+        for serie in self._qSeries:
+            if serie.property("number") == YDataNum:
+                serie.setData(
+                    self._YData[YDataNum][self._start:self._end+1])
+
     def _makeQSeries(self):
         for i in range(len(self._YData)):
             # TODO: Make use of the property "number"
@@ -81,6 +96,7 @@ class DataHolder(DataHolderBase):
                 self._qSeries[-1].setProperty("number", i)
                 self._qSeries[-1].setName(self._columnNames[i])
                 self._qSeries[-1].nameChanged.connect(self.updateColumnNames)
+                self._qSeries[-1].needsData.connect(self._setDataToQSerie)
 
     def _updateQSeries(self):
         # if len doesn't match that means a new file could have been opened
@@ -89,5 +105,8 @@ class DataHolder(DataHolderBase):
             self._makeQSeries()
 
         # Add the ydata to series
-        for qserie in self._qSeries:
-            qserie.setData(self._YData[qserie.property("number")][self._start:self._end+1])
+        # for qserie in self._qSeries:
+        #     qserie.setData(self._YData[qserie.property("number")][self._start:self._end+1])
+
+        # At least one must be initialized for mapping
+        self._setDataToQSerie(self._qSeries[0].property("number"))

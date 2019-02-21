@@ -7,14 +7,19 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 class ChartLineSeries(QLineSeries):
     """Derived class from QLineSeries"""
 
-    def __init__(self, ydata=[]):
+    # needsData is emitted at show() or setVisible(True)
+    # needsData is connected to _setDataToQSerie(YDataNum)
+    needsData = QtCore.pyqtSignal(int)
+
+    def __init__(self):
         super(ChartLineSeries, self).__init__()
+
         self.setUseOpenGL(True)
         self.hide()
         # NOTE: The range will be the whole range of the dataholder (selectionDataHolder)
         #           Range reset will be available by setting the selectionDataHolder xdata and ydata from overallDataHolder
 
-######## Setters
+######## Overrides
 
     def setColor(self, color):
         if isinstance(color, string_types): # if color is a text in hex format
@@ -28,6 +33,22 @@ class ChartLineSeries(QLineSeries):
         self.setVisible(not self.isVisible())
         super(ChartLineSeries, self).setUseOpenGL(state)
         self.setVisible(not self.isVisible())
+
+    def setVisible(self, state):
+        if self.property("number") != None and state == True and not len(self.pointsVector()):
+            self.needsData.emit(self.property("number"))
+            print("loaded in setVisible(True)", self.property("number"))
+
+        super(ChartLineSeries, self).setVisible(state)
+
+    def show(self):
+        if self.property("number") != None and not len(self.pointsVector()):
+            self.needsData.emit(self.property("number"))
+            print("loaded in show()", self.property("number"))
+
+        super(ChartLineSeries, self).show()
+
+######## Setters
 
     def setData(self, ydata):
         """Replace current data with new data (better alternative to replaceData)"""

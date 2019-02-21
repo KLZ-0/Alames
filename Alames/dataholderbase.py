@@ -142,7 +142,8 @@ class DataHolderBase(QtCore.QObject):
             self._YData.append([])
 
     def _truncate(self):
-        self.setData([], [])
+        self._XData = []
+        self._YData = []
 
 ######## Privates - calculations
 
