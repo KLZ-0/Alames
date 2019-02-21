@@ -58,6 +58,7 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
             self.serie.show()
         else:
             self.serie.hide()
+        self.updated.emit()
 
     def toggleOpenGL(self):
         if self.OpenGLCheckBox.isChecked():

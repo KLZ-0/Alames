@@ -5,18 +5,18 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
-from Alames.generated import ui_rightwidget
+from Alames.generated.ui_rightwidget import Ui_RightWidget
 
 from Alames import rightwidgetsection
 
-class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget):
+class RightWidget(QWidget, Ui_RightWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
 
-    DEFAULT_VISIBLE_SECTION_NUM = 3
+    DEFAULT_VISIBLE_SECTION_NUM = 0
 
     _sections = []
 
@@ -71,6 +71,9 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget):
         
     def isVisibleSectionByDefault(self, num):
         return self._sections[num].property("visible_by_default")
+
+    def isVisibleSectionSerie(self, num):
+        return self._sections[num].serie.isVisible()
 
     def setVisibleSection(self, num, state):
         self._sections[num].setVisible(state)

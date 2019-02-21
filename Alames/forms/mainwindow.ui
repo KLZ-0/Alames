@@ -236,9 +236,7 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="LoaderWidget" name="loaderWidget">
-    <layout class="QFormLayout" name="formLayout"/>
-   </widget>
+   <widget class="LoaderWidget" name="loaderWidget"/>
   </widget>
  </widget>
  <customwidgets>

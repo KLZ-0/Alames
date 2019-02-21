@@ -48,6 +48,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
     - make a second dataholder, the first is for overall values and the second for selected range values see todo below
  - after zooming the chart (connect some event) also modify the selection dataholder (get start and end of the chart and calculate) - the qlineseries does not need to be altered (maybe) **!!!plan it!!!**
  - there is also another kind of change to data, filters -> the overall dataholders data will change and also the selection dataholders, retaining its currently selected range (or just zoom out.. idk)
+ - **Add manual axis range override**
+ - **Add settings to scope**
 
 **BUGS**:
  - sometimes this Qt error happens unpredictably, but it does not cause any disturbance and the user is not affected - "qt.qpa.xcb: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1665, resource id: 37781937, major code: 40 (TranslateCoords), minor code: 0" [solved]
