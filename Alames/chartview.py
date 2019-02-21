@@ -49,21 +49,23 @@ class View(QChartView):
         if not self.focusLine.isVisible(): self.focusLine.show()
         if not self.focusValueTextItem.isVisible(): self.focusValueTextItem.show()
 
-        try:
-            self.focusValueTextItem.setPos(event.x(), event.y())
+        self.focusValueTextItem.setPos(event.x(), event.y())
 
-            xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
-            html = str(self.chart().getXData()[round(xVal)]) + "<br>"
-            for i in range(len(self.chart().getYData())):
-                if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData()[i][round(xVal)])
-            self.focusValueTextItem.setHtml(html)
-
-            focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()
-            self.focusLine.setPos(focusLineX, 0)
-        except IndexError:
+        xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().getDummyQSerie()).x()
+        if xVal < 0 or xVal >= self.chart().getEnd():
+            # When the end of the chart is reached
             self.focusValueTextItem.hide()
             self.focusLine.hide()
+            return
+
+        html = str(self.chart().getXData()[round(xVal)]) + "<br>"
+        for serie in self.chart().series():
+            if serie.isVisible():
+                html += "<font color=\"" + serie.color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
+        self.focusValueTextItem.setHtml(html)
+
+        focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().getDummyQSerie()).x()
+        self.focusLine.setPos(focusLineX, 0)
 
     def leaveEvent(self, event):
         super(View, self).leaveEvent(event)

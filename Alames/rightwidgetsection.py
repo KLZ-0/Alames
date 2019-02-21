@@ -21,6 +21,7 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
         self.colorPickButton.pressed.connect(self.pickSerieColor)
         self.visibleCheckBox.setChecked(serie.isVisible())
         self.visibleCheckBox.toggled.connect(self.setSerieVisiblity)
+        self.OpenGLCheckBox.setChecked(serie.useOpenGL())
         self.OpenGLCheckBox.toggled.connect(self.toggleOpenGL)
 
         # Enable default OpenGL

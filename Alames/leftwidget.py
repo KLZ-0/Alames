@@ -17,12 +17,6 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         super(LeftWidget, self).__init__(parent)
         self.chart = None
 
-        self.setupUi(self)
-
-        self.startBox.valueChanged.connect(self.updateChartRange)
-        self.endBox.valueChanged.connect(self.updateChartRange)
-        self.resetButton.clicked.connect(self.resetRange)
-
 ######## Widget setup
 
     def setChart(self, chart):
@@ -39,10 +33,17 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         Args: ()
         Setup box ranges
         """
+
+        self.setupUi(self)
+
         self.endBox.setMinimum(self.chart.getStart()+1)
         self.endBox.setMaximum(self.chart.getEnd())
         self.startBox.setMinimum(self.chart.getStart())
         self.startBox.setMaximum(self.chart.getEnd()-1)
+
+        self.startBox.valueChanged.connect(self.updateChartRange)
+        self.endBox.valueChanged.connect(self.updateChartRange)
+        self.resetButton.clicked.connect(self.resetRange)
 
 ######## Update Actions
 
@@ -68,6 +69,7 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         """
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
+        self.chart.zoomReset()
 
     def updateValuesFromChart(self):
         """

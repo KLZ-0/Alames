@@ -35,8 +35,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
         self.loadCSV(fileName)
         for serie in self.selectionDataHolder.getQSeries():
             self.addSeries(serie)
+            serie.visibleChanged.connect(self.updateAxes)
 
-        self.updateAxes()
+        self.updateAxes() # FIXME: -> exception happens when no series in chart
 
     def loadCSV(self, lFileName):
         if lFileName.endswith(".csv.xz"):
@@ -45,13 +46,11 @@ class Chart(QChart, chartmodifier.ChartModifier):
             except lzma.LZMAError:
                 scope.errorPopup("LZMA decompression failed - damaged xz file")
 
-        f = pandas.read_csv(lFileName)
-        csv = f.values
+        # Detect a header -> set data header to be the second line
+        f = pandas.read_csv(lFileName, header=1, delimiter=";", low_memory=False)
         
-        self.selectionDataHolder.setColumnNames(f.columns)
-        self.selectionDataHolder.setDataFromRows(csv)
-        self.overallDataHolder.setColumnNames(f.columns)
-        self.overallDataHolder.setDataFromRows(csv)
+        self.selectionDataHolder.setDataFromCSV(f)
+        self.overallDataHolder.setDataFromCSV(f)
 
 ######## Signal handlers
 
@@ -65,24 +64,29 @@ class Chart(QChart, chartmodifier.ChartModifier):
     def getXData(self):
         return self.selectionDataHolder.XData()
 
-    def getYData(self):
+    def getYData(self, num=None):
+        if num != None:
+            return self.selectionDataHolder.getYData(num)
         return self.selectionDataHolder.YData()
+
+    def getDummyQSerie(self):
+        return self.selectionDataHolder.getDummyQSerie()
 
     def getRange(self):
         try:
-            return self.series()[0].getStart(), self.series[0].getEnd()
+            return self.selectionDataHolder.getDummyQSerie().getStart(), self.selectionDataHolder.getDummyQSerie().getEnd()
         except IndexError:
             return 0
 
     def getStart(self):
         try:
-            return self.series()[0].getStart()
+            return self.selectionDataHolder.getDummyQSerie().getStart()
         except IndexError:
             return 0
 
     def getEnd(self):
         try:
-            return self.series()[0].getEnd()
+            return self.selectionDataHolder.getDummyQSerie().getEnd()
         except IndexError:
             return 0
 
@@ -96,8 +100,8 @@ class Chart(QChart, chartmodifier.ChartModifier):
 ######## View modifiers
 
     def setZoom(self, start, end):
-        firstPoint = self.mapToPosition(QtCore.QPoint(start, 0), self.series()[0])
-        lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.series()[0])
+        firstPoint = self.mapToPosition(QtCore.QPoint(start, 0), self.selectionDataHolder.getDummyQSerie())
+        lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.selectionDataHolder.getDummyQSerie())
         area = self.plotArea()
         self.zoomIn(QtCore.QRectF(firstPoint.x(), area.y(), lastPoint.x() - firstPoint.x(), area.height()))
 
@@ -156,10 +160,18 @@ class Chart(QChart, chartmodifier.ChartModifier):
     def updateAxisExtremes(self):
         # self.minY = min(min(x) for x in self.ydata)
         # self.maxY = max(max(x) for x in self.ydata)
-        self.minY = min(serie.min() for serie in self.series())
-        self.maxY = max(serie.max() for serie in self.series())
+        if len([serie for serie in self.series() if serie.isVisible()]) > 0:
+            self.minY = min([serie.min() for serie in self.series() if serie.isVisible()])
+            self.maxY = max([serie.max() for serie in self.series() if serie.isVisible()])
+        else:
+            self.minY = -10
+            self.maxY = 10
 
     def updateAxes(self):
+        if len(self.series()) == 0:
+            # Return if series not exist in the chart
+            return
+
         self.updateAxisExtremes()
         # IDEA: make a setting to turn on/edit 10% Y reserve
         yMinReserve = self.minY/10

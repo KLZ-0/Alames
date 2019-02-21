@@ -29,10 +29,11 @@ class DataHolder(DataHolderBase):
 
 ######## Setters - only super
 
-    def setDataFromRows(self, rows):
+    def setDataFromCSV(self, csv):
         """High level access function"""
-        super(DataHolder, self).setDataFromRows(rows)
+        super(DataHolder, self).setDataFromCSV(csv)
         self.resetRange()
+        # TODO: Figure out what happens with the qseries inside the chart -> they should be deleted and new ones created
 
     def setData(self, xdata, ydata):
         """Low level access function"""
@@ -59,6 +60,10 @@ class DataHolder(DataHolderBase):
 
 ######## Getters
 
+    def getDummyQSerie(self):
+        """Return a dummy serie for e.g. mapping.."""
+        return self._qSeries[0]
+
     def getQSeries(self, serienum=None):
         if serienum == None:
             return self._qSeries
@@ -70,14 +75,16 @@ class DataHolder(DataHolderBase):
     def _makeQSeries(self):
         for i in range(len(self._YData)):
             # TODO: Make use of the property "number"
-            self._qSeries.append(ChartLineSeries())
-            self._qSeries[-1].setProperty("number", i)
-            self._qSeries[-1].setName(self._columnNames[i])
-            self._qSeries[-1].nameChanged.connect(self.updateColumnNames)
+            if isinstance(self._YData[i][0], float) or isinstance(self._YData[i][0], int):
+                # Only create a QSeries if data is number -> thus it can be shown on a chart
+                self._qSeries.append(ChartLineSeries())
+                self._qSeries[-1].setProperty("number", i)
+                self._qSeries[-1].setName(self._columnNames[i])
+                self._qSeries[-1].nameChanged.connect(self.updateColumnNames)
 
     def _updateQSeries(self):
         # if len doesn't match that means a new file could have been opened
-        if len(self._YData) != len(self._qSeries) or len(self._qSeries) == 0:
+        if len(self._YData) != len(self._qSeries) or len(self._qSeries) == 0: # NOTE: this will not work with dynamic series
             self._qSeries = []
             self._makeQSeries()
 

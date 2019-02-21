@@ -170,7 +170,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>254</width>
+     <width>300</width>
      <height>63</height>
     </size>
    </property>
@@ -186,7 +186,7 @@
    <widget class="LeftWidget" name="leftWidget">
     <property name="minimumSize">
      <size>
-      <width>250</width>
+      <width>300</width>
       <height>0</height>
      </size>
     </property>
@@ -201,7 +201,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>254</width>
+     <width>300</width>
      <height>50</height>
     </size>
    </property>
@@ -226,7 +226,7 @@
    <widget class="RightWidget" name="rightWidget">
     <property name="minimumSize">
      <size>
-      <width>250</width>
+      <width>300</width>
       <height>0</height>
      </size>
     </property>

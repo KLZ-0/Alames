@@ -23,6 +23,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - add installation guide
  - add licensing header to every file
  - simplify imports
+ - clean old files
+ - exceptions
 
 **IDEAs**:
   - **When large numbers of points are concentrated on a small area, they should be merged to represent RMS values**
@@ -48,6 +50,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - sometimes this Qt error happens unpredictably, but it does not cause any disturbance and the user is not affected - "qt.qpa.xcb: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1665, resource id: 37781937, major code: 40 (TranslateCoords), minor code: 0" [solved]
     - This error happened when PyQt5 was installed using pacman, swithing to a pip install solves this problem
  - update left dock after multiply filter applied does not update
+ - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range
 
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
