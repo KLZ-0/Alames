@@ -31,6 +31,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.centralWidget.hide()
         self.rightDock.hide()
         self.leftDock.hide()
+        self.rightDock.widget().loaded.connect(self.loaderDock.widget().setup)
 
         #### Assign scope
         scope.errorPopup = self.errorPopup
@@ -38,6 +39,7 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.rightDock = self.rightDock
         scope.centralWidget = self.centralWidget
         scope.leftDock = self.leftDock
+        scope.loaderDock = self.loaderDock
 
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)

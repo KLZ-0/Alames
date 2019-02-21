@@ -115,7 +115,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
 ######## Toggle actions
 
     def toggleSerieVisiblity(self, key):
-        if int(key) > self.selectionDataHolder.getLen():
+        if int(key) > len(self.series()):
             return
         if self.series()[int(key) - 1].isVisible():
             self.series()[int(key) - 1].hide()

@@ -7,6 +7,7 @@ global window
 global rightDock
 global centralWidget
 global leftDock
+global loaderDock
 
 #### Meta-Objects
 global chartView
@@ -16,3 +17,13 @@ global chart
 
 #### functions
 global errorPopup
+
+#### Debug
+import sys, logging
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+def debug(s):
+    logging.debug(str(s))
+
+def log(s):
+    logging.info(str(s))

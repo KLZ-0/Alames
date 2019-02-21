@@ -232,6 +232,14 @@
     </property>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="loaderDock">
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="LoaderWidget" name="loaderWidget">
+    <layout class="QFormLayout" name="formLayout"/>
+   </widget>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
@@ -255,6 +263,12 @@
    <class>PhasorView</class>
    <extends>QGraphicsView</extends>
    <header>Alames/phasorview</header>
+  </customwidget>
+  <customwidget>
+   <class>LoaderWidget</class>
+   <extends>QWidget</extends>
+   <header>Alames/loaderwidget</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

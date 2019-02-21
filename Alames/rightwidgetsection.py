@@ -6,10 +6,14 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 from Alames.generated.ui_rightwidgetsection import Ui_rightWidgetSection
 
 class RightWidgetSection(QWidget, Ui_rightWidgetSection):
+
+    updated = QtCore.pyqtSignal()
+
     def __init__(self, parent, serie):
         super(RightWidgetSection, self).__init__(parent)
         self.setupUi(self)
         self.serie = serie
+        self.serie.nameChanged.connect(self.update)
 
         self.nOfLines = 4
         self.nameLineEdit.setText(serie.name())
@@ -27,6 +31,11 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
         # Enable default OpenGL
         # self.OpenGLCheckBox.setChecked(True)
 
+######## Getters
+
+    def getName(self):
+        return self.nameLineEdit.text()
+
 ######## Update Actions
 
     def updateVisibleBox(self):
@@ -39,6 +48,8 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
         pixRect = QtGui.QPixmap(64,64)
         pixRect.fill(self.serie.color())
         self.colorPickButton.setIcon(QtGui.QIcon(pixRect))
+
+        self.updated.emit()
 
 ######## Actions
 
@@ -67,5 +78,6 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
             pixRect = QtGui.QPixmap(64,64)
             pixRect.fill(self.serie.color())
             self.colorPickButton.setIcon(QtGui.QIcon(pixRect))
+            self.updated.emit()
         except ValueError:
             pass

@@ -26,6 +26,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - clean old files
  - exceptions
  - write a documentation
+ - Do every possible binding with signals in window instead of scope (see example loaderWidget after RightWidget is loaded) to prevent early accesses
+ - unify comments in py files
 
 **IDEAs**:
   - **When large numbers of points are concentrated on a small area, they should be merged to represent RMS values**

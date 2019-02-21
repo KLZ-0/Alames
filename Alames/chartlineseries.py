@@ -4,6 +4,8 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 
+from Alames import scope
+
 class ChartLineSeries(QLineSeries):
     """Derived class from QLineSeries"""
 
@@ -37,14 +39,14 @@ class ChartLineSeries(QLineSeries):
     def setVisible(self, state):
         if self.property("number") != None and state == True and not len(self.pointsVector()):
             self.needsData.emit(self.property("number"))
-            print("loaded in setVisible(True)", self.property("number"))
+            scope.log("loaded in setVisible(True): %d" % self.property("number"))
 
         super(ChartLineSeries, self).setVisible(state)
 
     def show(self):
         if self.property("number") != None and not len(self.pointsVector()):
             self.needsData.emit(self.property("number"))
-            print("loaded in show()", self.property("number"))
+            scope.log("loaded in show(): %d" % self.property("number"))
 
         super(ChartLineSeries, self).show()
 

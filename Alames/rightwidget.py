@@ -16,7 +16,12 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget):
     Same lvl as chartview > an object from this class is created in Chart
     """
 
+    DEFAULT_VISIBLE_SECTION_NUM = 3
+
     _sections = []
+
+    loaded = QtCore.pyqtSignal()
+    sectionUpdated = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super(RightWidget, self).__init__(parent)
@@ -35,15 +40,46 @@ class RightWidget(QWidget, ui_rightwidget.Ui_RightWidget):
 
     def setup(self):
         self.setupUi(self)
+        i = 0
         for serie in self.chart.series():
             self._sections.append(rightwidgetsection.RightWidgetSection(self, serie))
+            self._sections[-1].updated.connect(self.sectionUpdated.emit)
+            # Show first n sections
+            if i < self.DEFAULT_VISIBLE_SECTION_NUM: 
+                self._sections[-1].setProperty("visible_by_default", True)
+                self._sections[-1].show()
+            else:
+                self._sections[-1].setProperty("visible_by_default", False)
+                self._sections[-1].hide()
+                
             self.scrollArea.widget().layout().addWidget(self._sections[-1])
             # print(self.parent().rightWidget.objectName(), self.widget())
+            i += 1
+
+        self.loaded.emit()
+
+######## External section management
+
+    def getSectionLen(self):
+        return len(self._sections)
+
+    def getSectionName(self, num):
+        return self._sections[num].getName()
+
+    def isVisibleSection(self, num):
+        return self._sections[num].isVisible()
+        
+    def isVisibleSectionByDefault(self, num):
+        return self._sections[num].property("visible_by_default")
+
+    def setVisibleSection(self, num, state):
+        self._sections[num].setVisible(state)
 
 ######## Update Actions
 
     def update(self):
         self.updateSections()
+        self.sectionUpdated.emit()
 
     def updateSections(self):
         for section in self._sections:
