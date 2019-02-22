@@ -1,16 +1,16 @@
 # Alames - Digital signal analysing/logging software
-Alames is an open-source digital signal analyser software intended for use with microcontroller driven analysers (wich could be built easily, even at home - the PCB gerbers will be available in the PCB subfolder)
+Alames is an open-source signal analyser software intended for use with microcontroller driven analysers
 
-It basically consists of two parts:
- - Measurement - logs the returned data from the Analyser and manages its settings
- - Data analysis - arranges and modifies the existing data in order to create charts, images or reports from it
+It can also work with Power Quality Analysers from KMB with CSV files exported from Envis
 
 # Repository info
-*GitHub repository of my current SOČ/KOP 2019 project*
+*GitHub repository of my current SOČ/KOP 2019 project - lincensed under the MIT license*
 
-This repository was established for tracking changes and managing my workflow..
+This repository was established for tracking changes and managing my workflow
 
-Lincensed under the MIT license.
+For the current development progress see the [devel branch](https://github.com/KLZ-0/Alames/tree/devel)
+
+I merge to master only if the software is in stable (or partially stable) development state
 
 # Installation
 ### Linux
