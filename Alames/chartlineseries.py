@@ -12,6 +12,9 @@ class ChartLineSeries(QLineSeries):
     # needsData is emitted at show() or setVisible(True)
     # needsData is connected to _setDataToQSerie(YDataNum)
     needsData = QtCore.pyqtSignal(int)
+    scaleChanged = QtCore.pyqtSignal()
+
+    _scale = 1
 
     def __init__(self):
         super(ChartLineSeries, self).__init__()
@@ -28,8 +31,8 @@ class ChartLineSeries(QLineSeries):
             self.setColor(QtGui.QColor(color))
         else:
             super(ChartLineSeries, self).setColor(color)
-            self.hide()
-            self.show()
+        self.setVisible(not self.isVisible())
+        self.setVisible(not self.isVisible())
 
     def setUseOpenGL(self, state):
         self.setVisible(not self.isVisible())
@@ -61,6 +64,26 @@ class ChartLineSeries(QLineSeries):
             newData.append(QtCore.QPointF(i, ydata[i]))
 
         self.replace(newData)
+        self.rescale()
+
+    def setLineScale(self, newScale):
+        oldscale = self._scale
+        self._scale = newScale
+        self.rescale(oldscale)
+        self.scaleChanged.emit()
+
+    def rescale(self, oldscale=1):
+        if self._scale == oldscale:
+            # If scaling is not needed don't do it
+            return 
+        
+        scope.log("scaled serie " + str(self.property("number")) + " by " + str(self._scale))
+
+        scaledData = self.pointsVector()
+        for point in scaledData:
+            # The division is to set the scale to exactly the newscale instead of scalin an already scaled line
+            point.setY(point.y()/oldscale * self._scale)
+        self.replace(scaledData)
 
 ######## Getters
 

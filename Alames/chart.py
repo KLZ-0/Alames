@@ -36,6 +36,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
         for serie in self.selectionDataHolder.getQSeries():
             self.addSeries(serie)
             serie.visibleChanged.connect(self.updateAxes)
+            serie.scaleChanged.connect(self.updateAxes)
 
         self.updateAxes() # FIXME: -> exception happens when no series in chart
 

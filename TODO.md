@@ -48,7 +48,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
     - make a second dataholder, the first is for overall values and the second for selected range values see todo below
  - after zooming the chart (connect some event) also modify the selection dataholder (get start and end of the chart and calculate) - the qlineseries does not need to be altered (maybe) **!!!plan it!!!**
  - there is also another kind of change to data, filters -> the overall dataholders data will change and also the selection dataholders, retaining its currently selected range (or just zoom out.. idk)
- - **Add manual axis range override**
+ - **Add manual axis range override** >> better idea >> set a serie scale in RightWidgetSection to multiply all ydata in that serie by a scale
+ - Change scaling ratio to be more adaptive and add enable to copy the scaleValueButton text
  - **Add settings to scope**
 
 **BUGS**:
@@ -56,6 +57,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
     - This error happened when PyQt5 was installed using pacman, swithing to a pip install solves this problem
  - update left dock after multiply filter applied does not update
  - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range
+ - The chart zoom resets when a serie visbility is toggle > e.g. at keyboard toggle, checkbox toggle in section or colorChange (maybe axis scale update? idk. start by commenting signal invoke in chart.constructChart)
+ - Loading takes a little bit more time than in the previous revision - find out why (maybe numpy.interp in RightWidgetSection? > try to do it manually)
 
 **NOTES**:
  - workflow: open file > show data > options to modify data [properties] > display graph/chart [keyboard shortcut] > render
