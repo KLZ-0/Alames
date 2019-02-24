@@ -55,7 +55,7 @@ class Window(QMainWindow, Ui_MainWindow):
         f.setPointSize(24)
         self.initLabel.setFont(f)
 
-        self.setupShortcuts()
+        self._setupShortcuts()
 
 ######## Update methods
 
@@ -67,9 +67,11 @@ class Window(QMainWindow, Ui_MainWindow):
 ######## Open file methods
 
     def openFile(self):
-        f = self.fileSelect()
-        if Path(f).is_file() and (f.endswith(".csv") or f.endswith(".csv.xz")):
-            self.createChart(f)
+        f = self.getOpenFile("CSV files (*.csv *.csv.xz)")
+        if f == None:
+            return
+
+        self.createChart(f)
 
     def createChart(self, csvFile):
         scope.chart = chart.Chart() # FIXME: Two functions
@@ -85,17 +87,54 @@ class Window(QMainWindow, Ui_MainWindow):
 
         # scope.chart.chartView = scope.chartView
 
-    def fileSelect(self):
-        if platform.uname().system == "Linux":
-            return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0]
-        return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0].encode("utf-8").decode("utf-8", "replace")
+    def getOpenFile(self, typeFilter="CSV files (*.csv *.csv.xz)"):
+        f = QFileDialog.getOpenFileName(self, "Open..", str(
+            Path(__file__).parents[1]), typeFilter)
+
+        # If windows sometimes problems with the encoding happen
+        fileName = f[0]
+        if platform.uname().system != "Linux":
+            fileName = fileName.encode("utf-8").decode("utf-8", "replace")
+
+        # Extract suffixes from filter
+        fileSuffixes = f[1][f[1].find("(")+1:f[1].find(")")].split()
+        fileSuffixes = [suffix.lstrip("*") for suffix in fileSuffixes]
+
+        # Test if exists
+        if not Path(fileName).is_file() or not fileName.endswith(tuple(fileSuffixes)):
+            return None
+
+        return fileName
+
+    def getSaveFile(self, typeFilter="Images (*.png *.jpg)"):
+        f = QFileDialog.getSaveFileName(self, "Save as..", str(
+            Path(__file__).parents[1]), typeFilter)
+
+        # If windows sometimes problems with the encoding happen
+        fileName = f[0]
+        if platform.uname().system != "Linux":
+            fileName = fileName.encode("utf-8").decode("utf-8", "replace")
+
+        # Test whether the returned filename is not empty
+        if fileName == "":
+            return None
+
+        # Extract suffixes from filter
+        fileSuffixes = f[1][f[1].find("(")+1:f[1].find(")")].split()
+        fileSuffixes = [suffix.lstrip("*") for suffix in fileSuffixes]
+
+        # If returned filename does not have a suffix, append the first one (the default)
+        if not fileName.endswith(tuple(fileSuffixes)):
+            fileName += fileSuffixes[0]
+
+        return fileName
 
     def errorPopup(self, text):
         QErrorMessage(self).showMessage(text)
 
 ######## Shortcut binding
 
-    def setupShortcuts(self):
+    def _setupShortcuts(self):
         for key, method in windowkeymap.keydict.items():
             self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method)))
 

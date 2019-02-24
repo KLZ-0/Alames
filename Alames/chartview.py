@@ -5,6 +5,8 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.config.keymaps import chartviewkeymap
+
 from Alames import scope
 
 class View(QChartView):
@@ -13,11 +15,21 @@ class View(QChartView):
     Creates a widget inside MainWindow which is shared for max 3 widgets
     An object from this class is created in Chart
     """
+
+    _shortcuts = []
+
     def __init__(self, parent):
         super(View, self).__init__(parent)
         self.setMouseTracking(True)
         self.setInteractive(True)
         self.setRubberBand(self.HorizontalRubberBand)
+        self._setupShortcuts()
+
+######## Shortcut binding
+
+    def _setupShortcuts(self):
+        for key, method in chartviewkeymap.keydict.items():
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method)))
 
 ######## overrides
 
@@ -41,6 +53,25 @@ class View(QChartView):
         self.focusValueTextItem.setScale(1.5)
         self.focusValueTextItem.setZValue(10)
         self.focusValueTextItem.setDefaultTextColor(QtGui.QColor("#333333"))
+
+######## Actions
+
+    def saveToFile(self):
+        pixmap = self.grab()
+        filename = scope.window.getSaveFile("Images (*.png *.jpg)")
+        if filename == None:
+            return
+
+        result = pixmap.save(filename)
+        if result:
+            scope.log("Render saved successfully to " + filename)
+        else:
+            scope.log("Render save failec to " + filename)
+
+
+    def renderToFile(self, filename):
+        pixmap = self.grab()
+        return pixmap.save(filename)
 
 ######## Event handlers
 
