@@ -36,7 +36,7 @@ class Alames(QApplication):
         w = Window()
         w.show()
         w.windowHandle().setScreen(self.screens()[-1])
-        w.setGeometry(self.screens()[-1].availableGeometry())
+        # w.setGeometry(self.screens()[-1].availableGeometry())
         w.setWindowState(QtCore.Qt.WindowMaximized)
         sys.exit(self.exec_())
 
