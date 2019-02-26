@@ -162,19 +162,31 @@ class Chart(QChart, chartmodifier.ChartModifier):
         # self.minY = min(min(x) for x in self.ydata)
         # self.maxY = max(max(x) for x in self.ydata)
         if len([serie for serie in self.series() if serie.isVisible()]) > 0:
-            self.minY = min([serie.min() for serie in self.series() if serie.isVisible()])
-            self.maxY = max([serie.max() for serie in self.series() if serie.isVisible()])
+            minY = min([serie.min() for serie in self.series() if serie.isVisible()])
+            maxY = max([serie.max() for serie in self.series() if serie.isVisible()])
+            if minY == self.minY and maxY == self.maxY:
+                # The axes does not need to be updated
+                return False
+
+            self.minY = minY
+            self.maxY = maxY
+
         else:
             self.minY = -10
             self.maxY = 10
+        
+        return True
 
     def updateAxes(self):
         if len(self.series()) == 0:
             # Return if series not exist in the chart
             return
 
-        self.updateAxisExtremes()
         # IDEA: make a setting to turn on/edit 10% Y reserve
+        if not self.updateAxisExtremes():
+            # If the update was not necessary, do not recreate the axes
+            return
+
         yMinReserve = self.minY/10
         yMaxReserve = self.maxY/10
         base = 10 # round to this number
