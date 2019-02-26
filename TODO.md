@@ -26,10 +26,13 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - **Make a settings.py file** [easy]
    - **Add settings to scope - load at the start** [easy]
 
+ - Make the tooltip respect the chart dimensions and change its alignment accordingly [easy]
+
  - **Add left widget for maybe filters and make them customizable** [medium]
  - **Add exporter for csv files also - make a smaller file with only the selected data** [medium]
    - Option to save with or without the modifications - select which modifications [medium]
    - **save the modified file**
+   - NOTE: Introduce a modification log to chartmodifier
    
 
  - Add scrollSpeed slider [easy]
@@ -40,6 +43,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 **BUGS**:
  - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range [easy/medium]
  - Loading takes a little bit more time than in the previous revision - find out why (maybe numpy.interp in RightWidgetSection? > try to do it manually) [medium]
+ - Loading a file on top of another causes "problems"
 
 **NOTES**:
  - workflow: open file > show data > **options to modify data** [properties] > update chart > render/export chart into image > export/save modified CSV
