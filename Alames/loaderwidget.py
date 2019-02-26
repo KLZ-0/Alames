@@ -11,6 +11,8 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
     Purpose: Select which RightWidgetSections to show in RightDock
     """
 
+    _setupHappened = False
+
     _checkBoxes = []
 
     def __init__(self, parent=None):
@@ -21,19 +23,18 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
     def setup(self): 
         """
         Args: ()
-        Setup chackboxes
+        Setup checkboxes
         Called on RightWidget.loaded.emit()
         """
 
-        self.setupUi(self)
+        if not self._setupHappened:
+            self.setupUi(self)
 
         rightWidget = scope.rightDock.widget()
         rightWidget.sectionUpdated.connect(self._updateNames)
         targetLayout = self.scrollArea.widget().layout()
         
-        # TODO: Do this to every DockWidget
-        # Empty the container in case a new file is loaded
-        self._checkBoxes = []
+        self._truncate()
 
         for i in range(rightWidget.getSectionLen()):
             self._checkBoxes.append(QCheckBox(self))
@@ -41,6 +42,8 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
             self._checkBoxes[-1].setText(rightWidget.getSectionName(i))
             self._checkBoxes[-1].stateChanged.connect(self._updateRightWidgetSectionVisibility)
             targetLayout.addWidget(self._checkBoxes[-1])
+
+        self._setupHappened = True
 
     def _updateRightWidgetSectionVisibility(self):
         rightWidget = scope.rightDock.widget()
@@ -60,3 +63,13 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
             font.setBold(rightWidget.isVisibleSectionSerie(i))
             font.setItalic(rightWidget.isVisibleSectionSerie(i))
             self._checkBoxes[i].setFont(font)
+
+######## Privates
+
+    def _truncate(self):
+        for checkbox in self._checkBoxes:
+            checkbox.close()
+            checkbox.deleteLater()
+            del checkbox
+
+        self._checkBoxes = []

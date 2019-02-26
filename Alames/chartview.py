@@ -37,21 +37,22 @@ class View(QChartView):
         super(View, self).setChart(chart)
         scope.rightDock.widget().setChart(chart)
         scope.leftDock.widget().setChart(chart)
-        self.createTrackingTools()
+        self._createTrackingTools()
 
 ######## Init - tracking tools setup
 
-    def createTrackingTools(self):
+    def _createTrackingTools(self):
         self.focusLine = QGraphicsLineItem(0, 0, 0, 10, self.chart())
         focusPen = QtGui.QPen()
         focusPen.setWidthF(1)
         focusPen.setStyle(QtCore.Qt.DashLine)
         focusPen.setColor(QtGui.QColor("#999999"))
         self.focusLine.setPen(focusPen)
+        self.focusLine.setZValue(1500)
 
         self.focusValueTextItem = QGraphicsTextItem(self.chart())
         self.focusValueTextItem.setScale(1.5)
-        self.focusValueTextItem.setZValue(10)
+        self.focusValueTextItem.setZValue(100)
         self.focusValueTextItem.setDefaultTextColor(QtGui.QColor("#333333"))
 
 ######## Actions

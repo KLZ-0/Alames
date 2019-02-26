@@ -18,6 +18,8 @@ class RightWidget(QWidget, Ui_RightWidget):
 
     DEFAULT_VISIBLE_SECTION_NUM = 0
 
+    _setupHappened = False
+
     _sections = []
 
     loaded = QtCore.pyqtSignal()
@@ -39,7 +41,11 @@ class RightWidget(QWidget, Ui_RightWidget):
         self.setup()
 
     def setup(self):
-        self.setupUi(self)
+        if not self._setupHappened:
+            self.setupUi(self)
+
+        self._truncate()
+    
         i = 0
         for serie in self.chart.series():
             self._sections.append(rightwidgetsection.RightWidgetSection(self, serie))
@@ -57,6 +63,7 @@ class RightWidget(QWidget, Ui_RightWidget):
             i += 1
 
         self.loaded.emit()
+        self._setupHappened = True
 
 ######## External section management
 
@@ -87,6 +94,15 @@ class RightWidget(QWidget, Ui_RightWidget):
     def updateSections(self):
         for section in self._sections:
             section.update()
+
+######## Privates
+
+    def _truncate(self):
+        for section in self._sections:
+            section.close()
+            section.deleteLater()
+            
+        self._sections = []
 
 ######## Event handlers
 

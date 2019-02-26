@@ -38,8 +38,6 @@ class Chart(QChart, chartmodifier.ChartModifier):
             serie.visibleChanged.connect(self.updateAxes)
             serie.scaleChanged.connect(self.updateAxes)
 
-        self.updateAxes() # FIXME: -> exception happens when no series in chart
-
     def loadCSV(self, lFileName):
         if lFileName.endswith(".csv.xz"):
             try:

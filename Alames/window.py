@@ -74,6 +74,9 @@ class Window(QMainWindow, Ui_MainWindow):
         self.createChart(f)
 
     def createChart(self, csvFile):
+        if scope.chartView.chart():
+            scope.chartView.chart().deleteLater()
+
         scope.chart = chart.Chart() # FIXME: Two functions
         scope.chart.constructChart(csvFile) # FIXME: Two functions
         scope.chartView.setChart(scope.chart)
@@ -86,6 +89,9 @@ class Window(QMainWindow, Ui_MainWindow):
         self.phasorView.scene().setData(scope.chart.selectionDataHolder, {"show-current-circle": False, "current-color": "#ff0000", "voltage-color": "#0000ff"})
 
         # scope.chart.chartView = scope.chartView
+
+        # needed when opening a new file
+        self.updateChildren()
 
     def getOpenFile(self, typeFilter="CSV files (*.csv *.csv.xz)"):
         f = QFileDialog.getOpenFileName(self, "Open..", str(

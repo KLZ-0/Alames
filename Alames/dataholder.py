@@ -48,6 +48,13 @@ class DataHolder(DataHolderBase):
         super(DataHolder, self).setXData(xdata)
         self.resetRange()
 
+    def _truncate(self):
+        super(DataHolder, self)._truncate()
+        for serie in self._qSeries:
+            if serie.chart():
+                serie.chart().removeSeries(serie)
+        self._qSeries = []
+
 ######## Setters - custom
 
     def setRange(self, start, end):

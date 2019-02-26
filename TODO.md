@@ -43,7 +43,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 **BUGS**:
  - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range [easy/medium]
  - Loading takes a little bit more time than in the previous revision - find out why (maybe numpy.interp in RightWidgetSection? > try to do it manually) [medium]
- - Loading a file on top of another causes "problems"
+ - Tooltip line (focusLine) goes under chart when a new file is loaded
 
 **NOTES**:
  - workflow: open file > show data > **options to modify data** [properties] > update chart > render/export chart into image > export/save modified CSV
