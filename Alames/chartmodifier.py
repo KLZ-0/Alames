@@ -14,14 +14,6 @@ class ChartModifier:
     def __init__(self):
         self.filterAlamesOneApplied = False
 
-    def multiplyAll(self, ratio):
-
-        for i in range(self.selectionDataHolder.getLen()):
-            ydata = self.selectionDataHolder.getYData(i)
-            self.selectionDataHolder.setYData(i, [val*ratio for val in ydata])
-
-        scope.window.updateChildren()
-
     def filterAlamesOne(self):
         try:
             if self.filterAlamesOneApplied:
