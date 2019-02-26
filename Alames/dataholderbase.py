@@ -25,11 +25,15 @@ class DataHolderBase(QtCore.QObject):
 ######## Setters
 
     def setColumnNames(self, columnnames):
-        self._columnNames = columnnames
+        # Strip the first column (it is the X axis) and strip the last column (unnamed something) > created if the delimiter is at the eol
+        self._columnNames = [name for name in columnnames[1:]]
 
-    def setDataFromRows(self, rows):
+    def setDataFromCSV(self, csv):
         """High level access function"""
         # append the required YData array length [][]
+        rows = csv.values
+        self.setColumnNames(csv.columns)
+
         self._setYDataLen(len(rows[0])-1)
 
         for row in rows:
@@ -37,6 +41,12 @@ class DataHolderBase(QtCore.QObject):
 
             for i in range(len(row)-1):
                 self._YData[i].append(row[i+1])
+
+        # Bad CSV correction
+        # When the CSV comes from envis, it appends a delimiter at the end of every line > strip that off
+        if "Unnamed" in self._columnNames[-1]:
+            del self._columnNames[-1]
+            del self._YData[-1]
 
         # Calc RMS and power
         if self._testUI():
@@ -132,7 +142,8 @@ class DataHolderBase(QtCore.QObject):
             self._YData.append([])
 
     def _truncate(self):
-        self.setData([], [])
+        self._XData = []
+        self._YData = []
 
 ######## Privates - calculations
 
@@ -176,10 +187,10 @@ class DataHolderBase(QtCore.QObject):
         return (keys[0]-keys[1])*density
 
     def _getDegreeDensity(self, ydata):
+        """Finds two zero points and divides 90 degrees by their difference in x points"""
         keys = []
-        dataSet = ydata[1]
+        dataSet = ydata[1] # FIXME: Possible IndexError
         u = 0
-        waitingtime = 30
         for i in range(len(dataSet)):
             if (abs(dataSet[i]) > abs(dataSet[i+1]) < abs(dataSet[i+2]) and abs(dataSet[i+1]) < max(dataSet)/2):
                 keys.append(i+1)

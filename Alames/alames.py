@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.2.0"
+    VERSION = "1.3-r1"
 
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
@@ -36,7 +36,7 @@ class Alames(QApplication):
         w = Window()
         w.show()
         w.windowHandle().setScreen(self.screens()[-1])
-        w.setGeometry(self.screens()[-1].availableGeometry())
+        # w.setGeometry(self.screens()[-1].availableGeometry())
         w.setWindowState(QtCore.Qt.WindowMaximized)
         sys.exit(self.exec_())
 

@@ -13,15 +13,12 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
+
+    _setupHappened = False
+
     def __init__(self, parent=None):
         super(LeftWidget, self).__init__(parent)
         self.chart = None
-
-        self.setupUi(self)
-
-        self.startBox.valueChanged.connect(self.updateRange)
-        self.endBox.valueChanged.connect(self.updateRange)
-        self.resetButton.clicked.connect(self.resetRange)
 
 ######## Widget setup
 
@@ -39,10 +36,20 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         Args: ()
         Setup box ranges
         """
+
+        if not self._setupHappened:
+            self.setupUi(self)
+
         self.endBox.setMinimum(self.chart.getStart()+1)
         self.endBox.setMaximum(self.chart.getEnd())
         self.startBox.setMinimum(self.chart.getStart())
         self.startBox.setMaximum(self.chart.getEnd()-1)
+
+        self.startBox.valueChanged.connect(self.updateChartRange)
+        self.endBox.valueChanged.connect(self.updateChartRange)
+        self.resetButton.clicked.connect(self.resetRange)
+
+        self._setupHappened = True
 
 ######## Update Actions
 
@@ -54,7 +61,7 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
 
-    def updateRange(self):
+    def updateChartRange(self):
         """
         Args: ()
         Update chart zoom
@@ -68,6 +75,7 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         """
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
+        self.chart.zoomReset()
 
     def updateValuesFromChart(self):
         """

@@ -5,6 +5,8 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.config.keymaps import chartviewkeymap
+
 from Alames import scope
 
 class View(QChartView):
@@ -13,11 +15,21 @@ class View(QChartView):
     Creates a widget inside MainWindow which is shared for max 3 widgets
     An object from this class is created in Chart
     """
+
+    _shortcuts = []
+
     def __init__(self, parent):
         super(View, self).__init__(parent)
         self.setMouseTracking(True)
         self.setInteractive(True)
         self.setRubberBand(self.HorizontalRubberBand)
+        self._setupShortcuts()
+
+######## Shortcut binding
+
+    def _setupShortcuts(self):
+        for key, method in chartviewkeymap.keydict.items():
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method)))
 
 ######## overrides
 
@@ -25,22 +37,42 @@ class View(QChartView):
         super(View, self).setChart(chart)
         scope.rightDock.widget().setChart(chart)
         scope.leftDock.widget().setChart(chart)
-        self.createTrackingTools()
+        self._createTrackingTools()
 
 ######## Init - tracking tools setup
 
-    def createTrackingTools(self):
+    def _createTrackingTools(self):
         self.focusLine = QGraphicsLineItem(0, 0, 0, 10, self.chart())
         focusPen = QtGui.QPen()
         focusPen.setWidthF(1)
         focusPen.setStyle(QtCore.Qt.DashLine)
         focusPen.setColor(QtGui.QColor("#999999"))
         self.focusLine.setPen(focusPen)
+        self.focusLine.setZValue(1500)
 
         self.focusValueTextItem = QGraphicsTextItem(self.chart())
         self.focusValueTextItem.setScale(1.5)
-        self.focusValueTextItem.setZValue(10)
+        self.focusValueTextItem.setZValue(100)
         self.focusValueTextItem.setDefaultTextColor(QtGui.QColor("#333333"))
+
+######## Actions
+
+    def saveToFile(self):
+        pixmap = self.grab()
+        filename = scope.window.getSaveFile("Images (*.png *.jpg)")
+        if filename == None:
+            return
+
+        result = pixmap.save(filename)
+        if result:
+            scope.log("Render saved successfully to " + filename)
+        else:
+            scope.log("Render save failec to " + filename)
+
+
+    def renderToFile(self, filename):
+        pixmap = self.grab()
+        return pixmap.save(filename)
 
 ######## Event handlers
 
@@ -49,21 +81,23 @@ class View(QChartView):
         if not self.focusLine.isVisible(): self.focusLine.show()
         if not self.focusValueTextItem.isVisible(): self.focusValueTextItem.show()
 
-        try:
-            self.focusValueTextItem.setPos(event.x(), event.y())
+        self.focusValueTextItem.setPos(event.x(), event.y())
 
-            xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().series()[0]).x()
-            html = str(self.chart().getXData()[round(xVal)]) + "<br>"
-            for i in range(len(self.chart().getYData())):
-                if self.chart().series()[i].isVisible():
-                    html += "<font color=\"" + self.chart().series()[i].color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData()[i][round(xVal)])
-            self.focusValueTextItem.setHtml(html)
-
-            focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().series()[0]).x()
-            self.focusLine.setPos(focusLineX, 0)
-        except IndexError:
+        xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().getDummyQSerie()).x()
+        if xVal < 0 or xVal >= self.chart().getEnd():
+            # When the end of the chart is reached
             self.focusValueTextItem.hide()
             self.focusLine.hide()
+            return
+
+        html = str(self.chart().getXData()[round(xVal)]) + "<br>"
+        for serie in self.chart().series():
+            if serie.isVisible():
+                html += "<font color=\"" + serie.color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
+        self.focusValueTextItem.setHtml(html)
+
+        focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().getDummyQSerie()).x()
+        self.focusLine.setPos(focusLineX, 0)
 
     def leaveEvent(self, event):
         super(View, self).leaveEvent(event)
@@ -99,6 +133,9 @@ class View(QChartView):
 
         if "r" in key: # DEBUG
             self.chart().zoomReset()
+
+        if "i" in key:  # DEBUG
+            self.chart().setRange(100, 200)
 
         if event.key() == QtCore.Qt.Key_Right:
             self.chart().scroll(10, 0)

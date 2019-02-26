@@ -10,6 +10,8 @@ from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
 from Alames.generated import ui_aboutwidget
 
+from Alames.config.keymaps import windowkeymap
+
 from Alames import chart
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -18,6 +20,9 @@ class Window(QMainWindow, Ui_MainWindow):
     Manages the whole window except for the charting subsystem which is managed by Chart.
     Initializes Chart as its own property
     """
+
+    _shortcuts = []
+
     def __init__(self):
         super(Window, self).__init__()
         scope.window = self
@@ -26,6 +31,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.centralWidget.hide()
         self.rightDock.hide()
         self.leftDock.hide()
+        self.rightDock.widget().loaded.connect(self.loaderDock.widget().setup)
 
         #### Assign scope
         scope.errorPopup = self.errorPopup
@@ -33,6 +39,7 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.rightDock = self.rightDock
         scope.centralWidget = self.centralWidget
         scope.leftDock = self.leftDock
+        scope.loaderDock = self.loaderDock
 
         self.setWindowTitle("Alames")
         self.setAcceptDrops(True)
@@ -48,14 +55,28 @@ class Window(QMainWindow, Ui_MainWindow):
         f.setPointSize(24)
         self.initLabel.setFont(f)
 
+        self._setupShortcuts()
+
+######## Update methods
+
+    def updateChildren(self):
+        self.rightDock.widget().update()
+        self.leftDock.widget().update()
+        self.chartView.chart().updateChildren()
+
 ######## Open file methods
 
     def openFile(self):
-        f = self.fileSelect()
-        if Path(f).is_file() and (f.endswith(".csv") or f.endswith(".csv.xz")):
-            self.createChart(f)
+        f = self.getOpenFile("CSV files (*.csv *.csv.xz)")
+        if f == None:
+            return
+
+        self.createChart(f)
 
     def createChart(self, csvFile):
+        if scope.chartView.chart():
+            scope.chartView.chart().deleteLater()
+
         scope.chart = chart.Chart() # FIXME: Two functions
         scope.chart.constructChart(csvFile) # FIXME: Two functions
         scope.chartView.setChart(scope.chart)
@@ -69,33 +90,61 @@ class Window(QMainWindow, Ui_MainWindow):
 
         # scope.chart.chartView = scope.chartView
 
-    def fileSelect(self):
-        if platform.uname().system == "Linux":
-            return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0]
-        return QFileDialog.getOpenFileName(self, "Select CSV file", str(Path(__file__).parents[1]), "CSV files (*.csv *.csv.xz)")[0].encode("utf-8").decode("utf-8", "replace")
+        # needed when opening a new file
+        self.updateChildren()
+
+    def getOpenFile(self, typeFilter="CSV files (*.csv *.csv.xz)"):
+        f = QFileDialog.getOpenFileName(self, "Open..", str(
+            Path(__file__).parents[1]), typeFilter)
+
+        # If windows sometimes problems with the encoding happen
+        fileName = f[0]
+        if platform.uname().system != "Linux":
+            fileName = fileName.encode("utf-8").decode("utf-8", "replace")
+
+        # Extract suffixes from filter
+        fileSuffixes = f[1][f[1].find("(")+1:f[1].find(")")].split()
+        fileSuffixes = [suffix.lstrip("*") for suffix in fileSuffixes]
+
+        # Test if exists
+        if not Path(fileName).is_file() or not fileName.endswith(tuple(fileSuffixes)):
+            return None
+
+        return fileName
+
+    def getSaveFile(self, typeFilter="Images (*.png *.jpg)"):
+        f = QFileDialog.getSaveFileName(self, "Save as..", str(
+            Path(__file__).parents[1]), typeFilter)
+
+        # If windows sometimes problems with the encoding happen
+        fileName = f[0]
+        if platform.uname().system != "Linux":
+            fileName = fileName.encode("utf-8").decode("utf-8", "replace")
+
+        # Test whether the returned filename is not empty
+        if fileName == "":
+            return None
+
+        # Extract suffixes from filter
+        fileSuffixes = f[1][f[1].find("(")+1:f[1].find(")")].split()
+        fileSuffixes = [suffix.lstrip("*") for suffix in fileSuffixes]
+
+        # If returned filename does not have a suffix, append the first one (the default)
+        if not fileName.endswith(tuple(fileSuffixes)):
+            fileName += fileSuffixes[0]
+
+        return fileName
 
     def errorPopup(self, text):
         QErrorMessage(self).showMessage(text)
 
+######## Shortcut binding
+
+    def _setupShortcuts(self):
+        for key, method in windowkeymap.keydict.items():
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method)))
+
 ######## Event handlers
-
-    def keyPressEvent(self, event):
-        super(Window, self).keyPressEvent(event)
-        key = event.text()
-        if "o" in key:
-            self.openFile()
-
-        if "q" in key or event.key() == QtCore.Qt.Key_Escape:
-            QApplication.exit()
-
-        if event.key() == QtCore.Qt.Key_F11:
-            self.aboutWidget.move(self.frameGeometry().topLeft(
-            ) + self.frameGeometry().center() - self.aboutWidget.geometry().center())
-            self.aboutWidget.show()
-
-
-        if event.key() == QtCore.Qt.Key_F12:
-            QApplication.aboutQt()
 
     def dragEnterEvent(self, event):
         super(Window, self).dragEnterEvent(event)
