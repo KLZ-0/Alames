@@ -1,4 +1,4 @@
-import math
+from Alames.importer import *
 
 from Alames import scope
 from Alames.dataholderbase import DataHolderBase

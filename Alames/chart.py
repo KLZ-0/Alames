@@ -1,10 +1,4 @@
-import os, sys
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis
-import pandas
-import math
-import lzma
+from Alames.importer import *
 
 from Alames import scope
 
@@ -48,7 +42,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
                 scope.errorPopup("LZMA decompression failed - damaged xz file")
 
         # Detect a header -> set data header to be the second line
-        f = pandas.read_csv(lFileName, header=1, delimiter=";", low_memory=False)
+        f = read_csv(lFileName, header=1, delimiter=";", low_memory=False)
         
         self.selectionDataHolder.setDataFromCSV(f)
         self.overallDataHolder.setDataFromCSV(f)

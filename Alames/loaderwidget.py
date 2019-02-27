@@ -1,6 +1,4 @@
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
+from Alames.importer import *
 
 from Alames.sidewidget import SideWidget
 from Alames.generated.ui_loaderwidget import Ui_LoaderWidget

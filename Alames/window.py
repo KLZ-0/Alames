@@ -1,10 +1,6 @@
 #!/usr/bin/python
 
-import os, sys, platform
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis
-from pathlib import Path
+from Alames.importer import *
 
 from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
