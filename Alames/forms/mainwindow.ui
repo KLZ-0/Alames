@@ -173,7 +173,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>300</width>
+     <width>260</width>
      <height>63</height>
     </size>
    </property>
@@ -189,7 +189,7 @@
    <widget class="LeftWidget" name="leftWidget">
     <property name="minimumSize">
      <size>
-      <width>300</width>
+      <width>260</width>
       <height>0</height>
      </size>
     </property>
@@ -205,7 +205,7 @@
    <property name="minimumSize">
     <size>
      <width>300</width>
-     <height>50</height>
+     <height>44</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -236,10 +236,38 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="loaderDock">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>260</width>
+     <height>44</height>
+    </size>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="LoaderWidget" name="loaderWidget"/>
+   <widget class="LoaderWidget" name="loaderWidget">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>260</width>
+      <height>0</height>
+     </size>
+    </property>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
