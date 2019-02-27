@@ -33,6 +33,8 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
         self.endBox.valueChanged.connect(self.updateChartRange)
         self.resetButton.clicked.connect(self.resetRange)
 
+        self.speedSlider.valueChanged.connect(self._updateScrollSpeed)
+
 ######## Update Actions
 
     def update(self):
@@ -44,6 +46,8 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
 
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
+
+        self._updateScrollSpeed()
 
     def updateChartRange(self):
         """
@@ -71,3 +75,7 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
         endX = self.chart.mapToValue(QtCore.QPointF(plotArea.x() + plotArea.width(), plotArea.y()), self.chart.series()[0]).x()
         self.startBox.setValue(round(startX))
         self.endBox.setValue(round(endX))
+
+    def _updateScrollSpeed(self):
+        self.speedSliderValueButton.setText(str(self.speedSlider.value()) + "px")
+        self.chart.setScrollSpeed(self.speedSlider.value())

@@ -138,10 +138,10 @@ class View(QChartView):
             self.chart().setRange(100, 200)
 
         if event.key() == QtCore.Qt.Key_Right:
-            self.chart().scroll(10, 0)
+            self.chart().scroll(self.chart().getScrollSpeed(), 0)
             
         if event.key() == QtCore.Qt.Key_Left:
-            self.chart().scroll(-10, 0)
+            self.chart().scroll(-self.chart().getScrollSpeed(), 0)
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
@@ -156,7 +156,7 @@ class View(QChartView):
 
     def wheelEvent(self, event):
         super(View, self).wheelEvent(event)
-        self.chart().scroll(event.angleDelta().y()/8, 0)
+        self.chart().scroll((event.angleDelta().y()/120)*self.chart().getScrollSpeed(), 0)
         scope.rightDock.widget().update()
 
 

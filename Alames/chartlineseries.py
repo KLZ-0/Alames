@@ -24,6 +24,10 @@ class ChartLineSeries(QLineSeries):
         # NOTE: The range will be the whole range of the dataholder (selectionDataHolder)
         #           Range reset will be available by setting the selectionDataHolder xdata and ydata from overallDataHolder
 
+    def updateData(self):
+        """Called from DataHolder._updateQSeries() - when the data changes and must be updated"""
+        self.needsData.emit(self.property("number"))
+
 ######## Overrides
 
     def setColor(self, color):

@@ -22,6 +22,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
     Initializes the required objects as its own properties
     """
 
+    # Updated from LeftWidget
+    _scrollSpeed = 10
+
     def __init__(self):
         super(Chart, self).__init__()
         self.selectionDataHolder = DataHolder()
@@ -88,6 +91,14 @@ class Chart(QChart, chartmodifier.ChartModifier):
             return self.selectionDataHolder.getDummyQSerie().getEnd()
         except IndexError:
             return 0
+
+    def getScrollSpeed(self):
+        return self._scrollSpeed
+
+######## Setters
+
+    def setScrollSpeed(self, scrollspeed):
+        self._scrollSpeed = scrollspeed
 
 ######## Series modifier
 
