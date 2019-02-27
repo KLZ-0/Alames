@@ -21,6 +21,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 **IDEAs**:
   - make the serial communication part in C/C++? > if not then add pyserial to requirements.txt > maybe I don't want to do it..
   - use virtualenv for linux installation? (maybe also windows)
+  - pyserial? NO! [hard]
 
 **TODOs**:  `in importance order`
  - Create F1 help [easy]
@@ -30,8 +31,6 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
    - Option to save with or without the modifications - select which modifications [medium]
    - **save the modified file**
    - NOTE: Introduce a modification log to chartmodifier
-   
- - pyserial? [hard]
 
 **TODOs done**:
  - Add scrollSpeed slider [easy]

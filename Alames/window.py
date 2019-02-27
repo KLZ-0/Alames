@@ -73,7 +73,10 @@ class Window(QMainWindow, Ui_MainWindow):
         if f == None:
             return
 
+        timer = QtCore.QElapsedTimer()
+        timer.start()
         self.createChart(f)
+        self.statusBar().showMessage("Chart loaded in " + str(timer.elapsed()) + " milliseconds from " + f)
 
     def createChart(self, csvFile):
         if scope.chartView.chart():
