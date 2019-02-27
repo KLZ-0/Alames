@@ -2,7 +2,8 @@ import os, sys
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
-import numpy
+
+from Alames import scope
 
 from Alames.generated.ui_rightwidgetsection import Ui_rightWidgetSection
 
@@ -10,8 +11,8 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
 
     updated = QtCore.pyqtSignal()
 
-    _scaleMin = 0.01
-    _scaleMax = 100
+    _scaleMax = getattr(scope.settings, "ScalingRatio", 100)
+    _scaleMin = 1/_scaleMax
 
     def __init__(self, parent, serie):
         super(RightWidgetSection, self).__init__(parent)
@@ -92,8 +93,9 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
             pass
 
     def _updateSerieScale(self, value):
-        self.scaleValueButton.setText(str(self._mapSliderScaleToReal(value)))
-        self.serie.setLineScale(self._mapSliderScaleToReal(value))
+        realVal = self._mapSliderScaleToReal(value)
+        self.scaleValueButton.setText(str(realVal))
+        self.serie.setLineScale(realVal)
 
     def _resetSerieScale(self):
         self.scaleSlider.setValue(
@@ -101,4 +103,21 @@ class RightWidgetSection(QWidget, Ui_rightWidgetSection):
 
     def _mapSliderScaleToReal(self, sliderValue):
         midSliderScale = (self.scaleSlider.minimum() + self.scaleSlider.maximum())/2
-        return round(numpy.interp(sliderValue, [self.scaleSlider.minimum(), midSliderScale, self.scaleSlider.maximum()], [self._scaleMin, 1, self._scaleMax]), 2)
+
+        if sliderValue == midSliderScale:
+            return 1.00
+        elif sliderValue < midSliderScale:
+            return round(self._mapRange(sliderValue, self.scaleSlider.minimum(), midSliderScale, self._scaleMin, 1), 2)
+        elif sliderValue > midSliderScale:
+            return round(self._mapRange(sliderValue, midSliderScale, self.scaleSlider.maximum(), 1, self._scaleMax), 2)
+
+    def _mapRange(self, value, leftMin, leftMax, rightMin, rightMax):
+        # Figure out how 'wide' each range is
+        leftSpan = leftMax - leftMin
+        rightSpan = rightMax - rightMin
+
+        # Convert the left range into a 0-1 range (float)
+        valueScaled = float(value - leftMin) / float(leftSpan)
+
+        # Convert the 0-1 range into a value in the right range.
+        return rightMin + (valueScaled * rightSpan)

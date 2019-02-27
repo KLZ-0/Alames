@@ -16,12 +16,15 @@ OpenGLByDefault = True
 ### Chart ###
 #############
 
+# Scaling ratio (100 means minimal 0.01 and maximal 100)
+ScalingRatio = 100
+
 # Scroll speed when scrolling with the mouse wheel
 DefaultScrollSpeed = 10 # px
 
 # Y Axis
 YAxisReserve = 5 # percent (chart border)
-YAxisRound = 10  # round the Y axis value to this number to have round numbers on the axis numbering
+YAxisRound = 10  # round the Y axis extremes to this number to have round numbers on the axis numbering
 
 # Chart value tooltip settings
 TooltipTextScale = 1.5 # ratio

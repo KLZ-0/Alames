@@ -3,7 +3,6 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 import pandas
-import numpy as np
 
 from Alames.config.keymaps import chartviewkeymap
 
@@ -125,14 +124,15 @@ class View(QChartView):
 
     def leaveEvent(self, event):
         super(View, self).leaveEvent(event)
-        # QApplication.restoreOverrideCursor()
         if self.chart().series():
             self.focusLine.hide()
             self.focusValueTextItem.hide()
 
     def enterEvent(self, event):
         super(View, self).enterEvent(event)
-        # QApplication.setOverrideCursor(QtCore.Qt.CrossCursor)
+        line = self.focusLine.line()
+        line.setLength(self.height())
+        self.focusLine.setLine(line)
 
     def keyPressEvent(self, event):
         super(View, self).keyPressEvent(event)
@@ -155,10 +155,3 @@ class View(QChartView):
         super(View, self).wheelEvent(event)
         self.chart().scroll((event.angleDelta().y()/120)*self.chart().getScrollSpeed(), 0)
         scope.rightDock.widget().update()
-
-
-    def resizeEvent(self, event):
-        super(View, self).resizeEvent(event)
-        line = self.focusLine.line()
-        line.setLength(self.height())
-        self.focusLine.setLine(line)
