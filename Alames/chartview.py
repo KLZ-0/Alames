@@ -116,33 +116,6 @@ class View(QChartView):
         if key in ["1","2","3","4","5","6","7","8","9"]:
             self.chart().toggleSerieVisiblity(key)
 
-        if "a" in key:
-            self.chart().toggleAnimatable(key)
-
-        if "p" in key:
-            self.chart().toggleProperties()
-
-        if "f" in key:
-            self.chart().toggleLeftWidget()
-
-        if "m" in key:
-            self.chart().multiplyAll(2)
-
-        if "d" in key: # DEBUG
-            self.chart().filterAlamesOne()
-
-        if "r" in key: # DEBUG
-            self.chart().zoomReset()
-
-        if "i" in key:  # DEBUG
-            self.chart().setRange(100, 200)
-
-        if event.key() == QtCore.Qt.Key_Right:
-            self.chart().scroll(self.chart().getScrollSpeed(), 0)
-            
-        if event.key() == QtCore.Qt.Key_Left:
-            self.chart().scroll(-self.chart().getScrollSpeed(), 0)
-
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
         if event.button() == QtCore.Qt.MiddleButton:
