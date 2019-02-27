@@ -19,7 +19,8 @@ class ChartLineSeries(QLineSeries):
     def __init__(self):
         super(ChartLineSeries, self).__init__()
 
-        self.setUseOpenGL(True)
+        if getattr(scope.settings, "OpenGLByDefault", True):
+            self.setUseOpenGL(True)
         self.hide()
         # NOTE: The range will be the whole range of the dataholder (selectionDataHolder)
         #           Range reset will be available by setting the selectionDataHolder xdata and ydata from overallDataHolder

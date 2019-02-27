@@ -3,18 +3,20 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase, QFont, QPalette, QColor
 
+from Alames import scope
+
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.3-r5"
+    VERSION = "1.3-r6"
 
     def __init__(self, argv):
         super(Alames, self).__init__(argv)
 
-        if platform.uname().system == "Linux":
+        if platform.uname().system == "Linux" and not getattr(scope.settings, "FusionOnLinux", False):
             self.launch(False)
         else:
-            self.launch()
+            self.launch(getattr(scope.settings, "Fusion", True))
 
     def version(self):
         return self.VERSION

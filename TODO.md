@@ -23,8 +23,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
   - use virtualenv for linux installation? (maybe also windows)
 
 **TODOs**:  `in importance order`
- - **Make a settings.py file** [easy]
-   - **Add settings to scope - load at the start** [easy]
+ - Create F1 help [easy]
 
  - fix color change zoomReset [easy]
 
@@ -43,6 +42,9 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 
 **TODOs done**:
  - Add scrollSpeed slider [easy]
+
+ - Make a settings.py file [easy]
+  - Add settings to scope - load at the start [easy]
 
 **BUGS**:
  - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range [easy/medium]

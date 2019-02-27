@@ -20,7 +20,12 @@ keydict = {
     "ctrl+2": "toggle2",
     "ctrl+3": "toggle3",
     "ctrl+4": "toggle4",
+
+    "t" : "test",
 }
+
+def test():
+    scope.log(getattr(scope.settings, "Debug", True))
 
 ######## Action definitions
 

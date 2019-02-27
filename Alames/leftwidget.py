@@ -8,6 +8,8 @@ import numpy as np
 from Alames.sidewidget import SideWidget
 from Alames.generated import ui_leftwidget
 
+from Alames import scope
+
 class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
     """
     Purpose: relative positioning of internal labels
@@ -34,6 +36,9 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
         self.resetButton.clicked.connect(self.resetRange)
 
         self.speedSlider.valueChanged.connect(self._updateScrollSpeed)
+        self.speedSliderValueButton.clicked.connect(self._resetScrollSpeed)
+
+        self._resetScrollSpeed()
 
 ######## Update Actions
 
@@ -79,3 +84,6 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
     def _updateScrollSpeed(self):
         self.speedSliderValueButton.setText(str(self.speedSlider.value()) + "px")
         self.chart.setScrollSpeed(self.speedSlider.value())
+
+    def _resetScrollSpeed(self):
+        self.speedSlider.setValue(getattr(scope.settings, "DefaultScrollSpeed", 10))
