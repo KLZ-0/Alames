@@ -5,11 +5,12 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.sidewidget import SideWidget
 from Alames.generated.ui_rightwidget import Ui_RightWidget
 
 from Alames import rightwidgetsection
 
-class RightWidget(QWidget, Ui_RightWidget):
+class RightWidget(SideWidget, Ui_RightWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
@@ -18,32 +19,15 @@ class RightWidget(QWidget, Ui_RightWidget):
 
     DEFAULT_VISIBLE_SECTION_NUM = 0
 
-    _setupHappened = False
-
     _sections = []
 
     loaded = QtCore.pyqtSignal()
     sectionUpdated = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None):
-        super(RightWidget, self).__init__(parent)
-        self.chart = None
-        # self.setup()
-
 ######## Widget setup
 
-    def setChart(self, chart):
-        """
-        Args: (Chart chart)
-        chart - chart to get data from
-        """
-        self.chart = chart
-        self.setup()
-
     def setup(self):
-        if not self._setupHappened:
-            self.setupUi(self)
-
+        super(RightWidget, self).setup()
         self._truncate()
     
         i = 0
@@ -63,7 +47,6 @@ class RightWidget(QWidget, Ui_RightWidget):
             i += 1
 
         self.loaded.emit()
-        self._setupHappened = True
 
 ######## External section management
 
@@ -88,6 +71,8 @@ class RightWidget(QWidget, Ui_RightWidget):
 ######## Update Actions
 
     def update(self):
+        super(RightWidget, self).update()
+
         self.updateSections()
         self.sectionUpdated.emit()
 
@@ -103,9 +88,3 @@ class RightWidget(QWidget, Ui_RightWidget):
             section.deleteLater()
             
         self._sections = []
-
-######## Event handlers
-
-    def showEvent(self, event):
-        super(RightWidget, self).showEvent(event)
-        # self.updateSections() # FIXME: try: except:

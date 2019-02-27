@@ -22,6 +22,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
     Initializes the required objects as its own properties
     """
 
+    # Updated from LeftWidget
+    _scrollSpeed = 10
+
     def __init__(self):
         super(Chart, self).__init__()
         self.selectionDataHolder = DataHolder()
@@ -89,6 +92,14 @@ class Chart(QChart, chartmodifier.ChartModifier):
         except IndexError:
             return 0
 
+    def getScrollSpeed(self):
+        return self._scrollSpeed
+
+######## Setters
+
+    def setScrollSpeed(self, scrollspeed):
+        self._scrollSpeed = scrollspeed
+
 ######## Series modifier
 
     def setRange(self, start, end):
@@ -127,7 +138,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
         c.setPos(c.pos().x()-1, c.pos().y())
         scope.rightDock.widget().update()
 
-    def toggleAnimatable(self, key):
+    def toggleAnimatable(self):
         if self.animationOptions() == QChart.NoAnimation:
             self.setAnimationOptions(QChart.SeriesAnimations)
         else:

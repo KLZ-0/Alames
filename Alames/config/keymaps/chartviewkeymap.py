@@ -11,6 +11,11 @@ Define actions in the functions below and bind them to a shortcut in keydict
 
 keydict = {
     "s": "save",
+    "a": "toggleAnimation",
+    "p": "toggleProperties",
+    "l": "toggleLeftWidget",
+    "r": "resetZoom",
+    "i": "testRange",
 }
 
 ######## Action definitions
@@ -19,3 +24,18 @@ keydict = {
 
 def save():
     scope.chartView.saveToFile()
+
+def toggleAnimation():
+    scope.chart.toggleAnimatable()
+
+def toggleProperties():
+    scope.chart.toggleProperties()
+
+def toggleLeftWidget():
+    scope.chart.toggleLeftWidget()
+
+def resetZoom():
+    scope.chart.zoomReset()
+
+def testRange():
+    scope.chart.setRange(100, 200)

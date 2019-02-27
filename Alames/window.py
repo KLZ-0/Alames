@@ -31,7 +31,13 @@ class Window(QMainWindow, Ui_MainWindow):
         self.centralWidget.hide()
         self.rightDock.hide()
         self.leftDock.hide()
+        self.loaderDock.hide()
         self.rightDock.widget().loaded.connect(self.loaderDock.widget().setup)
+
+        # Temporary
+        self.phasorView.hide()
+        self.holder1.hide()
+        self.holder2.hide()
 
         #### Assign scope
         scope.errorPopup = self.errorPopup
@@ -83,6 +89,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.initLabel.hide()
         scope.centralWidget.show()
         scope.rightDock.show()
+        scope.loaderDock.show()
         scope.leftDock.show()
 
         # send signal to window->phasorWidget to update

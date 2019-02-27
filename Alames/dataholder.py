@@ -117,3 +117,7 @@ class DataHolder(DataHolderBase):
 
         # At least one must be initialized for mapping
         self._setDataToQSerie(self._qSeries[0].property("number"))
+
+        for serie in self._qSeries:
+            if serie.isVisible():
+                serie.updateData()

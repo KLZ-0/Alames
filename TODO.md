@@ -23,22 +23,28 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
   - use virtualenv for linux installation? (maybe also windows)
 
 **TODOs**:  `in importance order`
- - **Make a settings.py file** [easy]
-   - **Add settings to scope - load at the start** [easy]
+ - Create F1 help [easy]
+
+ - fix color change zoomReset [easy]
 
  - Make the tooltip respect the chart dimensions and change its alignment accordingly [easy]
 
- - **Add left widget for maybe filters and make them customizable** [medium]
+ - **Filters** - Add a widget for filters and make them customizable [medium]
  - **Add exporter for csv files also - make a smaller file with only the selected data** [medium]
    - Option to save with or without the modifications - select which modifications [medium]
    - **save the modified file**
    - NOTE: Introduce a modification log to chartmodifier
    
 
- - Add scrollSpeed slider [easy]
  - Change scaling ratio to be more adaptive and make the ratio copyable, rewritable, maybe +- buttons and more adaptive [easy/medium]
 
  - pyserial? [hard]
+
+**TODOs done**:
+ - Add scrollSpeed slider [easy]
+
+ - Make a settings.py file [easy]
+  - Add settings to scope - load at the start [easy]
 
 **BUGS**:
  - PositionLineItem and YAxis frags appear when no series are shown -> has to do something with the axis updating and dynamic y axis range [easy/medium]
