@@ -1,6 +1,4 @@
-import math
-from datetime import datetime
-from PyQt5 import QtCore
+from Alames.importer import *
 
 from Alames import scope
 

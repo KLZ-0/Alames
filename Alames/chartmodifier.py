@@ -1,6 +1,4 @@
-import traceback
-from PyQt5.QtWidgets import *
-from PyQt5 import QtGui, QtCore
+from Alames.importer import *
 
 from Alames import scope
 

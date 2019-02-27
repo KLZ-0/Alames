@@ -1,9 +1,4 @@
-import os, sys
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
-import pandas
-import numpy as np
+from Alames.importer import *
 
 from Alames.sidewidget import SideWidget
 from Alames.generated.ui_rightwidget import Ui_RightWidget

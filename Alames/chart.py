@@ -1,11 +1,4 @@
-import os, sys
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis
-import pandas
-import numpy as np
-import math
-import lzma
+from Alames.importer import *
 
 from Alames import scope
 
@@ -49,7 +42,7 @@ class Chart(QChart, chartmodifier.ChartModifier):
                 scope.errorPopup("LZMA decompression failed - damaged xz file")
 
         # Detect a header -> set data header to be the second line
-        f = pandas.read_csv(lFileName, header=1, delimiter=";", low_memory=False)
+        f = read_csv(lFileName, header=1, delimiter=";", low_memory=False)
         
         self.selectionDataHolder.setDataFromCSV(f)
         self.overallDataHolder.setDataFromCSV(f)
@@ -171,20 +164,39 @@ class Chart(QChart, chartmodifier.ChartModifier):
         # self.minY = min(min(x) for x in self.ydata)
         # self.maxY = max(max(x) for x in self.ydata)
         if len([serie for serie in self.series() if serie.isVisible()]) > 0:
-            minY = min([serie.min() for serie in self.series() if serie.isVisible()])
-            maxY = max([serie.max() for serie in self.series() if serie.isVisible()])
+            realMinY = min([serie.min() for serie in self.series() if serie.isVisible()])
+            realMaxY = max([serie.max() for serie in self.series() if serie.isVisible()])
+
+            minY, maxY = self._calculateAxisSize(realMinY, realMaxY)
+
             if minY == self.minY and maxY == self.maxY:
                 # The axes does not need to be updated
                 return False
 
-            self.minY = minY
-            self.maxY = maxY
+            self.minY, self.maxY = minY, maxY
 
         else:
             self.minY = -10
             self.maxY = 10
         
         return True
+
+    def _calculateAxisSize(self, minimum, maximum):
+        yMinReserve = minimum*getattr(scope.settings, "YAxisReserve", 10)/100
+        yMaxReserve = maximum*getattr(scope.settings, "YAxisReserve", 10)/100
+        base = getattr(scope.settings, "YAxisRound", 10)  # round to this number
+
+        if minimum <= 0:
+            calcMin = int(base * math.floor(float(minimum + yMinReserve)/base))
+        else:
+            calcMin = 0
+
+        if maximum >= 0:
+            calcMax = int(base * math.ceil(float(maximum + yMaxReserve)/base))
+        else:
+            calcMax = 0
+
+        return calcMin, calcMax
 
     def updateAxes(self):
         if len(self.series()) == 0:
@@ -196,24 +208,14 @@ class Chart(QChart, chartmodifier.ChartModifier):
             # If the update was not necessary, do not recreate the axes
             return
 
-        yMinReserve = self.minY/10
-        yMaxReserve = self.maxY/10
-        base = 10 # round to this number
-
         axisX = QValueAxis()
         axisY = QValueAxis()
         if self.series()[0].attachedAxes():
             axisX = self.series()[0].attachedAxes()[0]
             axisY = self.series()[0].attachedAxes()[1]
 
-        if self.minY <= 0:
-            axisY.setMin(int(base * math.floor(float(self.minY + yMinReserve)/base)))
-        else:
-            axisY.setMin(0)
-        if self.maxY >= 0:
-            axisY.setMax(int(base * math.ceil(float(self.maxY + yMaxReserve)/base)))
-        else:
-            axisY.setMax(0)
+        axisY.setMin(self.minY)
+        axisY.setMax(self.maxY)
 
         axisX.setRange(self.series()[0].getStart(), self.series()[0].getEnd())
         axisX.hide()

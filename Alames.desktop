@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Alames
+Comment=Digital signal analysing/logging software
+Exec=./Alames.pyw
+Terminal=false

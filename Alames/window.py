@@ -1,10 +1,6 @@
 #!/usr/bin/python
 
-import os, sys, platform
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtChart import QLineSeries, QValueAxis
-from pathlib import Path
+from Alames.importer import *
 
 from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
@@ -77,7 +73,10 @@ class Window(QMainWindow, Ui_MainWindow):
         if f == None:
             return
 
+        timer = QtCore.QElapsedTimer()
+        timer.start()
         self.createChart(f)
+        self.statusBar().showMessage("Chart loaded in " + str(timer.elapsed()) + " milliseconds from " + f)
 
     def createChart(self, csvFile):
         if scope.chartView.chart():

@@ -1,6 +1,4 @@
-import math
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
+from Alames.importer import *
 
 from Alames.phasorscene import PhasorScene
 
