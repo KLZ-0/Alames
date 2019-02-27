@@ -19,13 +19,13 @@ I merge to master only if the software is in stable (or partially stable) develo
 
 Run `./install.sh` from the cloned directory
 
-NOTE: The default installation is on per-user basis - it is not a system-wide install (The installer just copies the `.desktop` file to `~/.local/share/applications/`)
+NOTE: The default installation is on per-user basis - it is not a system-wide install (The installer just copies the `.desktop` file to `~/.local/share/applications/` and updates the exec path)
 
 **Manual installation:**
 
 Run `pip install --user -r ./requirements.txt` to install the dependencies and launch `Alames.pyw` directly or click on `Alames.desktop` to launch the application
 
-Optionally copy the `Alames.desktop` file to `~/.local/share/applications/` for per-user install or `/usr/share/applications/` for system-wide install
+Optionally copy the `Alames.desktop` file to `~/.local/share/applications/` for per-user install or `/usr/share/applications/` for system-wide install and change the exec path in the file to point to a valid `Alames.pyw` file
 
 ### Windows
 **Install dependencies:**
