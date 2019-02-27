@@ -16,6 +16,7 @@ keydict = {
     "l": "toggleLeftWidget",
     "r": "resetZoom",
     "i": "testRange",
+    "d": "filterAlamesOne"
 }
 
 ######## Action definitions
@@ -39,3 +40,6 @@ def resetZoom():
 
 def testRange():
     scope.chart.setRange(100, 200)
+
+def filterAlamesOne():
+    scope.chart.filterAlamesOne()
