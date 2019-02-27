@@ -25,7 +25,7 @@ NOTE: The default installation is on per-user basis - it is not a system-wide in
 
 Run `pip install --user -r ./requirements.txt` to install the dependencies and launch `Alames.pyw` directly or click on `Alames.desktop` to launch the application
 
-Optionally copy the `Alames.desktop` file to `~/.local/share/applications/` for per-user install or `/usr/share/applications/` for system-wide install and change the exec path in the file to point to a valid `Alames.pyw` file
+Optionally copy the `Alames.desktop` file to `~/.local/share/applications/` for per-user install or `/usr/share/applications/` for system-wide install and change the exec path in the file to point at a valid `Alames.pyw` file
 
 ### Windows
 **Install dependencies:**

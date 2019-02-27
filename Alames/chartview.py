@@ -16,6 +16,11 @@ class View(QChartView):
     An object from this class is created in Chart
     """
 
+    # Store the settings internally  for faster access speed
+    _valueTextItemScale = getattr(scope.settings, "TooltipTextScale", 1.5)
+    _valueTextItemMargin = getattr(scope.settings, "TooltipTextMargin", 10)
+    _valueTextItemOptimalPos = getattr(scope.settings, "TooltipOptimalPosition", True)
+
     _shortcuts = []
 
     def __init__(self, parent):
@@ -51,7 +56,7 @@ class View(QChartView):
         self.focusLine.setZValue(1500)
 
         self.focusValueTextItem = QGraphicsTextItem(self.chart())
-        self.focusValueTextItem.setScale(1.5)
+        self.focusValueTextItem.setScale(self._valueTextItemScale)
         self.focusValueTextItem.setZValue(100)
         self.focusValueTextItem.setDefaultTextColor(QtGui.QColor("#333333"))
 
@@ -81,8 +86,6 @@ class View(QChartView):
         if not self.focusLine.isVisible(): self.focusLine.show()
         if not self.focusValueTextItem.isVisible(): self.focusValueTextItem.show()
 
-        self.focusValueTextItem.setPos(event.x(), event.y())
-
         xVal = self.chart().mapToValue(QtCore.QPointF(event.x(), 0), self.chart().getDummyQSerie()).x()
         if xVal < 0 or xVal >= self.chart().getEnd():
             # When the end of the chart is reached
@@ -96,8 +99,29 @@ class View(QChartView):
                 html += "<font color=\"" + serie.color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
         self.focusValueTextItem.setHtml(html)
 
+        if self._valueTextItemOptimalPos:
+            self.focusValueTextItem.setPos(self._calculateOptimalTextPos(event.pos()))
+        else:
+            self.focusValueTextItem.setPos(event.pos())
+
         focusLineX = self.chart().mapToPosition(QtCore.QPointF(round(xVal), 0), self.chart().getDummyQSerie()).x()
         self.focusLine.setPos(focusLineX, 0)
+
+    def _calculateOptimalTextPos(self, basepoint):
+        margin = self._valueTextItemMargin
+        textRect = self.focusValueTextItem.boundingRect()
+        xpos = basepoint.x()
+        ypos = basepoint.y()
+
+        if xpos+(textRect.width()*self._valueTextItemScale+margin) > self.contentsRect().width():
+            xpos = self.contentsRect().width()-(textRect.width() *
+                                                self._valueTextItemScale + margin)
+
+        if ypos+(textRect.height()*self._valueTextItemScale+margin) > self.contentsRect().height():
+            ypos = self.contentsRect().height()-(textRect.height() *
+                                                self._valueTextItemScale + margin)
+        
+        return QtCore.QPointF(xpos, ypos)
 
     def leaveEvent(self, event):
         super(View, self).leaveEvent(event)
