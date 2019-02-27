@@ -2,21 +2,17 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTimeAxis, QValueAxis
 
+from Alames.sidewidget import SideWidget
 from Alames.generated.ui_loaderwidget import Ui_LoaderWidget
 
 from Alames import scope
 
-class LoaderWidget(QWidget, Ui_LoaderWidget):
+class LoaderWidget(SideWidget, Ui_LoaderWidget):
     """
     Purpose: Select which RightWidgetSections to show in RightDock
     """
 
-    _setupHappened = False
-
     _checkBoxes = []
-
-    def __init__(self, parent=None):
-        super(LoaderWidget, self).__init__(parent)
 
 ######## Widget setup
 
@@ -26,12 +22,10 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
         Setup checkboxes
         Called on RightWidget.loaded.emit()
         """
-
-        if not self._setupHappened:
-            self.setupUi(self)
+        super(LoaderWidget, self).setup()
 
         rightWidget = scope.rightDock.widget()
-        rightWidget.sectionUpdated.connect(self._updateNames)
+        rightWidget.sectionUpdated.connect(self.update)
         targetLayout = self.scrollArea.widget().layout()
         
         self._truncate()
@@ -43,13 +37,16 @@ class LoaderWidget(QWidget, Ui_LoaderWidget):
             self._checkBoxes[-1].stateChanged.connect(self._updateRightWidgetSectionVisibility)
             targetLayout.addWidget(self._checkBoxes[-1])
 
-        self._setupHappened = True
-
     def _updateRightWidgetSectionVisibility(self):
         rightWidget = scope.rightDock.widget()
 
         for i in range(rightWidget.getSectionLen()):
             rightWidget.setVisibleSection(i, self._checkBoxes[i].isChecked())
+
+    def update(self):
+        super(LoaderWidget, self).update()
+
+        self._updateNames()
 
     def _updateNames(self):
         rightWidget = scope.rightDock.widget()

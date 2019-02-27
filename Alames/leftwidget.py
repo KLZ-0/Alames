@@ -5,40 +5,24 @@ from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView, QDateTime
 import pandas
 import numpy as np
 
+from Alames.sidewidget import SideWidget
 from Alames.generated import ui_leftwidget
 
-class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
+class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
 
-    _setupHappened = False
-
-    def __init__(self, parent=None):
-        super(LeftWidget, self).__init__(parent)
-        self.chart = None
-
 ######## Widget setup
 
-    def setChart(self, chart):
-        """
-        Args: (Chart chart)
-        chart - chart to get data from
-        """
-        self.chart = chart
-        self.setup()
-        self.update()
-
-    def setup(self): # FIXME: Call to parent
+    def setup(self):
         """
         Args: ()
-        Setup box ranges
+        Setup widget Ui elements
         """
-
-        if not self._setupHappened:
-            self.setupUi(self)
+        super(LeftWidget, self).setup()
 
         self.endBox.setMinimum(self.chart.getStart()+1)
         self.endBox.setMaximum(self.chart.getEnd())
@@ -49,8 +33,6 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         self.endBox.valueChanged.connect(self.updateChartRange)
         self.resetButton.clicked.connect(self.resetRange)
 
-        self._setupHappened = True
-
 ######## Update Actions
 
     def update(self):
@@ -58,6 +40,8 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         Args: ()
         Update all values of Ui elements
         """
+        super(LeftWidget, self).update()
+
         self.startBox.setValue(self.chart.getStart())
         self.endBox.setValue(self.chart.getEnd())
 
@@ -87,9 +71,3 @@ class LeftWidget(QWidget, ui_leftwidget.Ui_LeftWidget):
         endX = self.chart.mapToValue(QtCore.QPointF(plotArea.x() + plotArea.width(), plotArea.y()), self.chart.series()[0]).x()
         self.startBox.setValue(round(startX))
         self.endBox.setValue(round(endX))
-
-######## Event handlers
-
-    def showEvent(self, event):
-        super(LeftWidget, self).showEvent(event)
-        # self.updateSections()

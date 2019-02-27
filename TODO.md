@@ -26,11 +26,11 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - **Make a settings.py file** [easy]
    - **Add settings to scope - load at the start** [easy]
 
- - make a SideWidget class [easy]
+ - fix color change zoomReset [easy]
 
  - Make the tooltip respect the chart dimensions and change its alignment accordingly [easy]
 
- - **Add left widget for maybe filters and make them customizable** [medium]
+ - **Filters** - Add a widget for filters and make them customizable [medium]
  - **Add exporter for csv files also - make a smaller file with only the selected data** [medium]
    - Option to save with or without the modifications - select which modifications [medium]
    - **save the modified file**
