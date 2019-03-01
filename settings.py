@@ -5,6 +5,9 @@
 # Show verbose output
 Debug = True
 
+# Statusbar
+StatusbarMessageTimeout = 0 # seconds (0-permanent)
+
 # Theming
 Fusion = True
 FusionOnLinux = False

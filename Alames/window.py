@@ -4,7 +4,8 @@ from Alames.importer import *
 
 from Alames import scope
 from Alames.generated.ui_mainwindow import Ui_MainWindow
-from Alames.generated import ui_aboutwidget
+from Alames.generated.ui_aboutwidget import Ui_AboutWidget
+from Alames.generated.ui_helpwidget import Ui_HelpWidget
 
 from Alames.config.keymaps import windowkeymap
 
@@ -47,8 +48,17 @@ class Window(QMainWindow, Ui_MainWindow):
         self.setAcceptDrops(True)
 
         self.aboutWidget = QWidget()
-        self.aboutWidget.ui = ui_aboutwidget.Ui_AboutWidget()
+        QShortcut(QtGui.QKeySequence.Quit, self.aboutWidget, self.aboutWidget.close)
+        self.aboutWidget.ui = Ui_AboutWidget()
         self.aboutWidget.ui.setupUi(self.aboutWidget)
+
+        self.helpWidget = QWidget()
+        QShortcut(QtGui.QKeySequence.Quit, self.helpWidget, self.helpWidget.close)
+        self.helpWidget.ui = Ui_HelpWidget()
+        self.helpWidget.ui.setupUi(self.helpWidget)
+        self.helpWidget.ui.label.setText(
+            self.helpWidget.ui.label.text() + self.shortcutsToStr())
+        
 
         # self.initLabel = QLabel("Drag & Drop a CSV file, or press:\n\nO - to open and load data\n\nS - to draw the file contents into a chart\n\nQ - to quit", self)
         self.initLabel = QLabel("Drag & Drop a CSV file or press O to open one", self)
@@ -58,6 +68,22 @@ class Window(QMainWindow, Ui_MainWindow):
         self.initLabel.setFont(f)
 
         self._setupShortcuts()
+
+    def shortcutsToStr(self):
+        basestr = ""
+        for keymapmodule in self.loadKeymaps():
+            basestr += "".join(["-" for i in range(20)]) + "<br>"
+            basestr += "= " + keymapmodule.__name__.split(".")[-1] + ".py<br>"
+            for key, action in keymapmodule.keydict.items():
+                basestr += str(action) + ": " + str(key).upper() + "<br>"
+        return basestr
+
+    def loadKeymaps(self):
+        keymaps = []
+        for module in pkgutil.iter_modules([os.path.dirname(__file__) + "/config/keymaps"]):
+            if not module.name.startswith('__'):
+                keymaps.append(importlib.import_module("Alames.config.keymaps." + module.name))
+        return keymaps
 
 ######## Update methods
 
@@ -75,15 +101,18 @@ class Window(QMainWindow, Ui_MainWindow):
 
         timer = QtCore.QElapsedTimer()
         timer.start()
-        self.createChart(f)
-        self.statusBar().showMessage("Chart loaded in " + str(timer.elapsed()) + " milliseconds from " + f)
+        if self.createChart(f):
+            self.statusBar().showMessage("Chart loaded in " + str(timer.elapsed()) + " milliseconds from " + f, getattr(scope.settings, "StatusbarMessageTimeout", 0)*1000)
+        else:
+            self.statusBar().showMessage("Chart load failed in " + str(timer.elapsed()) + " milliseconds from " + f, getattr(scope.settings, "StatusbarMessageTimeout", 0)*1000)
 
     def createChart(self, csvFile):
         if scope.chartView.chart():
             scope.chartView.chart().deleteLater()
 
         scope.chart = chart.Chart() # FIXME: Two functions
-        scope.chart.constructChart(csvFile) # FIXME: Two functions
+        if not scope.chart.constructChart(csvFile): # FIXME: Two functions
+            return False
         scope.chartView.setChart(scope.chart)
         self.initLabel.hide()
         scope.centralWidget.show()
@@ -98,6 +127,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
         # needed when opening a new file
         self.updateChildren()
+        return True
 
     def getOpenFile(self, typeFilter="CSV files (*.csv *.csv.xz)"):
         f = QFileDialog.getOpenFileName(self, "Open..", str(
@@ -141,14 +171,32 @@ class Window(QMainWindow, Ui_MainWindow):
 
         return fileName
 
-    def errorPopup(self, text):
-        QErrorMessage(self).showMessage(text)
+    def errorPopup(self, title, text=None, details=None, level=0):
+        if level < 0 or level > 2:
+            level = 2
+
+        errorLevels = {
+            0: QMessageBox.Information,
+            1: QMessageBox.Warning,
+            2: QMessageBox.Critical,
+        }
+        self.messageBox = getattr(self, "messageBox", QMessageBox())
+        self.messageBox.setIcon(errorLevels[level])
+
+        self.messageBox.setWindowTitle(str(title))
+        self.messageBox.setText(str(title))
+        if text != None:
+            self.messageBox.setInformativeText(str(text))
+        if details != None:
+            self.messageBox.setDetailedText(str(details))
+
+        self.messageBox.show()
 
 ######## Shortcut binding
 
     def _setupShortcuts(self):
         for key, method in windowkeymap.keydict.items():
-            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method)))
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method, scope.shortcutBindError)))
 
 ######## Event handlers
 

@@ -6,6 +6,8 @@ import platform
 import math
 import traceback
 import lzma
+import pkgutil
+import importlib
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QLineSeries, QValueAxis, QChart, QChartView

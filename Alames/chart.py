@@ -20,32 +20,36 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
     def __init__(self):
         super(Chart, self).__init__()
+        self.setAcceptHoverEvents(True)
         self.selectionDataHolder = DataHolder()
         self.overallDataHolder = DataHolderBase()
 
 ######## Setup
 
     def constructChart(self, fileName):
-        self.setAcceptHoverEvents(True)
 
-        self.loadCSV(fileName)
+        if not self.loadCSV(fileName):
+            return False
         for serie in self.selectionDataHolder.getQSeries():
             self.addSeries(serie)
             serie.visibleChanged.connect(self.updateAxes)
             serie.scaleChanged.connect(self.updateAxes)
+            
+        return True
 
     def loadCSV(self, lFileName):
         if lFileName.endswith(".csv.xz"):
-            try:
-                lFileName = lzma.open(lFileName) # file name or object
-            except lzma.LZMAError:
-                scope.errorPopup("LZMA decompression failed - damaged xz file")
+            lFileName = lzma.open(lFileName) # file name or object
 
-        # Detect a header -> set data header to be the second line
-        f = read_csv(lFileName, header=1, delimiter=";", low_memory=False)
-        
-        self.selectionDataHolder.setDataFromCSV(f)
-        self.overallDataHolder.setDataFromCSV(f)
+        try:
+            # Detect a header -> set data header to be the second line
+            f = read_csv(lFileName, header=1, delimiter=";", low_memory=False)
+            self.selectionDataHolder.setDataFromCSV(f)
+            self.overallDataHolder.setDataFromCSV(f)
+            return True
+        except lzma.LZMAError:
+            scope.errorPopup("LZMA decompression failed", "damaged xz file", traceback.format_exc(), level=2)
+            return False
 
 ######## Signal handlers
 

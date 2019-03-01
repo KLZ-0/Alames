@@ -15,7 +15,7 @@ class ChartModifier:
     def filterAlamesOne(self):
         try:
             if self.filterAlamesOneApplied:
-                scope.errorPopup("Filter already applied!")
+                scope.errorPopup("Filter already applied!", level=2)
                 return
             self.series()[0].setName("Voltage")
             self.series()[1].setName("Current")
@@ -49,4 +49,4 @@ class ChartModifier:
 
             self.filterAlamesOneApplied = True
         except:
-            scope.errorPopup(traceback.format_exc())
+            scope.errorPopup("Exception in the filter", "See details for more information", traceback.format_exc(), level=2)

@@ -29,7 +29,7 @@ class View(QChartView):
 
     def _setupShortcuts(self):
         for key, method in chartviewkeymap.keydict.items():
-            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method)))
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method, scope.shortcutBindError)))
 
 ######## overrides
 
