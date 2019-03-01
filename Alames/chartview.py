@@ -35,8 +35,6 @@ class View(QChartView):
 
     def setChart(self, chart):
         super(View, self).setChart(chart)
-        scope.rightDock.widget().setChart(chart)
-        scope.leftDock.widget().setChart(chart)
         self._createTrackingTools()
 
 ######## Init - tracking tools setup
@@ -73,6 +71,9 @@ class View(QChartView):
     def renderToFile(self, filename):
         pixmap = self.grab()
         return pixmap.save(filename)
+
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())
 
 ######## Event handlers
 

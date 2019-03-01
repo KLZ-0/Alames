@@ -19,3 +19,6 @@ class PhasorView(QGraphicsView):
 
     def resizeEvent(self, event):
         super(PhasorView, self).resizeEvent(event)
+
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())

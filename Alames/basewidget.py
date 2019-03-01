@@ -33,7 +33,7 @@ class BaseWidget(QWidget):
 
         self._setupHappened = True
 
-######## Update Actions
+######## Actions
 
     def update(self):
         """
@@ -41,3 +41,6 @@ class BaseWidget(QWidget):
         Update all values of Ui elements
         """
         pass
+
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())

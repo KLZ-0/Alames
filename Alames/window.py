@@ -30,7 +30,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.leftDock.hide()
         self.loaderDock.hide()
         self.rightDock.widget().loaded.connect(self.loaderDock.widget().setup)
-        self.leftDock.widget().exportTriggered.connect(self.exportWidget.toggle) # Connect toggle instead
+        self.leftDock.widget().exportTriggered.connect(self.exportWidget.toggleVisible)
 
         # Temporary
         self.phasorView.hide()
@@ -114,6 +114,10 @@ class Window(QMainWindow, Ui_MainWindow):
         if not scope.chart.constructChart(csvFile): # FIXME: Two functions
             return False
         scope.chartView.setChart(scope.chart)
+        self.rightDock.widget().setChart(scope.chart)
+        self.leftDock.widget().setChart(scope.chart)
+        self.exportWidget.setChart(scope.chart)
+
         self.initLabel.hide()
         scope.centralWidget.show()
         scope.rightDock.show()
@@ -127,6 +131,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
         # needed when opening a new file
         self.updateChildren()
+
         return True
 
     def getOpenFile(self, typeFilter="CSV files (*.csv *.csv.xz)"):

@@ -35,7 +35,7 @@ class LeftWidget(BaseWidget, ui_leftwidget.Ui_LeftWidget):
         self.speedSlider.valueChanged.connect(self._updateScrollSpeed)
         self.speedSliderValueButton.clicked.connect(self._resetScrollSpeed)
 
-        self.exportButton.clicked.connect(self.exportTriggered.emit)
+        self.exportButton.clicked.connect(self.exportTriggered.emit)  # Connect toggle instead
 
         self._resetScrollSpeed()
 

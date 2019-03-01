@@ -54,6 +54,9 @@ class RightWidget(BaseWidget, Ui_RightWidget):
     def isVisibleSection(self, num):
         return self._sections[num].isVisible()
         
+    def getVisibleSectionSeries(self): # FIXME: Leak
+        return [section.serie for section in self._sections if section.isVisible()]
+
     def isVisibleSectionByDefault(self, num):
         return self._sections[num].property("visible_by_default")
 

@@ -71,6 +71,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
     def getDummyQSerie(self):
         return self.selectionDataHolder.getDummyQSerie()
 
+    def getVisibleSeries(self):
+        return [serie for serie in self.series() if serie.isVisible()]
+
     def getRange(self):
         try:
             return self.selectionDataHolder.getDummyQSerie().getStart(), self.selectionDataHolder.getDummyQSerie().getEnd()
@@ -122,12 +125,10 @@ class Chart(QChart, chartmodifier.ChartModifier):
 ######## Toggle actions
 
     def toggleSerieVisiblity(self, key):
-        if int(key) > len(self.series()):
+        visibleSeries = scope.rightDock.widget().getVisibleSectionSeries()
+        if int(key) > len(visibleSeries):
             return
-        if self.series()[int(key) - 1].isVisible():
-            self.series()[int(key) - 1].hide()
-        else:
-            self.series()[int(key) - 1].show()
+        visibleSeries[int(key) - 1].toggleVisible()
 
         # Trigger move event after toggle to ensure current text of focusValueTextItem will change
         c = self.cursor()

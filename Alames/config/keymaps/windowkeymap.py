@@ -50,15 +50,12 @@ def about():
 #### Workspace toggle
 
 def toggle1():
-        scope.window.chartView.setVisible(
-            not scope.window.chartView.isVisible())
+        scope.window.chartView.toggleVisible()
 
 
 def toggle2():
-        scope.window.phasorView.setVisible(
-            not scope.window.phasorView.isVisible())
+        scope.window.phasorView.toggleVisible()
 
 
 def toggle3():
-        scope.window.exportWidget.setVisible(
-            not scope.window.exportWidget.isVisible())
+        scope.window.exportWidget.toggleVisible()

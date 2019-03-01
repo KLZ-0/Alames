@@ -54,6 +54,9 @@ class ChartLineSeries(QLineSeries):
 
         super(ChartLineSeries, self).show()
 
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())
+
 ######## Setters
 
     def setData(self, ydata):

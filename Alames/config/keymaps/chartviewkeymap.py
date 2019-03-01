@@ -16,7 +16,8 @@ keydict = {
     "l": "toggleLeftWidget",
     "r": "resetZoom",
     "i": "testRange",
-    "d": "filterAlamesOne"
+    "d": "filterAlamesOne",
+    "e": "exportCSV",
 }
 
 ######## Action definitions
@@ -43,3 +44,6 @@ def testRange():
 
 def filterAlamesOne():
     scope.chart.filterAlamesOne()
+
+def exportCSV():
+    scope.window.exportWidget.toggleVisible()
