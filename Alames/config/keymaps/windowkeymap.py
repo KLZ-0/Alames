@@ -20,7 +20,6 @@ keydict = {
     "ctrl+1": "toggle1",
     "ctrl+2": "toggle2",
     "ctrl+3": "toggle3",
-    "ctrl+4": "toggle4",
 
     "t": "test",
 }
@@ -61,9 +60,5 @@ def toggle2():
 
 
 def toggle3():
-        scope.window.holder1.setVisible(
-            not scope.window.holder1.isVisible())
-
-def toggle4():
-        scope.window.holder2.setVisible(
-            not scope.window.holder2.isVisible())
+        scope.window.exportWidget.setVisible(
+            not scope.window.exportWidget.isVisible())

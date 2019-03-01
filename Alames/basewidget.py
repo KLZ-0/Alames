@@ -1,6 +1,6 @@
 from Alames.importer import *
 
-class SideWidget(QWidget):
+class BaseWidget(QWidget):
     """
     Purpose: relative positioning of internal items in a DockWidget
     """
@@ -8,7 +8,7 @@ class SideWidget(QWidget):
     _setupHappened = False
 
     def __init__(self, parent=None):
-        super(SideWidget, self).__init__(parent)
+        super(BaseWidget, self).__init__(parent)
         self.chart = None
 
 ######## Widget setup

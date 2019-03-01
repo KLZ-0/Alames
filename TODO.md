@@ -30,6 +30,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
    - **save the modified file**
    - NOTE: Introduce a modification log to chartmodifier
 
+ - Transform chartmodifier into datamodifier [easy]
+
 **TODOs done**:
  - Add scrollSpeed slider [easy]
  - Make a settings.py file [easy]

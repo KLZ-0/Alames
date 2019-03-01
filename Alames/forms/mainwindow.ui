@@ -63,6 +63,16 @@
     <property name="spacing">
      <number>5</number>
     </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="ExportWidget" name="exportWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="PhasorView" name="phasorView">
       <property name="sizePolicy">
@@ -119,35 +129,6 @@
       </property>
       <property name="dragMode">
        <enum>QGraphicsView::NoDrag</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QGraphicsView" name="holder1">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>0</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QWidget" name="holder2" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
       </property>
      </widget>
     </item>
@@ -297,6 +278,12 @@
    <class>LoaderWidget</class>
    <extends>QWidget</extends>
    <header>Alames/loaderwidget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ExportWidget</class>
+   <extends>QWidget</extends>
+   <header>Alames/exportwidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,16 +1,18 @@
 from Alames.importer import *
 
-from Alames.sidewidget import SideWidget
+from Alames.basewidget import BaseWidget
 from Alames.generated import ui_leftwidget
 
 from Alames import scope
 
-class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
+class LeftWidget(BaseWidget, ui_leftwidget.Ui_LeftWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
     Same lvl as chartview > an object from this class is created in Chart
     """
+
+    exportTriggered = QtCore.pyqtSignal()
 
 ######## Widget setup
 
@@ -32,6 +34,8 @@ class LeftWidget(SideWidget, ui_leftwidget.Ui_LeftWidget):
 
         self.speedSlider.valueChanged.connect(self._updateScrollSpeed)
         self.speedSliderValueButton.clicked.connect(self._resetScrollSpeed)
+
+        self.exportButton.clicked.connect(self.exportTriggered.emit)
 
         self._resetScrollSpeed()
 

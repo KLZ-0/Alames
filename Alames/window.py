@@ -30,11 +30,11 @@ class Window(QMainWindow, Ui_MainWindow):
         self.leftDock.hide()
         self.loaderDock.hide()
         self.rightDock.widget().loaded.connect(self.loaderDock.widget().setup)
+        self.leftDock.widget().exportTriggered.connect(self.exportWidget.toggle) # Connect toggle instead
 
         # Temporary
         self.phasorView.hide()
-        self.holder1.hide()
-        self.holder2.hide()
+        self.exportWidget.hide()
 
         #### Assign scope
         scope.errorPopup = self.errorPopup

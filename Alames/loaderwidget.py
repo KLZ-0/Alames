@@ -1,11 +1,11 @@
 from Alames.importer import *
 
-from Alames.sidewidget import SideWidget
+from Alames.basewidget import BaseWidget
 from Alames.generated.ui_loaderwidget import Ui_LoaderWidget
 
 from Alames import scope
 
-class LoaderWidget(SideWidget, Ui_LoaderWidget):
+class LoaderWidget(BaseWidget, Ui_LoaderWidget):
     """
     Purpose: Select which RightWidgetSections to show in RightDock
     """
