@@ -46,6 +46,8 @@ class LeftWidget(BaseWidget, ui_leftwidget.Ui_LeftWidget):
 
         self.exportButton.clicked.connect(self.exportTriggered.emit)
 
+        self.showXCheckBox.toggled.connect(scope.chart.toggleXAxis)
+
 ######## Update Actions
 
     def update(self):

@@ -159,6 +159,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
         else:
             scope.leftDock.show()
 
+    def toggleXAxis(self, state):
+        self.axisX(self.series()[0]).setVisible(state)
+
 ######## Update actions
 
     def updateChildren(self):
