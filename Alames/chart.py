@@ -39,7 +39,12 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
     def loadCSV(self, lFileName):
         if lFileName.endswith(".csv.xz"):
-            lFileName = lzma.open(lFileName) # file name or object
+            lFileName = lzma.open(lFileName)  # file name or object
+        elif lFileName.endswith(".csv"):
+            pass
+        else:
+            scope.errorPopup("Not supported file type", "The requested file does not match any known filetypes", level=2)
+            return False
 
         try:
             # Detect a header -> set data header to be the second line

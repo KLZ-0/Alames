@@ -4,6 +4,7 @@ from Alames import scope
 
 class DataHolderBase(QtCore.QObject):
     """Data holder/container, if the data is composed of Current and Voltage the power values will also be calculated - It has no range"""
+    _xColumnName = ""
     _columnNames = []
 
     _YRMS = []
@@ -23,7 +24,7 @@ class DataHolderBase(QtCore.QObject):
 ######## Actions
 
     def export(self, filename, exportSeries=None):
-        exportHeaders = ["record time"]
+        exportHeaders = [self._xColumnName]
         exportData = [self._XData]
         if exportSeries == None:
             exportHeaders += self._columnNames
@@ -43,6 +44,7 @@ class DataHolderBase(QtCore.QObject):
 
     def setColumnNames(self, columnnames):
         # Strip the first column (it is the X axis) and strip the last column (unnamed something) > created if the delimiter is at the eol
+        self._xColumnName = columnnames[0]
         self._columnNames = [name for name in columnnames[1:]]
 
     def setDataFromCSV(self, csv):

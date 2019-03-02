@@ -39,4 +39,4 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
         elif self.onlyVisibleRadio.isChecked():
             dataHolder.export(fileName, [serie.property("number") for serie in scope.chart.getVisibleSeries()])
 
-        self.filenameLabel.setText("Export saved to " + fileName)
+        self.filenameLabel.setText("Export saved to <a href=" + fileName +">" + fileName + "</a>")
