@@ -1,11 +1,11 @@
 from Alames.importer import *
 
-from Alames.sidewidget import SideWidget
+from Alames.basewidget import BaseWidget
 from Alames.generated.ui_rightwidget import Ui_RightWidget
 
 from Alames import rightwidgetsection
 
-class RightWidget(SideWidget, Ui_RightWidget):
+class RightWidget(BaseWidget, Ui_RightWidget):
     """
     Purpose: relative positioning of internal labels
     Creates a widget inside MainWindow which is shared for max 3 widgets
@@ -54,6 +54,9 @@ class RightWidget(SideWidget, Ui_RightWidget):
     def isVisibleSection(self, num):
         return self._sections[num].isVisible()
         
+    def getVisibleSectionSeries(self): # FIXME: Leak
+        return [section.serie for section in self._sections if section.isVisible()]
+
     def isVisibleSectionByDefault(self, num):
         return self._sections[num].property("visible_by_default")
 

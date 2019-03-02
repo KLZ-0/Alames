@@ -1,6 +1,6 @@
 from Alames.importer import *
 
-class SideWidget(QWidget):
+class BaseWidget(QWidget):
     """
     Purpose: relative positioning of internal items in a DockWidget
     """
@@ -8,7 +8,7 @@ class SideWidget(QWidget):
     _setupHappened = False
 
     def __init__(self, parent=None):
-        super(SideWidget, self).__init__(parent)
+        super(BaseWidget, self).__init__(parent)
         self.chart = None
 
 ######## Widget setup
@@ -30,10 +30,18 @@ class SideWidget(QWidget):
 
         if not self._setupHappened:
             self.setupUi(self)
+            self._connectSlots()
 
         self._setupHappened = True
 
-######## Update Actions
+    def _connectSlots(self):
+        """
+        Args: ()
+        Connect signals to slots (happend only once)
+        """
+        pass
+
+######## Actions
 
     def update(self):
         """
@@ -41,3 +49,6 @@ class SideWidget(QWidget):
         Update all values of Ui elements
         """
         pass
+
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())

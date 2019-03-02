@@ -3,6 +3,8 @@ Alames is an open-source signal analyser software intended for use with microcon
 
 It can also work with Power Quality Analysers from KMB with CSV files exported from Envis
 
+![Screenshot](/screenshots/sample.png?raw=true "Sample screenshot")
+
 # Repository info
 *GitHub repository of my current SOČ/KOP 2019 project - lincensed under the MIT license*
 

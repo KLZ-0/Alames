@@ -38,3 +38,8 @@ def log(s):
         return
 
     logging.info(str(s))
+
+#### Non-critical error dialogs
+
+def shortcutBindError():
+    errorPopup("This keyboard shortcut is not binded correctly!", "This may be caused by a non-existent function in the keymap file", level=1)

@@ -29,14 +29,12 @@ class View(QChartView):
 
     def _setupShortcuts(self):
         for key, method in chartviewkeymap.keydict.items():
-            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method)))
+            self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(chartviewkeymap, method, scope.shortcutBindError)))
 
 ######## overrides
 
     def setChart(self, chart):
         super(View, self).setChart(chart)
-        scope.rightDock.widget().setChart(chart)
-        scope.leftDock.widget().setChart(chart)
         self._createTrackingTools()
 
 ######## Init - tracking tools setup
@@ -74,6 +72,9 @@ class View(QChartView):
         pixmap = self.grab()
         return pixmap.save(filename)
 
+    def toggleVisible(self):
+        self.setVisible(not self.isVisible())
+
 ######## Event handlers
 
     def mouseMoveEvent(self, event):
@@ -91,7 +92,7 @@ class View(QChartView):
         html = str(self.chart().getXData()[round(xVal)]) + "<br>"
         for serie in self.chart().series():
             if serie.isVisible():
-                html += "<font color=\"" + serie.color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
+                html += "<font color=\"" + serie.color().name() + "\">{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
         self.focusValueTextItem.setHtml(html)
 
         if self._valueTextItemOptimalPos:
@@ -129,12 +130,6 @@ class View(QChartView):
         line = self.focusLine.line()
         line.setLength(self.height())
         self.focusLine.setLine(line)
-
-    def keyPressEvent(self, event):
-        super(View, self).keyPressEvent(event)
-        key = event.text()
-        if key in ["1","2","3","4","5","6","7","8","9"]:
-            self.chart().toggleSerieVisiblity(key)
 
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)

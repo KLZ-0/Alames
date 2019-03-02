@@ -10,18 +10,18 @@ Define actions in the functions below and bind them to a shortcut in keydict
 ######## Dictionary for keyboard shortcut binding
 
 keydict = {
-    "o" : "open",
-    "q" : "exit",
-    "ctrl+q" : "exit",
+    "o": "open",
+    "q": "exit",
+    "ctrl+q": "exit",
 
-    "f12" : "about",
+    "f1": "help",
+    "f12": "about",
 
     "ctrl+1": "toggle1",
     "ctrl+2": "toggle2",
     "ctrl+3": "toggle3",
-    "ctrl+4": "toggle4",
 
-    "t" : "test",
+    "t": "test",
 }
 
 def test():
@@ -39,27 +39,23 @@ def exit():
 
 #### F keys
 
+def help():
+    scope.window.helpWidget.show()
+    scope.window.helpWidget.move(scope.window.frameGeometry().center() - scope.window.helpWidget.rect().center())
+
 def about():
-    scope.window.aboutWidget.move(scope.window.frameGeometry().topLeft(
-    ) + scope.window.frameGeometry().center() - scope.window.aboutWidget.geometry().center())
     scope.window.aboutWidget.show()
+    scope.window.aboutWidget.move(scope.window.frameGeometry().center() - scope.window.aboutWidget.rect().center())
 
 #### Workspace toggle
 
 def toggle1():
-        scope.window.chartView.setVisible(
-            not scope.window.chartView.isVisible())
+        scope.window.chartView.toggleVisible()
 
 
 def toggle2():
-        scope.window.phasorView.setVisible(
-            not scope.window.phasorView.isVisible())
+        scope.window.phasorView.toggleVisible()
 
 
 def toggle3():
-        scope.window.holder1.setVisible(
-            not scope.window.holder1.isVisible())
-
-def toggle4():
-        scope.window.holder2.setVisible(
-            not scope.window.holder2.isVisible())
+        scope.window.exportWidget.toggleVisible()
