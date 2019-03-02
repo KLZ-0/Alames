@@ -27,9 +27,16 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
         fileName = scope.window.getSaveFile("CSV (*.csv)")
         if fileName == None:
             return
-        dataHolder = self.chart.selectionDataHolder # TODO: Make a method in chart to return the default dataholder
+        
+        # TODO: Make a method in chart to return the default dataholder
+        if self.withModificationCheckBox.isChecked():
+            dataHolder = self.chart.selectionDataHolder
+        else:
+            dataHolder = self.chart.overallDataHolder
 
         if self.everythingRadio.isChecked():
             dataHolder.export(fileName)
         elif self.onlyVisibleRadio.isChecked():
             dataHolder.export(fileName, [serie.property("number") for serie in scope.chart.getVisibleSeries()])
+
+        self.filenameLabel.setText("Export saved to " + fileName)
