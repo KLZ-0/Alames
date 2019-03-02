@@ -28,6 +28,15 @@ class LeftWidget(BaseWidget, ui_leftwidget.Ui_LeftWidget):
         self.startBox.setMinimum(self.chart.getStart())
         self.startBox.setMaximum(self.chart.getEnd()-1)
 
+        self._resetScrollSpeed()
+
+    def _connectSlots(self):
+        """
+        Args: ()
+        Connect signals to slots (happend only once)
+        """
+        super(LeftWidget, self)._connectSlots()
+
         self.startBox.valueChanged.connect(self.updateChartRange)
         self.endBox.valueChanged.connect(self.updateChartRange)
         self.resetButton.clicked.connect(self.resetRange)
@@ -35,9 +44,7 @@ class LeftWidget(BaseWidget, ui_leftwidget.Ui_LeftWidget):
         self.speedSlider.valueChanged.connect(self._updateScrollSpeed)
         self.speedSliderValueButton.clicked.connect(self._resetScrollSpeed)
 
-        self.exportButton.clicked.connect(self.exportTriggered.emit)  # Connect toggle instead
-
-        self._resetScrollSpeed()
+        self.exportButton.clicked.connect(self.exportTriggered.emit)
 
 ######## Update Actions
 

@@ -23,7 +23,6 @@ class LoaderWidget(BaseWidget, Ui_LoaderWidget):
         super(LoaderWidget, self).setup()
 
         rightWidget = scope.rightDock.widget()
-        rightWidget.sectionUpdated.connect(self.update)
         targetLayout = self.scrollArea.widget().layout()
         
         self._truncate()
@@ -34,6 +33,17 @@ class LoaderWidget(BaseWidget, Ui_LoaderWidget):
             self._checkBoxes[-1].setText(rightWidget.getSectionName(i))
             self._checkBoxes[-1].stateChanged.connect(self._updateRightWidgetSectionVisibility)
             targetLayout.addWidget(self._checkBoxes[-1])
+
+    def _connectSlots(self):
+        """
+        Args: ()
+        Connect signals to slots (happend only once)
+        """
+        super(LoaderWidget, self)._connectSlots()
+
+        scope.rightDock.widget().sectionUpdated.connect(self.update)
+
+######## Update actions
 
     def _updateRightWidgetSectionVisibility(self):
         rightWidget = scope.rightDock.widget()

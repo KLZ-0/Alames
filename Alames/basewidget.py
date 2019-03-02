@@ -30,8 +30,16 @@ class BaseWidget(QWidget):
 
         if not self._setupHappened:
             self.setupUi(self)
+            self._connectSlots()
 
         self._setupHappened = True
+
+    def _connectSlots(self):
+        """
+        Args: ()
+        Connect signals to slots (happend only once)
+        """
+        pass
 
 ######## Actions
 
