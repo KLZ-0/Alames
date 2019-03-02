@@ -1,6 +1,6 @@
 from Alames.importer import *
 
-from Alames.config.keymaps import chartviewkeymap
+from Alames.keymaps import chartviewkeymap
 
 from Alames import scope
 

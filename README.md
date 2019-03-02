@@ -1,7 +1,7 @@
 # Alames - Digital signal analysing/logging software
 Alames is an open-source signal analyser software intended for use with microcontroller driven analysers
 
-It can also work with Power Quality Analysers from KMB with CSV files exported from Envis
+It can also work with KMB Power Quality Analyser readings via CSV files exported from Envis
 
 ![Screenshot](/screenshots/sample.png?raw=true "Sample screenshot")
 
@@ -12,7 +12,7 @@ This repository was established for tracking changes and managing my workflow
 
 For the current development progress see the [devel branch](https://github.com/KLZ-0/Alames/tree/devel)
 
-I merge to master only if the software is in stable (or partially stable) development state
+Merge to master is only done when the software is in stable (or partially stable) development state
 
 # Installation
 ### Linux

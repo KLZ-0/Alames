@@ -7,7 +7,7 @@ from Alames.generated.ui_mainwindow import Ui_MainWindow
 from Alames.generated.ui_aboutwidget import Ui_AboutWidget
 from Alames.generated.ui_helpwidget import Ui_HelpWidget
 
-from Alames.config.keymaps import windowkeymap
+from Alames.keymaps import windowkeymap
 
 from Alames import chart
 
@@ -80,9 +80,9 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def loadKeymaps(self):
         keymaps = []
-        for module in pkgutil.iter_modules([os.path.dirname(__file__) + "/config/keymaps"]):
+        for module in pkgutil.iter_modules([os.path.dirname(__file__) + "/keymaps"]):
             if not module.name.startswith('__'):
-                keymaps.append(importlib.import_module("Alames.config.keymaps." + module.name))
+                keymaps.append(importlib.import_module("Alames.keymaps." + module.name))
         return keymaps
 
 ######## Update methods

@@ -50,7 +50,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - Add X axis toggle option [easy]
 
 **BUGS**:
- - Loading takes a little bit more time than in the previous revision - find out why (maybe numpy.interp in RightWidgetSection? > try to do it manually) [medium]
+ - None (for now)
 
 **NOTES**:
  - workflow: open file > show data > **options to modify data** [properties] > update chart > render/export chart into image > export/save modified CSV
