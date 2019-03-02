@@ -217,3 +217,9 @@ class Window(QMainWindow, Ui_MainWindow):
     def resizeEvent(self, event):
         super(Window, self).resizeEvent(event)
         self.initLabel.setGeometry(self.contentsRect())
+
+    def keyPressEvent(self, event):
+        super(Window, self).keyPressEvent(event)
+        key = event.text()
+        if getattr(scope, "chart", False) and key in ["1","2","3","4","5","6","7","8","9"]:
+            scope.chart.toggleSerieVisiblity(key)

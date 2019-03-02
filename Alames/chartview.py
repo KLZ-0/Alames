@@ -131,12 +131,6 @@ class View(QChartView):
         line.setLength(self.height())
         self.focusLine.setLine(line)
 
-    def keyPressEvent(self, event):
-        super(View, self).keyPressEvent(event)
-        key = event.text()
-        if key in ["1","2","3","4","5","6","7","8","9"]:
-            self.chart().toggleSerieVisiblity(key)
-
     def mousePressEvent(self, event):
         super(View, self).mousePressEvent(event)
         if event.button() == QtCore.Qt.MiddleButton:
