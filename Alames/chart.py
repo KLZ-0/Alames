@@ -41,20 +41,44 @@ class Chart(QChart, chartmodifier.ChartModifier):
         if lFileName.endswith(".csv.xz"):
             lFileName = lzma.open(lFileName)  # file name or object
         elif lFileName.endswith(".csv"):
-            pass
+            lFileName = open(lFileName, "r")
         else:
             scope.errorPopup("Not supported file type", "The requested file does not match any known filetypes", level=2)
             return False
 
         try:
             # Detect a header -> set data header to be the second line
-            f = read_csv(lFileName, header=1, delimiter=";", low_memory=False)
+            autoDelimiter = self._detectDelimiter(lFileName)
+            f = read_csv(lFileName, header=1, delimiter=getattr(scope.settings, "OpenCSVDelimiter", autoDelimiter), low_memory=False)
+            if len(f.columns) == 1:
+                raise ValueError("Not enough columns")
             self.selectionDataHolder.setDataFromCSV(f)
             self.overallDataHolder.setDataFromCSV(f)
             return True
         except lzma.LZMAError:
+            scope.window.hideUi()
             scope.errorPopup("LZMA decompression failed", "damaged xz file", traceback.format_exc(), level=2)
             return False
+        except ValueError:
+            scope.window.hideUi()
+            scope.errorPopup("Invalid delimiter", "The CSV parsing returned only one column", traceback.format_exc(), level=2)
+            return False
+
+    def _detectDelimiter(self, readableFile):
+        charset = getattr(scope.settings, "OpenCSVDelimiterCheck", [",", ";"])
+        charsetSplits = []
+        for i, line in enumerate(readableFile):
+            if i == 3: # some random line number in the data range
+                for char in charset:
+                    charsetSplits.append(len(str(line).split(char)))
+                break
+        
+        readableFile.seek(0)
+        for i in range(len(charsetSplits)):
+            if charsetSplits[i] == max(charsetSplits):
+                return charset[i]
+
+        return ";"
 
 ######## Signal handlers
 
