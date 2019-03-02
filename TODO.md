@@ -11,7 +11,6 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 
 **Finishing touch**:
  - add licensing header to every file
- - clean old files [partial]
  - write a documentation
  - unify comments in py files [partial]
 
@@ -19,6 +18,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - add installation guide
  - simplify imports
  - exceptions
+ - clean old files [partial]
 
 **IDEAs**:
  - make the serial communication part in C/C++? > if not then add pyserial to requirements.txt > maybe I don't want to do it..

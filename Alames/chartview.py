@@ -75,6 +75,9 @@ class View(QChartView):
     def toggleVisible(self):
         self.setVisible(not self.isVisible())
 
+    def toggleXAxis(self, state):
+        self.chart().toggleXAxis(state)
+
 ######## Event handlers
 
     def mouseMoveEvent(self, event):

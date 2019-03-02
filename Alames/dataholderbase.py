@@ -37,7 +37,7 @@ class DataHolderBase(QtCore.QObject):
 
         pandasObject = DataFrame(list(zip(*exportData)))
         filename = open(filename, "w")
-        filename.write("Reading exported from Alames;\n")
+        filename.write("Reading exported from Alames " + QApplication.applicationVersion() + ";\n")
         pandasObject.to_csv(filename, sep=getattr(scope.settings, "ExportCSVDelimiter", ";"), header=exportHeaders, index=False, line_terminator=getattr(scope.settings, "ExportCSVLineTerminator", ";\n"))
 
 ######## Setters
