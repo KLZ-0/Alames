@@ -35,7 +35,7 @@ class DataHolderBase(QtCore.QObject):
                 exportHeaders.append(self._columnNames[i])
                 exportData.append(self._YData[i])
 
-        pandasObject = DataFrame(zip(*exportData))
+        pandasObject = DataFrame(list(zip(*exportData)))
         filename = open(filename, "w")
         filename.write("Reading exported from Alames;\n")
         pandasObject.to_csv(filename, sep=";", header=exportHeaders, index=False, line_terminator=";\n")

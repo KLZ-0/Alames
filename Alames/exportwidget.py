@@ -13,14 +13,13 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
     def __init__(self, parent=None):
         super(ExportWidget, self).__init__(parent)
 
-    def setup(self):
-        super(ExportWidget, self).setup()
+    def _connectSlots(self):
+        super(ExportWidget, self)._connectSlots()
         """
         Args: ()
-        Setup widget Ui elements
+        Connect signals to slots (happend only once)
         """
-
-        # FIXME: Enable if fixed
+        
         self.exportButton.clicked.connect(self.startExport)
 
     def startExport(self):
