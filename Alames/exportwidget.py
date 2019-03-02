@@ -21,14 +21,15 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
         """
 
         # FIXME: Enable if fixed
-        # self.exportButton.clicked.connect(self.startExport)
+        self.exportButton.clicked.connect(self.startExport)
 
     def startExport(self):
-        radios = self.findChildren(QRadioButton)
         fileName = scope.window.getSaveFile("CSV (*.csv)")
+        if fileName == None:
+            return
         dataHolder = self.chart.selectionDataHolder # TODO: Make a method in chart to return the default dataholder
 
-        print(DataFrame(zip(*dataHolder.YData())))
-        # TODO: Add also XDATA as first column to CSV
-        # print(radios)
-        # TODO: Continue here
+        if self.everythingRadio.isChecked():
+            dataHolder.export(fileName)
+        elif self.onlyVisibleRadio.isChecked():
+            dataHolder.export(fileName, [serie.property("number") for serie in scope.chart.getVisibleSeries()])

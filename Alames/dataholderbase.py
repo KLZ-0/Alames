@@ -20,6 +20,25 @@ class DataHolderBase(QtCore.QObject):
         self._XData = xdata  # xdata [val] val can be string
         self._YData = ydata  # ydata [i][val]
 
+######## Actions
+
+    def export(self, filename, exportSeries=None):
+        exportHeaders = ["record time"]
+        exportData = [self._XData]
+        if exportSeries == None:
+            exportHeaders += self._columnNames
+            exportData += self._YData
+        
+        else:
+            for i in exportSeries:
+                exportHeaders.append(self._columnNames[i])
+                exportData.append(self._YData[i])
+
+        pandasObject = DataFrame(zip(*exportData))
+        filename = open(filename, "w")
+        filename.write("Reading exported from Alames;\n")
+        pandasObject.to_csv(filename, sep=";", header=exportHeaders, index=False, line_terminator=";\n")
+
 ######## Setters
 
     def setColumnNames(self, columnnames):

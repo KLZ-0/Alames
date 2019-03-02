@@ -6,6 +6,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - Fusion theme
  - OpenGL on by default
  - option to change default "open file" directory
+ - Tooltip precision
 
 
 **Finishing touch**:
@@ -31,6 +32,8 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
    - NOTE: Introduce a modification log to chartmodifier
 
  - Transform chartmodifier into datamodifier [easy]
+
+ - Window title and reading name from CSV [easy]
 
 **TODOs done**:
  - Add scrollSpeed slider [easy]
