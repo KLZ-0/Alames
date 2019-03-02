@@ -26,6 +26,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - pyserial? NO! [hard]
  - Do every possible binding with signals in window instead of scope (see example loaderWidget after RightWidget is loaded) to prevent early accesses
  - Window title and reading name from CSV [easy]
+ - Add xz export [easiest]
 
 **TODOs**:  `in importance order`
  - **Filters** - Add a widget for filters and make them customizable [medium]

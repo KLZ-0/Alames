@@ -92,7 +92,7 @@ class View(QChartView):
         html = str(self.chart().getXData()[round(xVal)]) + "<br>"
         for serie in self.chart().series():
             if serie.isVisible():
-                html += "<font color=\"" + serie.color().name() + "\">" + "{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
+                html += "<font color=\"" + serie.color().name() + "\">{0:.3f}<br>".format(self.chart().getYData(serie.property("number"))[round(xVal)])
         self.focusValueTextItem.setHtml(html)
 
         if self._valueTextItemOptimalPos:

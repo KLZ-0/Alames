@@ -23,6 +23,12 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
         self.exportButton.clicked.connect(self.startExport)
 
     def startExport(self):
+        if self.onlyVisibleRadio.isChecked() and len(scope.chart.getVisibleSeries()) == 0:
+            scope.errorPopup("No series are visible!",
+                             "Select at least one or choose 'Everything' in the export widget", level=2)
+            return
+
+        # File selection dialog
         fileName = scope.window.getSaveFile("CSV (*.csv)")
         if fileName == None:
             return
@@ -35,7 +41,11 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
 
         if self.everythingRadio.isChecked():
             dataHolder.export(fileName)
-        elif self.onlyVisibleRadio.isChecked():
-            dataHolder.export(fileName, [serie.property("number") for serie in scope.chart.getVisibleSeries()])
+        elif self.onlyVisibleRadio.isChecked():  
+            visibleNumbers = [serie.property("number") for serie in scope.chart.getVisibleSeries()]
+
+            if self.sampleDurCheckBox.isChecked() and 0 not in visibleNumbers:
+                visibleNumbers.insert(0, 0)
+            dataHolder.export(fileName, visibleNumbers)
 
         self.filenameLabel.setText("Export saved to <a href=" + fileName +">" + fileName + "</a>")
