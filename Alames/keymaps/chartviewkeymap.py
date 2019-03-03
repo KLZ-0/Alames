@@ -18,6 +18,7 @@ keydict = {
     "i": "testRange",
     "d": "filterAlamesOne",
     "e": "exportCSV",
+    "x": "toggleXAxis",
 }
 
 ######## Action definitions
@@ -47,3 +48,6 @@ def filterAlamesOne():
 
 def exportCSV():
     scope.window.exportWidget.toggleVisible()
+
+def toggleXAxis():
+    scope.leftDock.widget().showXCheckBox.toggle()

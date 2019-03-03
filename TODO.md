@@ -11,7 +11,6 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
 
 **Finishing touch**:
  - add licensing header to every file
- - clean old files [partial]
  - write a documentation
  - unify comments in py files [partial]
 
@@ -19,6 +18,7 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - add installation guide
  - simplify imports
  - exceptions
+ - clean old files [partial]
 
 **IDEAs**:
  - make the serial communication part in C/C++? > if not then add pyserial to requirements.txt > maybe I don't want to do it..
@@ -47,9 +47,10 @@ Licensing: MIT should be OK.. https://riverbankcomputing.com/pipermail/pyqt/2016
  - Add exporter for csv files also - make a smaller file with only the selected data [medium]
    - Option to save with or without the modifications - select which modifications [medium]
    - save the modified file
+ - Add X axis toggle option [easy]
 
 **BUGS**:
- - Loading takes a little bit more time than in the previous revision - find out why (maybe numpy.interp in RightWidgetSection? > try to do it manually) [medium]
+ - None (for now)
 
 **NOTES**:
  - workflow: open file > show data > **options to modify data** [properties] > update chart > render/export chart into image > export/save modified CSV

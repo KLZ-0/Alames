@@ -7,7 +7,7 @@ from Alames.generated.ui_mainwindow import Ui_MainWindow
 from Alames.generated.ui_aboutwidget import Ui_AboutWidget
 from Alames.generated.ui_helpwidget import Ui_HelpWidget
 
-from Alames.config.keymaps import windowkeymap
+from Alames.keymaps import windowkeymap
 
 from Alames import chart
 
@@ -80,9 +80,9 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def loadKeymaps(self):
         keymaps = []
-        for module in pkgutil.iter_modules([os.path.dirname(__file__) + "/config/keymaps"]):
+        for module in pkgutil.iter_modules([os.path.dirname(__file__) + "/keymaps"]):
             if not module.name.startswith('__'):
-                keymaps.append(importlib.import_module("Alames.config.keymaps." + module.name))
+                keymaps.append(importlib.import_module("Alames.keymaps." + module.name))
         return keymaps
 
 ######## Update methods
@@ -107,8 +107,10 @@ class Window(QMainWindow, Ui_MainWindow):
             self.statusBar().showMessage("Chart load failed in " + str(timer.elapsed()) + " milliseconds from " + f, getattr(scope.settings, "StatusbarMessageTimeout", 0)*1000)
 
     def createChart(self, csvFile):
-        if scope.chartView.chart():
-            scope.chartView.chart().deleteLater()
+        if getattr(scope, "chart", False) and not scope.chart.property("deceased"):
+            oldchart = scope.chart
+            oldchart.setProperty("deceased", True)
+            oldchart.deleteLater()
 
         scope.chart = chart.Chart() # FIXME: Two functions
         if not scope.chart.constructChart(csvFile): # FIXME: Two functions
@@ -123,6 +125,7 @@ class Window(QMainWindow, Ui_MainWindow):
         scope.rightDock.show()
         scope.loaderDock.show()
         scope.leftDock.show()
+        scope.chartView.show()
 
         # send signal to window->phasorWidget to update
         self.phasorView.scene().setData(scope.chart.selectionDataHolder, {"show-current-circle": False, "current-color": "#ff0000", "voltage-color": "#0000ff"})
@@ -202,6 +205,18 @@ class Window(QMainWindow, Ui_MainWindow):
     def _setupShortcuts(self):
         for key, method in windowkeymap.keydict.items():
             self._shortcuts.append(QShortcut(QtGui.QKeySequence(key), self, getattr(windowkeymap, method, scope.shortcutBindError)))
+
+######## Actions
+
+    def hideUi(self):
+        self.chartView.hide()
+        self.rightDock.hide()
+        self.leftDock.hide()
+        self.loaderDock.hide()
+        self.phasorView.hide()
+        self.exportWidget.hide()
+
+        self.initLabel.show()
 
 ######## Event handlers
 
