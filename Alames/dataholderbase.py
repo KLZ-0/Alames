@@ -23,17 +23,33 @@ class DataHolderBase(QtCore.QObject):
 
 ######## Actions
 
-    def export(self, filename, exportSeries=None):
+    def export(self, filename, useRange, exportSeries=None):
+        if useRange:
+            startRange, endRange = scope.chart.getZoomRange()
+            scope.log("Export " + str(startRange) + " : " + str(endRange))
+            if startRange == None or endRange == None:
+                useRange = False
+            else:
+                exportData = [self._XData[startRange:endRange]]
+        
+        if not useRange:
+            exportData = [self._XData]
+
         exportHeaders = [self._xColumnName]
-        exportData = [self._XData]
         if exportSeries == None:
             exportHeaders += self._columnNames
-            exportData += self._YData
+            if useRange:
+                exportData += [serie[startRange:endRange] for serie in self._YData]
+            else:
+                exportData += self._YData
         
         else:
             for i in exportSeries:
                 exportHeaders.append(self._columnNames[i])
-                exportData.append(self._YData[i])
+                if useRange:
+                    exportData.append(self._YData[i][startRange:endRange])
+                else:
+                    exportData.append(self._YData[i])
 
         pandasObject = DataFrame(list(zip(*exportData)))
         filename = open(filename, "w")
@@ -68,8 +84,8 @@ class DataHolderBase(QtCore.QObject):
             del self._YData[-1]
 
         # Calc RMS and power
-        if self._testUI():
-            self._calcAll()
+        # if self._testUI():
+            # self._calcAll()
 
         self.changed.emit()
 
@@ -79,8 +95,8 @@ class DataHolderBase(QtCore.QObject):
         self._YData = ydata
 
         # Calc RMS and power
-        if self._testUI():
-            self._calcAll()
+        # if self._testUI():
+            # self._calcAll()
 
         self.changed.emit()
 
@@ -88,8 +104,8 @@ class DataHolderBase(QtCore.QObject):
         self._XData = xdata
 
         # Calc RMS and power
-        if self._testUI():
-            self._calcAll()
+        # if self._testUI():
+            # self._calcAll()
 
         self.changed.emit()
 
@@ -100,7 +116,7 @@ class DataHolderBase(QtCore.QObject):
 
         # Calc RMS and power 
         # In this case it can cause unexpected calculation problems if not all the ydata was changed
-        self._calcAll() 
+        # self._calcAll() 
 
         self.changed.emit()
 

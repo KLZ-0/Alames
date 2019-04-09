@@ -222,12 +222,18 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def dragEnterEvent(self, event):
         super(Window, self).dragEnterEvent(event)
-        if event.mimeData().text()[-4:].lower() == ".csv":
+        fileType = ".".join(event.mimeData().text().lower().split(".")[-2:])
+        scope.log("File of type '" + str(fileType) + "' dragged over window")
+        if fileType == "csv" or fileType == "csv.xz":
             event.acceptProposedAction()
 
     def dropEvent(self, event):
         super(Window, self).dropEvent(event)
-        self.createChart(event.mimeData().text())
+        print(event.mimeData().urls()[0].toString().replace("file:///", ""))
+        fileName = event.mimeData().urls()[0].toString().replace("file:///", "")
+        if platform.uname().system == "Linux":
+            fileName = "/" + fileName
+        self.createChart(fileName)
 
     def resizeEvent(self, event):
         super(Window, self).resizeEvent(event)

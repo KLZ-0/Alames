@@ -138,6 +138,9 @@ class Chart(QChart, chartmodifier.ChartModifier):
 
 ######## View modifiers
 
+    def getZoomRange(self):
+        return scope.leftDock.widget().startBox.value(), scope.leftDock.widget().endBox.value()
+
     def setZoom(self, start, end):
         firstPoint = self.mapToPosition(QtCore.QPoint(start, 0), self.selectionDataHolder.getDummyQSerie())
         lastPoint = self.mapToPosition(QtCore.QPoint(end, 0), self.selectionDataHolder.getDummyQSerie())
