@@ -230,7 +230,10 @@ class Window(QMainWindow, Ui_MainWindow):
     def dropEvent(self, event):
         super(Window, self).dropEvent(event)
         print(event.mimeData().urls()[0].toString().replace("file:///", ""))
-        self.createChart(event.mimeData().urls()[0].toString().replace("file:///", ""))
+        fileName = event.mimeData().urls()[0].toString().replace("file:///", "")
+        if platform.uname().system == "Linux":
+            fileName = "/" + fileName
+        self.createChart(fileName)
 
     def resizeEvent(self, event):
         super(Window, self).resizeEvent(event)
