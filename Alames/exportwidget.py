@@ -40,12 +40,12 @@ class ExportWidget(BaseWidget, Ui_ExportWidget):
             dataHolder = self.chart.overallDataHolder
 
         if self.everythingRadio.isChecked():
-            dataHolder.export(fileName)
+            dataHolder.export(fileName, self.useRangeCheckBox.isChecked())
         elif self.onlyVisibleRadio.isChecked():  
             visibleNumbers = [serie.property("number") for serie in scope.chart.getVisibleSeries()]
 
             if self.sampleDurCheckBox.isChecked() and 0 not in visibleNumbers:
                 visibleNumbers.insert(0, 0)
-            dataHolder.export(fileName, visibleNumbers)
+            dataHolder.export(fileName, self.useRangeCheckBox.isChecked(), visibleNumbers)
 
         self.filenameLabel.setText("Export saved to <a href=" + fileName +">" + fileName + "</a>")

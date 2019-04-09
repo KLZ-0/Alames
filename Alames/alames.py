@@ -5,7 +5,7 @@ from Alames import scope
 from Alames.window import Window
 
 class Alames(QApplication):
-    VERSION = "1.5-r2"
+    VERSION = "1.5-r3"
     QApplication.setApplicationVersion(VERSION)
 
     def __init__(self, argv):
