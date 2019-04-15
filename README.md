@@ -1,18 +1,18 @@
-# Alames - Digital signal analysing/logging software
-Alames is an open-source signal analyser software intended for use with microcontroller driven analysers
-
-It can also work with KMB Power Quality Analyser readings via CSV files exported from Envis
+# Alames - Slightly advanced CSV visualizer
+Alames is an open-source CSV visualizer with the option to edit column names, colors, export rendered charts and extract data from big CSV files.
 
 ![Screenshot](/screenshots/power.png?raw=true "Sample screenshot")
 
 # Repository info
 *GitHub repository of my current SOČ/KOP 2019 project - lincensed under the MIT license*
 
-This repository was established for tracking changes and managing my workflow
+This project was originally developed as a signal analysing software intended for use with microcontroller driven analysers. It also supported CSV readings from KMB Power Quality Analysers exported from Envis.
 
-For the current development progress see the [devel branch](https://github.com/KLZ-0/Alames/tree/devel)
+The project later evolved into a CSV viewer with some editing features.
 
-Merge to master is only done when the software is in stable (or partially stable) development state
+For the current development progress see the [devel branch](https://github.com/KLZ-0/Alames/tree/devel).
+
+There is no ongoing development for now.
 
 # Installation
 ### Linux
